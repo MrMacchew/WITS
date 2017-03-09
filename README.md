@@ -1,11 +1,12 @@
-# WITS (Weber Inventory Tracking System)
+# WITS (Weber Inventory Tracking System) [![CircleCI](https://circleci.com/gh/WSUWITTS/WITS.svg?style=svg&circle-token=a0a120a09d8e4c4aa4cac0c342b33583e77df25d)](https://circleci.com/gh/WSUWITTS/WITS)
 
 
-| [Dependencies](#dependencies) 	| [Setup Laravel](#setup-laravel) 	| [Start Laravel](#start-laravel) 	|
-|-------------------------------	|---------------------------------	|---------------------------------	|
-_____________________
+| [Dependencies](#dependencies) 	| [Setup Laravel](#start-laravel) 
+|-------------------------------	|---------------------------------
 
 
+
+___
 ## Dependencies
 
 
@@ -15,19 +16,19 @@ _____________________
 |  **Mac**  |  [Installer](https://goo.gl/SOVPvM)  |                           Pre-installed                           |      Use [Docs](https://getcomposer.org/download/)      |        [Installer (64)](https://nodejs.org/dist/v7.7.2/node-v7.7.2.pkg)       |
 | **Linux** |     [Docs](https://goo.gl/n0rXRg)    | [LAMP Docs](http://howtoubuntu.org/how-to-install-lamp-on-ubuntu) |      Use [Docs](https://getcomposer.org/download/)      | [Installer (64)](https://nodejs.org/dist/v7.7.2/node-v7.7.2-linux-x64.tar.xz) |
 
-
-
+____
 
 ## Got everything? Let's do a quick check.
 
 ````
 docker -v && php -v && composer -V && node -v && npm -v
 ````
+____________________________________________________________________________________________
 
 
 ## Clone Project
 
-*Window Users: you might need to put this in **`[User Profile]/sites` directory** because docker & windows are still trying to work with each other* :)
+*Window Users: you might need to put this in **`[User Profile]/sites` directory** because docker & windows are still trying to work with each other* :) 
 
 Something like this:
 `git clone git@github.com:WSUWITTS/WITS.git %UserProfile%/sites/wits`
@@ -35,8 +36,10 @@ Something like this:
 `cd %UserProfile%/sites/wits` (Root level of the project)
 
 
-
+_________
 ## Setup Laravel
+
+
 
 ````
 composer install
@@ -45,15 +48,14 @@ composer install
 ````
 npm install
 ````
-
-**Copy** a new `.env` from `.env.example`. This is where you put any Settings/Passwords/Keys
+ 
+*(this file is where you put any Settings/Passwords/Keys)*
+Create a new `.env`
 ````
 cp .env.example .env
 ````
 
-````
-php artisan key:generate
-````
+____________________________________________________________________________________________
 
 
 ## Start Laravel

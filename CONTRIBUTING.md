@@ -34,8 +34,12 @@ WIITS is willing to take pull requests from anyone. One person cannot be simply 
 
 Only ADMINS have rights to roll back commits on the `master` and `develop` branch. These two branches are protrected, hence, the history cannot be changed. If the rollback ever takes place, ADMINS will notify everyone via email.
 
+> Consider reading Git [schematics](https://github.com/WSUWITTS/WITS/blob/3b11435f5f8d7278eca0b9df11c000d107ff3db4/SCHEMATIC.md)
+
 ### Addional Resources
 
 [Git Simple Guide](http://rogerdudler.github.io/git-guide/)
+
 [Github Pull Request](https://help.github.com/articles/creating-a-pull-request/)
+
 [General Github Documentation](https://help.github.com)
