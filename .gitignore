@@ -9,3 +9,4 @@ Homestead.yaml
 .env
 /data/*
 /storage/installed
+.DS_store
