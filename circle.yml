@@ -10,8 +10,7 @@ machine:
     timezone: "America/Denver"
 
     php:
-        version:
-            7.0.3
+        version: 7.0.3
 
     environment:
         APP_ENV: testing
@@ -32,27 +31,33 @@ checkout:
     - git clone git@github.com:WSUWITTS/WITS.git
 
 dependencies:
-    pre:
-      - sudo pip install docker-compose
-      - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+    # pre:
+    #   - sudo pip install docker-compose
+    #   - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
 
     override:
       - composer install --prefer-source --no-interaction --no-dev
+      - npm install
 
-    post:
-      - docker-compose up
+    # post:
+    #   - docker-compose up
 
-database:
+# database:
 
-compile:
+# compile:
 
 test:
     override:
         - vendor/bin/phpunit
 
-deployment:
+#deployment:
 #     production:
 #         branch: [master]
 #         commands:
 #           - docker push WSUWITTS/WITS:v$CIRCLE_BUILD_NUM
 #           - docker push WSUWITTS/WITS:latest
+
+# notify:
+#   webhooks:
+#     # A list of hashes representing hooks. Only the url field is supported.
+#     - url: https://someurl.com/hooks/circle
