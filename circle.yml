@@ -10,7 +10,7 @@ machine:
     timezone: "America/Denver"
 
     php:
-        version: 7.0.3
+        version: 7.1
 
     environment:
         APP_ENV: testing
