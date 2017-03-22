@@ -8,6 +8,7 @@ machine:
 
     services:
         - docker
+        # - mysql
 
     timezone: "America/Denver"
 
@@ -22,8 +23,9 @@ machine:
         DB_HOST: 127.0.0.1
         DB_PORT: 3306
         DB_DATABASE: wits
-        DB_USERNAME: root
-        DB_PASSWORD: root
+        DB_NAME: circle_test
+        DB_USER: ubuntu
+
 
 checkout:
   post:
@@ -32,16 +34,18 @@ checkout:
 
 dependencies:
     pre:
-        - sudo service mysql stop #we'll use docker instead
-        - sudo pip install docker-compose
+    #     - sudo pip install docker-compose
     #   - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
-
+        - pwd
     override:
       - composer install --prefer-source --no-interaction
       - npm install
+      - php artisan
+      # - mysql -u ubuntu -e "create database $DB_NAME"
 
-    post:
-      - docker-compose up
+    # post:
+    #   - sudo service mysql stop #we'll use docker instead
+    #   - docker-compose up &
 
 # database:
 
