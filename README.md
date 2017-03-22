@@ -1,4 +1,4 @@
-# WITS (Weber Inventory Tracking System) [![CircleCI](https://circleci.com/gh/WSUWITTS/WITS.svg?style=svg)](https://circleci.com/gh/WSUWITTS/WITS)
+# WITS (Weber Inventory Tracking System) [![CircleCI](https://circleci.com/gh/WSUWITTS/WITS.svg?style=svg&circle-token=a0a120a09d8e4c4aa4cac0c342b33583e77df25d)](https://circleci.com/gh/WSUWITTS/WITS)
 
 
 | [Dependencies](#dependencies) 	| [Setup Laravel](#setup-laravel) 	| [Start Laravel](#start-laravel) 	|
