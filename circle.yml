@@ -1,3 +1,4 @@
+# https://circleci.com/docs/1.0/build-image-trusty/
 machine:
     node:
         version: 5.5.0
@@ -7,7 +8,6 @@ machine:
 
     services:
         - docker
-        - docker-compose
 
     timezone: "America/Denver"
 
@@ -30,8 +30,8 @@ checkout:
     - git clone git@github.com:WSUWITTS/WITS.git
 
 dependencies:
-    # pre:
-    #   - sudo pip install docker-compose
+    pre:
+        - sudo pip install docker-compose
     #   - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
 
     override:
