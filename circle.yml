@@ -27,7 +27,8 @@ machine:
 
 checkout:
   post:
-    - git clone git@github.com:WSUWITTS/WITS.git
+    - rm -rf wits
+    - git clone git@github.com:WSUWITTS/WITS.git wits
 
 dependencies:
     pre:
@@ -38,8 +39,8 @@ dependencies:
       - composer install --prefer-source --no-interaction --no-dev
       - npm install
 
-    # post:
-    #   - docker-compose up
+    post:
+      - docker-compose up
 
 # database:
 
