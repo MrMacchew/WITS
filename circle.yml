@@ -36,7 +36,7 @@ dependencies:
     #   - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
 
     override:
-      - composer install --prefer-source --no-interaction --no-dev
+      - composer install --prefer-source --no-interaction
       - npm install
 
     post:
