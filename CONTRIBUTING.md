@@ -39,3 +39,5 @@ Only ADMINS have rights to roll back commits on the `master` and `develop` branc
 [Git Simple Guide](http://rogerdudler.github.io/git-guide/)
 [Github Pull Request](https://help.github.com/articles/creating-a-pull-request/)
 [General Github Documentation](https://help.github.com)
+
+### Additional Changes
