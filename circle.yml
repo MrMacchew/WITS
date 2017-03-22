@@ -32,6 +32,7 @@ checkout:
 
 dependencies:
     pre:
+        - service mysql stop #we'll use docker instead
         - sudo pip install docker-compose
     #   - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
 
