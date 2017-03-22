@@ -1,55 +1,69 @@
+# https://circleci.com/docs/1.0/build-image-trusty/
 machine:
     node:
         version: 5.5.0
-    pre:
-    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
-
-    services:
-    - docker
-
-    timezone:
-    "America/Denver"
 
     php:
-    - version: 7.0.3
+        version: 7.1.0
+
+    services:
+        - docker
+        # - mysql
+
+    timezone: "America/Denver"
+
+    environment:
+        APP_ENV: testing
+        APP_KEY: base64:Oc/a3EFM+m5E+UpYajlPqpxVMe0BmhWxAIsEcpq7HJs=
+        APP_DEBUG: true
+        APP_LOG_LEVEL: debug
+        APP_URL: http://localhost
+
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: wits
+        DB_NAME: circle_test
+        DB_USER: ubuntu
+
 
 checkout:
   post:
-    - git clone git@github.com:WSUWITTS/WITS.git
-
-  environment:
-    APP_ENV: testing
-    APP_KEY: base64:Oc/a3EFM+m5E+UpYajlPqpxVMe0BmhWxAIsEcpq7HJs=
-
-    APP_ENV: local
-    APP_KEY: base64:Oc/a3EFM+m5E+UpYajlPqpxVMe0BmhWxAIsEcpq7HJs=
-    APP_DEBUG: true
-    APP_LOG_LEVEL: debug
-    APP_URL: http://localhost
-
-    DB_CONNECTION: mysql
-    DB_HOST: 127.0.0.1
-    DB_PORT: 3306
-    DB_DATABASE: wits
-    DB_USERNAME: root
-    DB_PASSWORD: root
-
+    - rm -rf wits
+    - git clone git@github.com:WSUWITTS/WITS.git wits
 
 dependencies:
     pre:
-      - sudo pip install docker-compose
-      - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
-
-    post:
-      - docker-compose up
-
+    #     - sudo pip install docker-compose
+    #   - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+        - pwd
     override:
-    - composer install --no-interaction
+      - composer install --prefer-source --no-interaction
+      - npm install
+      - php artisan
+      # - mysql -u ubuntu -e "create database $DB_NAME"
+
+    # post:
+    #   - sudo service mysql stop #we'll use docker instead
+    #   - docker-compose up &
+
+# database:
+
+# compile:
+
+test:
+    override:
+        - vendor/bin/phpunit
 
 
-    # deployment:
-    #     production:
-    #         branch: [master]
-    #         commands:
-    #           - docker push WSUWITTS/WITS:v$CIRCLE_BUILD_NUM
-    #           - docker push WSUWITTS/WITS:latest
+#deployment:
+#     production:
+#         branch: [master]
+#         commands:
+#           - docker push WSUWITTS/WITS:v$CIRCLE_BUILD_NUM
+#           - docker push WSUWITTS/WITS:latest
+
+# notify:
+#   webhooks:
+#     # A list of hashes representing hooks. Only the url field is supported.
+#     - url: https://someurl.com/hooks/circle
