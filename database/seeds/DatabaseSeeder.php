@@ -11,6 +11,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        Eloquent::unguard();
+
+        if (App::environment() === 'production')
+        {
+            //Production Seeds
+            $this->call('ProductionSeeder');
+            // $this->call(UsersTableSeeder::class);
+
+        }
+        else
+        {
+            //Staging Seeds
+            $this->call('StagingSeeder');
+        }
     }
 }

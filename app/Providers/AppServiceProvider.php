@@ -3,6 +3,7 @@
 namespace App\Providers;
 use Laravel\Dusk\DuskServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Schema::defaultStringLength(191);
     }
 
     /**
@@ -23,11 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-       if ($this->app->environment('local', 'testing')) {
+        if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);
         }
 
         $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
-
     }
 }
