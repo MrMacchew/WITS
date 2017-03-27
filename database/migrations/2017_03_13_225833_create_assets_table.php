@@ -15,7 +15,21 @@ class CreateAssetsTable extends Migration
     {
         Schema::create('assets', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('room_id');
             $table->string('name');
+            $table->string('manufacturer');
+            $table->string('model');
+            $table->string('description');
+            $table->string('weber_inventory_tag');
+            $table->string('acquisition_date');
+            $table->string('mac_address_wired'); // ?
+            $table->string('mac_address_wireless'); // ?
+            $table->string('operating_system'); // ?
+            $table->string('expensive');
+            $table->string('software'); // ?
+            $table->string('vendor');
+            $table->string('vendor_serial_number');
+            $table->string('serial_number');
             $table->timestamps();
         });
     }
