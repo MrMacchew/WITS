@@ -34,6 +34,7 @@ class CreateAssetsTable extends Migration
             $table->string('po_number');
             $table->integer('category_id');
             $table->boolean('checkoutable');
+
             $table->timestamps();
         });
     }
