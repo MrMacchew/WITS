@@ -1,8 +1,8 @@
 # WITS (Weber Inventory Tracking System)
 
 
-| [Dependencies](#dependencies) 	| [Setup Laravel](#setup-laravel) 	| [Start Laravel](#start-laravel) 	|
-|-------------------------------	|---------------------------------	|---------------------------------	|
+| [Dependencies](#dependencies)     | [Setup Laravel](#setup-laravel)   | [Start Laravel](#start-laravel)   |
+|-------------------------------    |---------------------------------  |---------------------------------  |
 _____________________
 
 
