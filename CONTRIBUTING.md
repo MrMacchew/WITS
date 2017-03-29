@@ -29,13 +29,18 @@ WIITS is willing to take pull requests from anyone. One person cannot be simply 
     Rebase your commits with HEAD or SHA
     ``git rebase -i HEAD~2``
 
+7. Make sure your commit messages follow the project's standard. Check [SCHEMATICS.md](https://github.com/WSUWITTS/WITS/blob/develop/SCHEMATIC.md) for more information.
 
 ### Revert Policy
 
 Only ADMINS have rights to roll back commits on the `master` and `develop` branch. These two branches are protrected, hence, the history cannot be changed. If the rollback ever takes place, ADMINS will notify everyone via email.
 
+> Consider reading Git [schematics](https://github.com/WSUWITTS/WITS/blob/develop/SCHEMATIC.md)
+
 ### Addional Resources
 
 [Git Simple Guide](http://rogerdudler.github.io/git-guide/)
+
 [Github Pull Request](https://help.github.com/articles/creating-a-pull-request/)
+
 [General Github Documentation](https://help.github.com)
