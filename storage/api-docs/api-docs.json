@@ -30,6 +30,38 @@
                     }
                 }
             }
+        },
+        "/api/v1/example/{id}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "An example resource"
+                    }
+                }
+            },
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "An example resource"
+                    }
+                }
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "An example resource"
+                    }
+                }
+            }
+        },
+        "/api/v1/example/{id}/edit": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "An example resource"
+                    }
+                }
+            }
         }
     },
     "definitions": {}

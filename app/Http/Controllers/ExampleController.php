@@ -63,6 +63,13 @@ class ExampleController extends Controller
      * @param  \App\Example  $example
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @SWG\Get(
+    *     path="/api/v1/example/{id}",
+    *     @SWG\Response(response="200", description="An example resource")
+    * )
+    */
     public function show(Example $example)
     {
         //
@@ -74,6 +81,14 @@ class ExampleController extends Controller
      * @param  \App\Example  $example
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @SWG\Get(
+    *     path="/api/v1/example/{id}/edit",
+    *     @SWG\Response(response="200", description="An example resource")
+    * )
+    */
+
     public function edit(Example $example)
     {
         //
@@ -86,6 +101,13 @@ class ExampleController extends Controller
      * @param  \App\Example  $example
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @SWG\Put(
+    *     path="/api/v1/example/{id}",
+    *     @SWG\Response(response="200", description="An example resource")
+    * )
+    */
     public function update(Request $request, Example $example)
     {
         //
@@ -97,6 +119,13 @@ class ExampleController extends Controller
      * @param  \App\Example  $example
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @SWG\Delete(
+    *     path="/api/v1/example/{id}",
+    *     @SWG\Response(response="200", description="An example resource")
+    * )
+    */
     public function destroy(Example $example)
     {
         //
