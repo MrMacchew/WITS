@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 class ExampleController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * @SWG\Info(title="My First API", version="0.1")
+    */
+
+    /**
+    * @SWG\Get(
+    *     path="/api/v1/example",
+    *     @SWG\Response(response="200", description="An example resource")
+    * )
+    */
     public function index()
     {
         return "test";
@@ -22,6 +27,13 @@ class ExampleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @SWG\Get(
+    *     path="/api/v1/example/create",
+    *     @SWG\Response(response="200", description="An example resource")
+    * )
+    */
     public function create()
     {
         //
@@ -33,6 +45,13 @@ class ExampleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @SWG\Post(
+    *     path="/api/v1/example",
+    *     @SWG\Response(response="200", description="An example resource")
+    * )
+    */
     public function store(Request $request)
     {
         //

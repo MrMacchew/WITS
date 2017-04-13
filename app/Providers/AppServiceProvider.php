@@ -26,5 +26,8 @@ class AppServiceProvider extends ServiceProvider
        if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);
         }
+
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
+
     }
 }
