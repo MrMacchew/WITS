@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => 'WITS',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,7 +179,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        \L5Swagger\L5SwaggerServiceProvider::class
 
+        Spatie\Permission\PermissionServiceProvider::class,
 
 
     ],
