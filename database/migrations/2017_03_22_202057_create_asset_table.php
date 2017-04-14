@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAssetTable extends Migration
+class CreateAssetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,34 @@ class CreateAssetTable extends Migration
      */
     public function up()
     {
-        Schema::create('asset', function (Blueprint $table) {
+        Schema::enableForeignKeyConstraints();
+        Schema::create('assets', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('room_id')->unsigned();
+            $table->string('name');
+            $table->string('manufacturer')->nullable();
+            $table->string('model')->nullable();
+            $table->integer('replacement_id')->unsigned()->nullable();
+            $table->string('description')->nullable();
+            $table->string('weber_inventory_tag')->unique();
+            $table->string('acquisition_date')->nullable();
+            $table->decimal('cost', 7, 2)->nullable();
+            $table->string('serial_number')->nullable();
+            $table->string('po_number')->nullable();
+            $table->integer('category_id')->unsigned()->nullable();
+            $table->boolean('checkoutable')->nullable();
             $table->timestamps();
         });
+
+        Schema::table('assets', function (Blueprint $table) {
+            $table->foreign('room_id')->references('id')->on('room');
+            $table->foreign('replacement_id')->references('id')->on('assets');
+            $table->foreign('category_id')->references('id')->on('category');
+
+        });
+
+
+
     }
 
     /**
@@ -26,6 +50,7 @@ class CreateAssetTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asset');
+        Schema::dropIfExists('assets');
+
     }
 }
