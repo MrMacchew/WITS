@@ -15,8 +15,7 @@ class CreatePropertiesTable extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('asset_prop_id');
-            $table->string('name');
+            $table->integer('name_id');
             $table->string('property');
             $table->timestamps();
         });

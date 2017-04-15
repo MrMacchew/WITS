@@ -17,9 +17,9 @@ class CreateCheckoutTable extends Migration
             $table->increments('id');
             $table->integer('asset_id');
             $table->string('user_id');
-            $table->integer('cost_code');
+            $table->integer('cost_code')->nullable();
             $table->date('checkout_date');
-            $table->date('checkin_date');
+            $table->date('checkin_date')->nullable();
             // $table->timestamps();
 
         });

@@ -16,7 +16,7 @@ class CreateSupportTable extends Migration
         Schema::create('support', function (Blueprint $table) {
             $table->increments('id');
             $table->string('primary_contact');
-            $table->string('secondary_contact');
+            $table->string('secondary_contact')->nullable();
             $table->timestamps();
         });
     }

@@ -28,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(DuskServiceProvider::class);
         }
 
+        if ($this->app->environment('local')) {
+            $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
+        }
+
         $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
     }
 }

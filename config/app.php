@@ -167,7 +167,6 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-        Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
 
 //        Dwoodard\LaravelInstaller\Providers\LaravelInstallerServiceProvider::class,
 
@@ -179,9 +178,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \L5Swagger\L5SwaggerServiceProvider::class
-
         Spatie\Permission\PermissionServiceProvider::class,
+        \L5Swagger\L5SwaggerServiceProvider::class,
+
 
 
     ],

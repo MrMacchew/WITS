@@ -15,8 +15,8 @@ class CreateCampusTable extends Migration
     {
         Schema::create('campus', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('campus_code');
+            $table->string('name')->unique();
+            $table->string('campus_code')->unique();
         });
     }
 

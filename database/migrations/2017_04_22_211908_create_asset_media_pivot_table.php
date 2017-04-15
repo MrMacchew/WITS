@@ -14,18 +14,13 @@ class CreateAssetMediaPivotTable extends Migration
     public function up()
     {
         Schema::create('asset_media', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('asset_id')->unsigned()->index();
-            $table->integer('media_id')->unsigned()->index();
-            // $table->primary(['asset_id', 'media_id']);
-        });
-
-
-         Schema::table('asset_media', function (Blueprint $table) {
             $table->foreign('asset_id')->references('id')->on('assets')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('media_id')->unsigned()->index();
             $table->foreign('media_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
             $table->primary(['asset_id', 'media_id']);
         });
+
     }
 
     /**

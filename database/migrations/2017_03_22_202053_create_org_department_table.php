@@ -1,4 +1,4 @@
-<?php
+     <?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,9 +14,10 @@ class CreateOrgDepartmentTable extends Migration
     public function up()
     {
         Schema::create('org_department', function (Blueprint $table) {
-            $table->increments('id'); //?
+            $table->increments('id');
             $table->integer('department_id');
-            $table->timestamps(); //?
+            $table->string('org');
+            $table->timestamps();
         });
     }
 

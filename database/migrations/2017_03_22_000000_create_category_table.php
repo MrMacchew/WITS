@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAssetPropertiesTable extends Migration
+class CreateCategoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +13,11 @@ class CreateAssetPropertiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('asset_properties', function (Blueprint $table) {
+        Schema::create('category', function (Blueprint $table) {
             $table->increments('id');
-            
-            $table->timestamps();
+            $table->string('name')->unique();
+            $table->integer('lifecycle'); //years as integer
+
         });
     }
 
@@ -26,6 +28,6 @@ class CreateAssetPropertiesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('asset_properties');
+        Schema::dropIfExists('category');
     }
 }

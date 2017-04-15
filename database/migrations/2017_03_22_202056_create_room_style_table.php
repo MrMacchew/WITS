@@ -15,8 +15,6 @@ class CreateRoomStyleTable extends Migration
     {
         Schema::create('room_style', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('style_id');
-            $table->integer('room_id');
             $table->string('name');
             $table->timestamps();
         });

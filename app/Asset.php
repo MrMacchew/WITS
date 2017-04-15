@@ -12,11 +12,11 @@ class Asset extends Model
         parent::boot();
     }
 
-protected $revisionEnabled = true;
+    protected $revisionEnabled = true;
     protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
     protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
 
-        /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

@@ -9,7 +9,6 @@
         "darkaonline/l5-swagger": "~4.0",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "mpociot/laravel-apidoc-generator": "^2.0",
         "spatie/laravel-permission": "^1.12",
         "venturecraft/revisionable": "^1.28"
     },

@@ -13,22 +13,21 @@ class CreateAssetsTable extends Migration
      */
     public function up()
     {
-        Schema::enableForeignKeyConstraints();
         Schema::create('assets', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('room_id')->unsigned();
             $table->string('name');
             $table->string('manufacturer')->nullable();
             $table->string('model')->nullable();
-            $table->integer('replacement_id')->unsigned()->nullable();
             $table->string('description')->nullable();
-            $table->string('weber_inventory_tag')->unique();
+            $table->string('weber_inventory_tag')->unique()->nullable();
             $table->string('acquisition_date')->nullable();
             $table->decimal('cost', 7, 2)->nullable();
             $table->string('serial_number')->nullable();
             $table->string('po_number')->nullable();
-            $table->integer('category_id')->unsigned()->nullable();
             $table->boolean('checkoutable')->nullable();
+            $table->integer('replacement_id')->unsigned()->nullable();
+            $table->integer('category_id')->unsigned()->nullable();
             $table->timestamps();
         });
 
