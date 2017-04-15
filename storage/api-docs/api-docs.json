@@ -8,13 +8,56 @@
     "paths": {
         "/api/v1/example": {
             "get": {
+                "tags": [
+                    "Example"
+                ],
+                "summary": "Finds Pets by tags",
+                "description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+                "operationId": "findPetsByTags",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "tags",
+                        "in": "query",
+                        "description": "Tags to filter by",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "An example resource"
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "items": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
                     }
-                }
+                },
+                "deprecated": false,
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
             },
             "post": {
+                "tags": [
+                    "Example"
+                ],
                 "responses": {
                     "200": {
                         "description": "An example resource"
@@ -24,6 +67,10 @@
         },
         "/api/v1/example/create": {
             "get": {
+                "tags": [
+                    "Example"
+                ],
+                "summary": "Show the form for creating a new resource.",
                 "responses": {
                     "200": {
                         "description": "An example resource"
@@ -33,6 +80,9 @@
         },
         "/api/v1/example/{id}": {
             "get": {
+                "tags": [
+                    "Example"
+                ],
                 "responses": {
                     "200": {
                         "description": "An example resource"
@@ -40,6 +90,9 @@
                 }
             },
             "put": {
+                "tags": [
+                    "Example"
+                ],
                 "responses": {
                     "200": {
                         "description": "An example resource"
@@ -47,6 +100,9 @@
                 }
             },
             "delete": {
+                "tags": [
+                    "Example"
+                ],
                 "responses": {
                     "200": {
                         "description": "An example resource"
@@ -56,6 +112,9 @@
         },
         "/api/v1/example/{id}/edit": {
             "get": {
+                "tags": [
+                    "Example"
+                ],
                 "responses": {
                     "200": {
                         "description": "An example resource"
