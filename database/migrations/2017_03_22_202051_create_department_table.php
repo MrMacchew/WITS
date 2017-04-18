@@ -1,4 +1,4 @@
-                             <?php
+<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,12 +15,12 @@ class CreateDepartmentTable extends Migration
     {
         Schema::create('department', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('primary_orgcode_id')->unsigned()->nullable();
             $table->string('name');
             $table->string('phone');
-            $table->string('primary_orgcode');
             $table->string('email');
             $table->string('primary_contact');
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

@@ -23,7 +23,6 @@ class Asset extends Model
      */
     protected $fillable = [
         "id",
-        "room_id",
         "name",
         "manufacturer",
         "model",
@@ -39,5 +38,10 @@ class Asset extends Model
     ];
 
     protected $hidden = [];
+
+    public function media()
+    {
+        return $this->morphMany('App\Media', 'mediable');
+    }
 
 }

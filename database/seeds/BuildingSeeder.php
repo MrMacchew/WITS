@@ -11,7 +11,6 @@ class BuildingSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('building')->delete();
-        factory(App\Building::class, 50)->create();
+        // factory(App\Building::class, 50)->create();
     }
 }

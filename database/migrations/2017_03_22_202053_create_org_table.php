@@ -1,10 +1,10 @@
-     <?php
+<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrgDepartmentTable extends Migration
+class CreateOrgTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateOrgDepartmentTable extends Migration
      */
     public function up()
     {
-        Schema::create('org_department', function (Blueprint $table) {
+        Schema::create('org', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('department_id');
-            $table->string('org');
-            $table->timestamps();
+            $table->integer('department_id')->unsigned();
+            $table->foreign('department_id')->references('id')->on('department');
+            $table->string('name');
+            $table->string('code');
+            // $table->timestamps();
         });
     }
 
@@ -28,6 +30,6 @@ class CreateOrgDepartmentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('org_department');
+        Schema::dropIfExists('org');
     }
 }

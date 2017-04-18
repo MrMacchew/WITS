@@ -11,9 +11,23 @@ class DepartmentTest extends TestCase
 {
     use DatabaseMigrations;
 
-     /** @test */
-    public function testExample()
-    {
-        $this->assertTrue(true);
+    /** @test */
+    public function it_creates_1_fake_department_checks_name() {
+        $data = [
+        "name" => "foo",
+        ];
+        $asset = factory(\App\Department::class)->create($data);
+        // dd($asset);
+        $this->assertTrue($asset->name == "foo");
+    }
+
+    /** @test */
+    public function it_creates_1_fake_department_checks_phone() {
+        $data = [
+        "phone" => "foo",
+        ];
+        $asset = factory(\App\Department::class)->create($data);
+        // dd($asset);
+        $this->assertTrue($asset->phone == "foo");
     }
 }

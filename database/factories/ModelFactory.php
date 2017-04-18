@@ -13,7 +13,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\User::class, function (Faker\Generator $faker) {
-    $faker->seed(1);
+    // $faker->seed(1);
     static $password;
     $data = [
         'name' => $faker->unique()->name,
@@ -30,7 +30,7 @@ $factory->define(App\Asset::class, function (Faker\Generator $faker) {
     $faker->seed(1);
     $data = [
         'id' => null,
-        'room_id' => $faker->buildingNumber(), // NOTE: How are we doing room numbers with alphabets -  202A, 202B
+        'room_id' => $faker->randomDigit(),
         'name' => $faker->word(),
         'manufacturer' => $faker->word(),
         'model' => $faker->randomElement($array = array ('iPad','Computer','Laptop', 'Extron', 'Projector', 'Camera')),
@@ -54,9 +54,9 @@ $factory->define(App\Asset::class, function (Faker\Generator $faker) {
 $factory->define(App\Campus::class, function (Faker\Generator $faker) {
     $faker->seed(1);
     $data = [
-            'id' => null,
-            'name' =>$faker->word(),
-            'campus_code' => $faker->word() . "_" . $faker->randomDigit(),
+        'id' => null,
+        'name' =>$faker->word(),
+        'campus_code' => $faker->word() . "_" . $faker->randomDigit(),
     ];
     // dd($data);
     return $data;
@@ -65,12 +65,12 @@ $factory->define(App\Campus::class, function (Faker\Generator $faker) {
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Building::class, function (Faker\Generator $faker) {
-    $faker->seed(1);
+    // $faker->seed(1);
     $data = [
-        'id' => null,
-        'campus_id' => $faker->unique()->randomDigit()+1,
-        'name' => $faker->unique()->word(),
-        'latlong' => json_encode("{'lat': ". $faker->unique()->latitude .", 'long': ".$faker->unique()->longitude ."}")
+    'id' => null,
+    'campus_id' => $faker->unique(true)->randomDigit(),
+    'name' => $faker->unique()->word(),
+    'latlong' => json_encode("{'lat': ". $faker->unique()->latitude .", 'long': ".$faker->unique()->longitude ."}")
     ];
     // dd($data);
     return $data;
@@ -95,11 +95,24 @@ $factory->define(App\Department::class, function (Faker\Generator $faker) {
     $faker->seed(1);
     $data = [
         'id' => null,
-        'name' => $faker->unique()->departmentName,
-        'phone' => $faker->unique()->phoneNumber,
-        'primary_orgcode' => $faker->unique()->numberBetween($min = 25000, $max = 26000),
+        'name' => $faker->unique()->colorName(),
+        'phone' => $faker->unique()->phoneNumber(),
+        'primary_orgcode_id' => $faker->randomDigit(),
         'email' => $faker->unique()->safeEmail,
-        'primary_contact' => $faker->unique()->name($gender = null|'male'|'female'),
+        'primary_contact' => $faker->unique()->name(),
+    ];
+    // dd($data);
+    return $data;
+});
+
+
+$factory->define(App\Org::class, function (Faker\Generator $faker) {
+    $faker->seed(1);
+    $data = [
+        'id'=> null,
+        'department_id' =>  $faker->randomDigit(),
+        'name' =>  "org_".$faker->unique()->word(),
+        'code' => $faker->unique()->regexify('\d{5}')
     ];
     // dd($data);
     return $data;
@@ -112,6 +125,56 @@ $factory->define(App\Campus::class, function (Faker\Generator $faker) {
         'name' =>  $faker->unique()->word(),
         'campus_code' => $faker->unique()->regexify('\w{3}_\d{3}')
     ];
+    // dd($data);
+    return $data;
+});
+
+
+
+$factory->define(App\Room::class, function (Faker\Generator $faker) {
+    $faker->seed(1);
+    $data = [
+        'id'=> null,
+        'number' => $faker->unique()->regexify('\d{3}[A-Z]?'),
+        'name' => $faker->word(),
+        'style_id' => $faker->unique()->numberBetween(1,10),
+        'capacity' => $faker->numberBetween(20,300),
+        'support_id' => $faker->numberBetween(1,10),
+    ];
+    // dd($data);
+    return $data;
+});
+
+
+$factory->define(App\RoomStyle::class, function (Faker\Generator $faker) {
+    $faker->seed(1);
+    $data = [
+        'id'=> null,
+        'name' =>  $faker->unique()->word(),
+    ];
+    // dd($data);
+    return $data;
+});
+
+$factory->define(App\Support::class, function (Faker\Generator $faker) {
+    $faker->seed(1);
+    $data = [
+        'id' => null,
+        'primary_contact' =>$faker->unique()->name(),
+        'secondary_contact' => $faker->unique()->name()
+    ];
+    // dd($data);
+    return $data;
+});
+
+$factory->define(App\Software::class, function (Faker\Generator $faker) {
+    $faker->seed(1);
+    $data = [
+        'id' => null,
+        'title' => $faker->unique()->colorName(),
+        'filename' => 'filename_'.$faker->unique()->colorName().'.jpg',
+        'url' => $faker->imageUrl(640, 480, 'cats', true, 'Faker'), 
+        ];
     // dd($data);
     return $data;
 });

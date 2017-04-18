@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\User;
+use App\Org;
 use Illuminate\Http\Request;
 
-class UserController extends ApiController
+class OrgController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class UserController extends ApiController
      */
     public function index()
     {
-        return User::all();
+        //
     }
 
     /**
@@ -41,10 +41,10 @@ class UserController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Org  $org
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Org $org)
     {
         //
     }
@@ -52,10 +52,10 @@ class UserController extends ApiController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Org  $org
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Org $org)
     {
         //
     }
@@ -64,10 +64,10 @@ class UserController extends ApiController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param  \App\Org  $org
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Org $org)
     {
         //
     }
@@ -75,10 +75,10 @@ class UserController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  \App\Org  $org
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Org $org)
     {
         //
     }

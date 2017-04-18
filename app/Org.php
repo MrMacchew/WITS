@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AssetMedia extends Model
+class Org extends Model
 {
     use \Venturecraft\Revisionable\RevisionableTrait;
 
@@ -15,5 +15,8 @@ class AssetMedia extends Model
     protected $revisionEnabled = true;
     protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
     protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
+
+    protected $table = 'org';
+    public $timestamps  = false;
 
 }

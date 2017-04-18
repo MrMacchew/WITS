@@ -27,8 +27,15 @@ class Building extends Model
     protected $fillable = [
         "campus_id", "name", "latlong"
     ];
+
     public function campus()
     {
         return $this->belongsTo('App\Campus');
     }
+
+    public function department()
+    {
+        return $this->belongsToMany('App\Department', 'building_department', 'building_id', 'department_id');
+    }
+
 }

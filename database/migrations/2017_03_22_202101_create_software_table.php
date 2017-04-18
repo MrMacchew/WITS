@@ -14,8 +14,8 @@ class CreateSoftwareTable extends Migration
     public function up()
     {
         Schema::create('software', function (Blueprint $table) {
-            $table->integer('software_id');
-            $table->string('software_name');
+            $table->increments('id');
+            $table->string('title');
             $table->string('filename');
             $table->string('url');
         });

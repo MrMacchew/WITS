@@ -11,6 +11,6 @@ class RoomStyleSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(App\RoomStyle::class, 15)->create();
     }
 }

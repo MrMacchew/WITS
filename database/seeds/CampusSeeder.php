@@ -14,7 +14,8 @@ class CampusSeeder extends Seeder
         factory(App\Campus::class, 10)->create()->each(function ($campus) {
 
             $campus->buildings()->save(factory(App\Building::class)->make());
-            // dump($campus);
+            // dump($campus->buildings->toArray());
+
         });
     }
 }

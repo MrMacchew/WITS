@@ -11,6 +11,6 @@ class SupportSeeder extends Seeder
      */
     public function run()
     {
-        //
+    	factory(App\Support::class, 10)->create();
     }
 }
