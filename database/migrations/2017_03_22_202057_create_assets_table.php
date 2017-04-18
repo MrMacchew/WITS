@@ -19,14 +19,14 @@ class CreateAssetsTable extends Migration
             $table->string('name');
             $table->string('manufacturer')->nullable();
             $table->string('model')->nullable();
+            $table->integer('replacement_id')->unsigned()->nullable();
             $table->string('description')->nullable();
+            $table->decimal('cost', 7, 2)->nullable();
             $table->string('weber_inventory_tag')->unique()->nullable();
             $table->string('acquisition_date')->nullable();
-            $table->decimal('cost', 7, 2)->nullable();
             $table->string('serial_number')->nullable();
             $table->string('po_number')->nullable();
             $table->boolean('checkoutable')->nullable();
-            $table->integer('replacement_id')->unsigned()->nullable();
             $table->integer('category_id')->unsigned()->nullable();
             $table->timestamps();
         });

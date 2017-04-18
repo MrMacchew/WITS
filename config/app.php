@@ -173,13 +173,15 @@ return [
         /*
          * Application Service Providers...
          */
+
+        Laravel\Passport\PassportServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-        \L5Swagger\L5SwaggerServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
 
 
 

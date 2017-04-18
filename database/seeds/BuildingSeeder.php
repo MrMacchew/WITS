@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class AssetSeeder extends Seeder
+class BuildingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,7 @@ class AssetSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('assets')->delete();
-        factory(App\Asset::class, 50)->create();
+        DB::table('building')->delete();
+        factory(App\Building::class, 50)->create();
     }
 }

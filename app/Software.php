@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SupportFiles extends Model
+class Software extends Model
 {
     use \Venturecraft\Revisionable\RevisionableTrait;
 

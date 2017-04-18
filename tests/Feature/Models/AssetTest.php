@@ -18,11 +18,12 @@ class AssetTest extends TestCase
     /** @test */
     public function it_creates_1_fake_assets_checks_name() {
         $data = [
-        "name" => "roomname"
+        "name" => "foo",
+
         ];
         $asset = factory(\App\Asset::class)->create($data);
-
-        $this->assertTrue($asset->name == "roomname");
+        // dd($asset);
+        $this->assertTrue($asset->name == "foo");
     }
 
 

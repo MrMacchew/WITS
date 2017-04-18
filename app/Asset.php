@@ -22,7 +22,7 @@ class Asset extends Model
      * @var array
      */
     protected $fillable = [
-        // "id",
+        "id",
         "room_id",
         "name",
         "manufacturer",
@@ -37,5 +37,7 @@ class Asset extends Model
         "category_id",
         "checkoutable",
     ];
+
+    protected $hidden = [];
 
 }

@@ -27,4 +27,9 @@ class Campus extends Model
     protected $fillable = [
         'name', 'campus_code'
     ];
+
+    public function buildings()
+    {
+        return $this->hasMany('App\Building', 'id');
+    }
 }

@@ -9,10 +9,6 @@ class ExampleController extends Controller
 {
 
     /**
-    * @SWG\Info(title="My First API", version="0.1")
-    */
-
-    /**
      * @SWG\Get(
      *     path="/api/v1/example",
      *     summary="Finds Pets by tags",

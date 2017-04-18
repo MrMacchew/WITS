@@ -2,14 +2,25 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * Class User
+ *
+ * @package App
+ *
+ * @SWG\Definition(
+ *   definition="User",
+ *   required={"name", "email"}
+ * )
+ *
+ */
 class User extends Authenticatable
 {
-    use Notifiable;
-    use HasRoles;
+    use HasApiTokens, Notifiable, HasRoles;
     use \Venturecraft\Revisionable\RevisionableTrait;
 
     public static function boot(){

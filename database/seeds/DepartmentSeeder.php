@@ -11,7 +11,6 @@ class DepartmentSeeder extends Seeder
      */
     public function run()
     {
-
         DB::table('department')->delete();
         factory(App\Department::class, 10)-> create();
 

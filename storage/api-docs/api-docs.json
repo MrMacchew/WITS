@@ -1,10 +1,14 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "My First API",
-        "version": "0.1"
+        "title": "WITS API",
+        "version": "1.0"
     },
+    "host": "localhost",
     "basePath": "",
+    "schemes": [
+        "http"
+    ],
     "paths": {
         "/api/v1/example": {
             "get": {
@@ -123,5 +127,29 @@
             }
         }
     },
-    "definitions": {}
+    "definitions": {
+        "Error": {
+            "required": [
+                "code",
+                "message"
+            ],
+            "properties": {
+                "code": {
+                    "description": "Class ApiController",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "Class ApiController",
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "name",
+                "email"
+            ]
+        }
+    }
 }

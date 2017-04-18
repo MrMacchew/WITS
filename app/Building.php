@@ -27,4 +27,8 @@ class Building extends Model
     protected $fillable = [
         "campus_id", "name", "latlong"
     ];
+    public function campus()
+    {
+        return $this->belongsTo('App\Campus');
+    }
 }

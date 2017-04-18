@@ -16,14 +16,21 @@ class DatabaseSeeder extends Seeder
         if (App::environment() === 'production')
         {
             //Production Seeds
-            $this->call('ProductionSeeder');
-            // $this->call(UsersTableSeeder::class);
+            // $this->call(UsersSeeder::class);
 
         }
         else
         {
             //Staging Seeds
-            $this->call('StagingSeeder');
+            $this->call(UsersSeeder::class);
+            $this->call(CampusSeeder::class);
+            // $this->call(BuildingSeeder::class); //Campus adds data
+            // $this->call(AssetSeeder::class);
         }
+
+        //both production or test items
+
+        //roles
+        //properties
     }
 }
