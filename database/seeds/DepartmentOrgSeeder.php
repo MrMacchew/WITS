@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DepartmentSeeder extends Seeder
+class DepartmentOrgSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,6 +17,12 @@ class DepartmentSeeder extends Seeder
         factory(App\Department::class, 10)->create();
 
         $department = App\Department::find(1);
+        $department->org()->save(factory(App\Org::class)->make());
+        $department->org()->save(factory(App\Org::class)->make());
+        $department->org()->save(factory(App\Org::class)->make());
+
+        $department = App\Department::find(2);
+        $department->org()->save(factory(App\Org::class)->make());
         $department->org()->save(factory(App\Org::class)->make());
 
 

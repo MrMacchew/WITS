@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CheckoutSeeder extends Seeder
+class CategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,7 @@ class CheckoutSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Checkout::class, 10)->create();
+    	factory(App\Category::class, 2)->create();
+
     }
 }

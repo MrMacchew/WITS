@@ -11,7 +11,6 @@ class AssetSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('assets')->delete();
         factory(App\Asset::class, 50)->create();
     }
 }

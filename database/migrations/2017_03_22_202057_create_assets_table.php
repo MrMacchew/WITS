@@ -32,9 +32,9 @@ class CreateAssetsTable extends Migration
         });
 
         Schema::table('assets', function (Blueprint $table) {
-            $table->foreign('room_id')->references('id')->on('room');
-            $table->foreign('replacement_id')->references('id')->on('assets');
-            $table->foreign('category_id')->references('id')->on('category');
+            // $table->foreign('room_id')->references('id')->on('room');
+            // $table->foreign('replacement_id')->references('id')->on('assets');
+            // $table->foreign('category_id')->references('id')->on('category');
 
         });
 

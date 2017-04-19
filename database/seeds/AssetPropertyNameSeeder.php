@@ -11,6 +11,6 @@ class AssetPropertyNameSeeder extends Seeder
      */
     public function run()
     {
-        //
+        // factory(App\AssetPropertyName::class, 10)->create();
     }
 }
