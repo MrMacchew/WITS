@@ -8,43 +8,7 @@ use Illuminate\Http\Request;
 class ExampleController extends Controller
 {
 
-    /**
-     * @SWG\Get(
-     *     path="/api/v1/example",
-     *     summary="Finds Pets by tags",
-     *     tags={"Example"},
-     *     description="Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-     *     operationId="findPetsByTags",
-     *     produces={"application/json"},
-     *     @SWG\Parameter(
-     *         name="tags",
-     *         in="query",
-     *         description="Tags to filter by",
-     *         required=true,
-     *         type="array",
-     *         @SWG\Items(type="string"),
-     *         collectionFormat="multi"
-     *     ),
-     *     @SWG\Response(
-     *         response=200,
-     *         description="successful operation",
-     *         @SWG\Schema(
-     *             type="object",
-     *             @SWG\Items(ref="#/definitions/Pet")
-     *         ),
-     *     ),
-     *     @SWG\Response(
-     *         response="400",
-     *         description="Invalid tag value",
-     *     ),
-     *     security={
-     *         {
-     *             "petstore_auth": {"write:pets", "read:pets"}
-     *         }
-     *     },
-     *     deprecated=false
-     * )
-     */
+
 
     public function index()
     {
@@ -52,17 +16,7 @@ class ExampleController extends Controller
     }
 
 
-    /**
-    * Show the form for creating a new resource.
-    *
-    * @return \Illuminate\Http\Response
-    *
-    * @SWG\Get(
-    *     path="/api/v1/example/create",
-    *     tags={"Example"},
-    *     @SWG\Response(response="200", description="An example resource")
-    * )
-    */
+
     public function create()
     {
         //
@@ -75,13 +29,6 @@ class ExampleController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /**
-    * @SWG\Post(
-    *     path="/api/v1/example",
-    *     tags={"Example"},
-    *     @SWG\Response(response="200", description="An example resource")
-    * )
-    */
     public function store(Request $request)
     {
         //
@@ -94,13 +41,7 @@ class ExampleController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /**
-    * @SWG\Get(
-    *     path="/api/v1/example/{id}",
-    *     tags={"Example"},
-    *     @SWG\Response(response="200", description="An example resource")
-    * )
-    */
+
     public function show(Example $example)
     {
         //
@@ -113,13 +54,7 @@ class ExampleController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /**
-    * @SWG\Get(
-    *     path="/api/v1/example/{id}/edit",
-    *     tags={"Example"},
-    *     @SWG\Response(response="200", description="An example resource")
-    * )
-    */
+
 
     public function edit(Example $example)
     {
@@ -134,13 +69,7 @@ class ExampleController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /**
-    * @SWG\Put(
-    *     path="/api/v1/example/{id}",
-    *     tags={"Example"},
-    *     @SWG\Response(response="200", description="An example resource")
-    * )
-    */
+
     public function update(Request $request, Example $example)
     {
         //
@@ -153,13 +82,7 @@ class ExampleController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /**
-    * @SWG\Delete(
-    *     path="/api/v1/example/{id}",
-    *     tags={"Example"},
-    *     @SWG\Response(response="200", description="An example resource")
-    * )
-    */
+
     public function destroy(Example $example)
     {
         //

@@ -34,3 +34,9 @@ Vue.component(
 const app = new Vue({
     el: '#app'
 });
+
+$.ajaxSetup({
+  headers: {
+    Authorization: 'Bearer:' + $('meta[name="api-token"]').attr("content")
+  }
+});

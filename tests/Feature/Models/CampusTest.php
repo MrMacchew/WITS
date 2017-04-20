@@ -12,7 +12,7 @@ class CampusTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function testExample()
+    public function it_creates_a_campus()
     {
         $this->assertTrue(true);
     }

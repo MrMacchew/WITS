@@ -55,8 +55,15 @@ dependencies:
 # compile:
 
 test:
+    pre:
+        - "./vendor/laravel/dusk/bin/chromedriver-linux":
+            background: true
+        - cp .env.testing .env
+        - "php artisan serve":
+            background: true
     override:
         - vendor/bin/phpunit
+        - php artisan dusk
 
 
 #deployment:

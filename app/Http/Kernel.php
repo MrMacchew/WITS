@@ -34,7 +34,10 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class
+            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+
+            // appending custom middleware
+            \App\Http\Middleware\HttpsProtocol::class,
         ],
 
         'api' => [
@@ -42,6 +45,8 @@ class Kernel extends HttpKernel
             'bindings',
         ],
     ];
+
+
 
     /**
      * The application's route middleware.

@@ -27,7 +27,7 @@
             console.log('Component mounted.')
             axios.get('/api/v1/user')
             .then(function (response) {
-                console.log(response);
+                // console.log(response);
                 vm.user = response.data;
             })
             .catch(function (error) {

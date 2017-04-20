@@ -49,7 +49,7 @@ class DatabaseMake extends Command
         if($mysql->query($sql) === TRUE) {
             $this->info("Create Database: " . env("DB_DATABASE"));
             $this->info("Database created successfully");
-            \Artisan::call('migrate:refresh');
+            \Artisan::call('migrate');
             \Artisan::call('db:seed');
         } else {
             $this->info("Error creating database: " . $mysql->error);
