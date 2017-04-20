@@ -1,14 +1,15 @@
 # https://circleci.com/docs/1.0/build-image-trusty/
 machine:
+    hosts:
+        myapp.dev: 127.0.0.1:8000
     node:
         version: 5.5.0
-
     php:
         version: 7.1.0
 
     services:
         - docker
-        # - mysql
+        - mysql
 
     timezone: "America/Denver"
 
@@ -37,6 +38,8 @@ dependencies:
     #     - sudo pip install docker-compose
     #   - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
         - pwd
+        - sudo composer self-update
+
     override:
       - composer install --prefer-source --no-interaction
       - npm install
@@ -53,14 +56,20 @@ dependencies:
 # database:
 
 # compile:
+general:
+  artifacts:
+    - "tests/Browser/screenshots"
+    - "tests/Browser/console"
+    - "server.log"
 
 test:
     pre:
         - "./vendor/laravel/dusk/bin/chromedriver-linux":
             background: true
-        - cp .env.testing .env
-        - "php artisan serve":
+        - "sudo php artisan serve --host=myapp.dev --port=8080 > server.log 2>&1":
             background: true
+        - "sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080"
+        - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080"
     override:
         - vendor/bin/phpunit
         - php artisan dusk
