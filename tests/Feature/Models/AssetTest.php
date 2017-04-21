@@ -31,5 +31,4 @@ class AssetTest extends TestCase
     public function testExample()
     {
         $this->assertTrue(true);
-    }
 }

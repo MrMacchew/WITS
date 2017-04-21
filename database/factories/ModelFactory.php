@@ -50,6 +50,12 @@ $factory->define(App\Asset::class, function (Faker\Generator $faker) {
     return $data;
 });
 
+// $factory->state(App\Asset::class, 'asset_replacement', function($faker){
+//     return [
+//         'replacement_id' => $faker->unique(true)->numberBetween(1,10)
+//     ];
+// })
+
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Campus::class, function (Faker\Generator $faker) {
     $faker->seed(1);
