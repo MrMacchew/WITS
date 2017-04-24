@@ -20,6 +20,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 Route::resource('assets', 'Api\v1\AssetController');
+Route::resource('room', 'Api\v1\RoomController');
+
+Route::get('dashboard', 'DashboardController@index');
 
 Route::get('/install', function(){
 	Artisan::call('db:make');

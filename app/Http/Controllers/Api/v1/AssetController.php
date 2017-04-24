@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Asset;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Validator;
 
 class AssetController extends ApiController
 {
@@ -71,16 +73,18 @@ class AssetController extends ApiController
      */
     public function store(Request $request)
     {
-        $rules = array(
-            'name'       => 'required',
-            'room_id'      => 'required|integer'
-        );
 
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'room_id' => 'required',
+        ]);
 
-        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            // dd($validator->messages());
+            return new JsonResponse($validator->messages(), 422);
+        }
 
-        $asset =  Asset::create($request->all());
-        return $asset;
+        return Asset::create($request->all());
     }
 
     /**

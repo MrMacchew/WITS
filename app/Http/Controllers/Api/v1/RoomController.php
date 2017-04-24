@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Room;
 use Illuminate\Http\Request;
+use Validator;
+
 
 class RoomController extends ApiController
 {
@@ -35,7 +37,18 @@ class RoomController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'number' => 'required',
+        'style_id' => 'required',
+        ]);
+
+		if ($validator->fails()) {
+            // dd($validator->messages());
+            return new JsonResponse($validator->messages(), 422);
+        }
+
+       return  Room::create($request->all());
     }
 
     /**

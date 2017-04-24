@@ -1,11 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Auth;
+use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
@@ -15,9 +17,7 @@ class AuthTest extends TestCase
     public function it_goes_to_login()
     {
         $response = $this->get('/login');
-        // dd($response->status());
-        // dd($response->status() == 200||$response->status() == 302);
-        $this->assertTrue($response->status() == 200||$response->status() == 302);
+        $this->assertTrue($response->status() == 200);
     }
 
 

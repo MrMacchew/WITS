@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
             throw $exception;
         }
 
-        dump($request, $exception);
+        // dump($request, $exception);
         return parent::render($request, $exception);
     }
 
