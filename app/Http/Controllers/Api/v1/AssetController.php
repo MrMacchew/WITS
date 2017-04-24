@@ -71,7 +71,16 @@ class AssetController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules = array(
+            'name'       => 'required',
+            'room_id'      => 'required|integer'
+        );
+
+
+        $validator = \Validator::make($request->all(), $rules);
+
+        $asset =  Asset::create($request->all());
+        return $asset;
     }
 
     /**

@@ -18,10 +18,14 @@ class CreateMediaTable extends Migration
             $table->integer('mediable_id');
             $table->string('mediable_type');
             $table->string('name');
-            $table->binary('image'); //base64
-            $table->string('mime_type'); //mime_content_type('php.gif')
+            // $table->binary('image'); //65 kB (small) laravel doesn't do mediumblobs
+            $table->string('mime_type'); //php's mime_content_type('php.gif')
             $table->timestamps();
         });
+
+
+        DB::statement("ALTER TABLE media ADD image MEDIUMBLOB AFTER name"); // 16MB
+        // DB::statement("ALTER TABLE media ADD image LONGBLOB"); // 4G
     }
 
     /**

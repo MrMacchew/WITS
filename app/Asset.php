@@ -23,6 +23,7 @@ class Asset extends Model
      */
     protected $fillable = [
         "id",
+        "room_id",
         "name",
         "manufacturer",
         "model",

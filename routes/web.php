@@ -18,3 +18,13 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::resource('assets', 'Api\v1\AssetController');
+
+Route::get('/install', function(){
+	Artisan::call('db:make');
+
+	echo 'DB Migration, DONE... ';
+	sleep(2);
+    return redirect('/');
+});

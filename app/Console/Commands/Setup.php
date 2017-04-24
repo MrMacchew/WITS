@@ -39,8 +39,15 @@ class Setup extends Command
         $this->info("Setup");
         $this->info("=======================");
 
-        \Artisan::call('key:generate');
-        $this->info("Generate key");
+        if (empty(env('APP_KEY'))) {
+
+            \Artisan::call('key:generate');
+            $this->info("Key Generated");
+
+        }else{
+            $this->info("Key Already Exsists: " . env('APP_KEY'));
+        }
+
 
         \Artisan::call('db:make');
         $this->info("Database");
@@ -49,9 +56,9 @@ class Setup extends Command
         $this->info("Swagger");
 
         \Artisan::call('passport:install');
-        $this->info("Passport");
+        $this->info("Passport:install");
 
         \Artisan::call('passport:keys');
-        $this->info("Passport");
+        $this->info("Passport:keys");
     }
 }
