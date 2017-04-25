@@ -62,6 +62,10 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'canInstall' => \Dwoodard\LaravelInstaller\Middleware\canInstall::class
+        'canInstall' => \Dwoodard\LaravelInstaller\Middleware\canInstall::class,
+
+        'saml' => \App\Http\Middleware\SamlAuth::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
+
     ];
 }

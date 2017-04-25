@@ -18,7 +18,15 @@ class PagesTest extends DuskTestCase
                     ->assertSee('WITS');
         });
     }
-    
+
+    public function dashboard()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/dashboard')
+                    ->assertSee('dashboard');
+        });
+    }
+
     /**
      * @test
      */
@@ -31,5 +39,5 @@ class PagesTest extends DuskTestCase
     }
 
 
-    
+
 }
