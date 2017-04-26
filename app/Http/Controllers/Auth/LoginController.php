@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
+use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use SimpleXMLElement;
-use App\User;
-use Auth;
 
 
 
@@ -25,7 +25,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    // use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -42,6 +42,18 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);
+    }
+
+    public function login(Request $request)
+    {
+       // dd(Auth::check());
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        Auth::logout();
+        return redirect(url('/'));
     }
 
     public function saml(Request $request) {
@@ -80,6 +92,6 @@ class LoginController extends Controller
         Auth::loginUsingId($user->id);
 
         // Redirect Home
-        return redirect('/');
+        return redirect('/home');
     }
 }

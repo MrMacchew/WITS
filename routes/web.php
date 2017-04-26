@@ -20,14 +20,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 
-Route::get('/login', function () { })->middleware('saml');
+Route::get('/login', 'Auth\LoginController@login')->middleware('saml');
 Route::post('/saml-response', 'Auth\LoginController@saml');
 
-Route::get('/logout', function () {
-    Session::flush();
-    Auth::logout();
-    return redirect(url('/'));
-});
 
 Route::resource('assets', 'Api\v1\AssetController');
 Route::resource('room', 'Api\v1\RoomController');

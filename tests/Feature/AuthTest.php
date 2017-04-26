@@ -16,7 +16,7 @@ class AuthTest extends TestCase
      */
     public function it_goes_to_login()
     {
-        $response = $this->get('/login');
+        $response = $this->post('/login');
         $this->assertTrue($response->status() == 200);
     }
 
