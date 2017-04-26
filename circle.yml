@@ -8,8 +8,8 @@ machine:
         version: 7.1.0
 
     services:
-        # - docker
-        - mysql
+        - docker
+        #- mysql
     post:
     - chromedriver:
         background: true
@@ -31,6 +31,8 @@ machine:
         DB_USER: ubuntu
 
 
+
+
 checkout:
   post:
     - rm -rf wits
@@ -39,7 +41,7 @@ checkout:
 dependencies:
   pre:
     # - sudo pip install docker-compose
-    # - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
     - pwd
     - sudo composer self-update
 
@@ -56,10 +58,10 @@ dependencies:
     - sudo ln -s /opt/circleci/.phpenv/shims/php /usr/local/bin/php
     - sudo cp /opt/circleci/.phpenv/shims/php /usr/bin/php
     - cp .env.dusk.testing .env
-    - "sudo php artisan serve --host=dev.wits.weber.edu --port=443 > server.log 2>&1":
+    - "sudo php artisan serve --host=dev.wits.weber.edu --port=8080 > server.log 2>&1":
         background: true
-    - "sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 443"
-    - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 443"
+    - "sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080"
+    - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080"
 
 # database:
 
