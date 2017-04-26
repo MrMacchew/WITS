@@ -8,7 +8,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected $baseUrl = 'http://localhost';
+    // protected $baseUrl = 'http://localhost';
 
     protected function setUp()
     {
@@ -16,14 +16,14 @@ abstract class TestCase extends BaseTestCase
     }
 
 
-    protected function disableExceptionHandling()
-    {
-        $this->app->instance(ExceptionHandler::class, new class extends Handler {
-            public function __construct() {}
-            public function report(Exception $e) {}
-            public function render($request, Exception $e) {
-                throw $e;
-            }
-        });
-    }
+    // protected function disableExceptionHandling()
+    // {
+    //     $this->app->instance(ExceptionHandler::class, new class extends Handler {
+    //         public function __construct() {}
+    //         public function report(Exception $e) {}
+    //         public function render($request, Exception $e) {
+    //             throw $e;
+    //         }
+    //     });
+    // }
 }
