@@ -34,7 +34,7 @@ class PagesTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
-                    ->assertSee('WITS');
+                    ->assertSee("CAS");
         });
     }
 
