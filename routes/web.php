@@ -19,7 +19,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-
 Route::get('/login', 'Auth\LoginController@login')->middleware('saml');
 Route::post('/saml-response', 'Auth\LoginController@saml');
 
