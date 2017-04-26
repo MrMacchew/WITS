@@ -21,7 +21,7 @@ machine:
         APP_KEY: base64:Oc/a3EFM+m5E+UpYajlPqpxVMe0BmhWxAIsEcpq7HJs=
         APP_DEBUG: true
         APP_LOG_LEVEL: debug
-        APP_URL: http://localhost
+        APP_URL: https://dev.wits.weber.edu
 
         DB_CONNECTION: sqlite
         DB_HOST: 127.0.0.1
