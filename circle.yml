@@ -55,7 +55,6 @@ dependencies:
   post:
     - sudo ln -s /opt/circleci/.phpenv/shims/php /usr/local/bin/php
     - sudo cp /opt/circleci/.phpenv/shims/php /usr/bin/php
-    - sudo "echo "127.0.0.1     dev.wits.weber.edu" >> /etc/hosts"
     - cp .env.dusk.testing .env
     - "sudo php artisan serve --host=dev.wits.weber.edu --port=8080 > server.log 2>&1":
         background: true
