@@ -75,7 +75,7 @@ general:
 
 test:
     override:
-        - php artisan dusk
+        # - php artisan dusk
         - vendor/bin/phpunit
 
 

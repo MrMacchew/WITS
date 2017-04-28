@@ -8,7 +8,7 @@ use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use SimpleXMLElement;
-
+use Illuminate\Support\Str;
 
 
 
@@ -61,8 +61,7 @@ class LoginController extends Controller
         $xml_string = base64_decode($request->get('SAMLResponse'));
         $elements = new SimpleXMLElement($xml_string);
         $result = $elements->children('saml', true)[1]->AttributeStatement;//->Attribute[0]->attributes();
-//        print_r($result->asXML());
-//        die();
+//        dd($result->asXML());
         foreach($result as $v) {
             foreach($v as $i => $val) {
                 if($val->AttributeValue->count() > 1) {
@@ -75,15 +74,14 @@ class LoginController extends Controller
             }
         }
 
-//         print(json_encode($saml));
-//         die();
+        // dd(json_encode($saml));
 
         //does user exist?
         $user = User::where('email', '=', $saml['email'])->first();
 
-        //if user doesn't exist set Sentry
+        //if user doesn't exist create User
         if(!$user) {
-            $user = User::create(['username' => $saml['sAMAccountName'], 'password' => Str::random(16),
+            $user = User::create(['user' => $saml['sAMAccountName'], 'password' => Str::random(16),
                 'email' => $saml['email'], 'first_name' => $saml['FirstName'], 'last_name' => $saml['LastName']]);
             $user->assignRole('user');
 
@@ -92,6 +90,6 @@ class LoginController extends Controller
         Auth::loginUsingId($user->id);
 
         // Redirect Home
-        return redirect('/home');
+        return redirect('/dashboard');
     }
 }

@@ -6,8 +6,6 @@ Route::get('/', function () {
 });
 
 
-
-
 Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
     // Custom route added to standard Resource
     // Route::get('example/foo', 'ExampleController@foo');
@@ -18,8 +16,10 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/settings', 'PagesController@settings');
 
 Route::get('/login', 'Auth\LoginController@login')->middleware('saml');
+Route::get('/logout', 'Auth\LoginController@logout');
 Route::post('/saml-response', 'Auth\LoginController@saml');
 
 

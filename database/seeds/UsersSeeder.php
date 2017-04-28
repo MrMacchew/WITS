@@ -11,7 +11,7 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('assets')->delete();
+        DB::table('users')->delete();
         factory(App\User::class, 50)->create();
     }
 }
