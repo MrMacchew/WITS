@@ -20,5 +20,4 @@ class AuthTest extends TestCase
         $this->assertTrue($response->status() == 200);
     }
 
-
 }

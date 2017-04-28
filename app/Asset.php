@@ -22,7 +22,6 @@ class Asset extends Model
      * @var array
      */
     protected $fillable = [
-        "id",
         "room_id",
         "name",
         "manufacturer",

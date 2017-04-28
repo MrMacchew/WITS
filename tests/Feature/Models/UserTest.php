@@ -27,13 +27,15 @@ class UserTest extends TestCase
     public function it_creates_a_demo_user(){
 
             $user = \App\User::create([
-                "name" => "demouser",
+                "first_name" => "demo",
+                "last_name" => "user",
+                "username" => "demouser",
                 "email" => "demo@weber.edu",
                 "password" => bcrypt('demodemo')
                 ]);
 
-            $demouser = \App\User::where('name','demouser')->first();
-            $this->assertTrue($demouser->name == $user->name);
+            $demouser = \App\User::where('username','demouser')->first();
+            $this->assertTrue($demouser->username == $user->username);
     }
 
 

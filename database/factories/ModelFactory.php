@@ -18,12 +18,12 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
     $firstname = $faker->unique()->firstName;
     $lastname = $faker->unique()->lastName;
-    $user = $faker->unique()->firstName . $faker->unique()->lastName;
+    $user = $faker->firstName . "_" . $faker->lastName;
 
     $data = [
         'first_name' => $firstname,
         'last_name' => $lastname,
-        'user' => $user,
+        'username' => $user,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
