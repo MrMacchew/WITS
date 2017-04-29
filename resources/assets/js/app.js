@@ -6,6 +6,8 @@
  */
 
 require('./bootstrap');
+require('./sb-admin-2');
+require('./metisMenu');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
