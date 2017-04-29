@@ -1,1 +1,0 @@
-sidebar.blade.php

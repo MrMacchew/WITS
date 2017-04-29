@@ -1,6 +1,6 @@
 @extends('layouts.default', ['sidebar' => true])
 
-@section ('page_heading','Locations')
+@section ('page_heading','Users')
 @section('content')
 
 

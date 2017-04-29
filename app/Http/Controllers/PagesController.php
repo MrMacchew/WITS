@@ -10,4 +10,23 @@ class PagesController extends Controller
     {
     	return view('pages/settings');
     }
+
+    public function inventory()
+    {
+    	return view('pages/inventory');
+    }
+    public function locations()
+    {
+    	return view('pages/locations');
+    }
+
+    public function users()
+    {
+    	return view('pages/users');
+    }
+
+    public function departments()
+    {
+    	return view('pages/departments');
+    }
 }

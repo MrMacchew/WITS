@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.blank', ['sidebar' => false])
 
 @section('content')
 

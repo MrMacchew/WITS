@@ -1,8 +1,7 @@
 @extends('layouts.default', ['sidebar' => true])
 
-@section ('page_heading','Locations')
+@section ('page_heading','Departments')
 @section('content')
-
 
 <div id="accordion" class="panel-group">
 	<div class="panel panel-success">
@@ -22,6 +21,5 @@
 		</div>
 	</div>
 </div>
-
 
 @stop

@@ -1,13 +1,14 @@
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
     <div class="navbar-header">
-         
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
         <a class="navbar-brand" href="{{ url ('/') }}">{{ config('app.name', 'Laravel') }}</a>
     </div>
     <!-- /.navbar-header -->
-    
-    <ul class="nav navbar-top-links navbar-left">
-        <li class="active"><a href="#">Link</a></li>
-    </ul>
 
     <ul class="nav navbar-top-links navbar-right">
 
@@ -105,5 +106,49 @@
 
     </ul>
     <!-- /.navbar-top-links -->
+
+
+    @if (Auth::check())
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </li>
+
+                    <li {{ (Request::is('/dashboard') ? 'class="active"' : '') }}>
+                        <a href="{{ url ('/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    </li>
+
+                    <li {{ (Request::is('/inventory') ? 'class="active"' : '') }}>
+                        <a href="{{ url ('/inventory') }}"><i class="fa fa-list-alt fa-fw"></i> Inventory</a>
+                    </li>
+
+                    <li {{ (Request::is('/departments') ? 'class="active"' : '') }}>
+                        <a href="{{ url ('/departments') }}"><i class="fa fa-sitemap fa-fw"></i> Departments</a>
+                    </li>
+
+                    <li {{ (Request::is('/locations') ? 'class="active"' : '') }}>
+                        <a href="{{ url ('/locations') }}"><i class="fa fa-map-marker fa-fw"></i> Locations</a>
+                    </li>
+
+                    <li {{ (Request::is('/users') ? 'class="active"' : '') }}>
+                        <a href="{{ url ('/users') }}"><i class="fa fa-users fa-fw"></i> Users</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+    @endif
 
 </nav>

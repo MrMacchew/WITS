@@ -1,8 +1,7 @@
 @extends('layouts.default', ['sidebar' => true])
 
-@section ('page_heading','Locations')
+@section ('page_heading','Inventory')
 @section('content')
-
 
 <div id="accordion" class="panel-group">
 	<div class="panel panel-success">
@@ -15,13 +14,12 @@
 			</h4>
 		</div>
 
-		<div id="collapse3" class="panel-collapse collapse in" aria-expanded="true" style="height: 0px;">
+		<div id="collapse3" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
 			<div class="panel-body">
-				Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. In accusantium fuga obcaecati debitis asperiores voluptates vero, est, dignissimos similique alias quis? Vitae commodi hic sit pariatur sapiente id est alias..
 			</div>
 		</div>
 	</div>
 </div>
-
 
 @stop

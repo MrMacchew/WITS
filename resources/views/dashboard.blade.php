@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.default', ['sidebar' => true])
 
 @section ('page_heading','Dashboard')
 @section('content')
@@ -15,11 +15,11 @@
 		</div>
 
 		<div id="collapse3" class="panel-collapse collapse in" aria-expanded="true" style="height: 0px;">
-		<div class="panel-body">
-			Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+			<div class="panel-body">
+				Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+			</div>
 		</div>
 	</div>
-</div>
 </div>
 
 @endsection
