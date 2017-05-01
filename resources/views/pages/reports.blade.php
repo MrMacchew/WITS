@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section ('page_heading','Locations')
+@section ('page_heading','Reports')
 @section('content')
 
 

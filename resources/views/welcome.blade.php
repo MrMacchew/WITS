@@ -8,11 +8,11 @@
 
     <div>
         @if (Auth::check())
-        @role('user')
-        I'm a user!
-        @else
-        I'm not a user...
-        @endrole
+            @role('user')
+                I'm a user!
+            @else
+                I'm not a user...
+            @endrole
         @endif
     </div>
 </div>

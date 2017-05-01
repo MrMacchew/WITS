@@ -17,6 +17,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
 
 mix.browserSync({
     //proxy: 'http://localhost'
-    proxy: 'http://192.168.99.100/'
+    proxy: 'https://dev.wits.weber.edu/'
 });
 

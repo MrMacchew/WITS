@@ -142,7 +142,24 @@
                     </li>
 
                     <li {{ (Request::is('/users') ? 'class="active"' : '') }}>
-                        <a href="{{ url ('/users') }}"><i class="fa fa-users fa-fw"></i> Users</a>
+                        <a href="#"><i class="fa fa-users fa-fw"></i> Users <span class="fa arrow"></a>
+
+                        <ul class="nav nav-second-level">
+                            <li {{ (Request::is('/users') ? 'class="active"' : '') }}>
+                                <a href="{{ url ('/users') }}">Users List</a>
+                            </li>
+
+                            <li {{ (Request::is('*roles-permissions') ? 'class="active"' : '') }}>
+                                <a href="{{ url ('/users/roles-permissions') }}">Roles / Permissions</a>
+                            </li>
+
+                             
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+
+                    <li {{ (Request::is('/reports') ? 'class="active"' : '') }}>
+                        <a href="{{ url ('/reports') }}"><i class="fa fa-file-text-o fa-fw"></i> Reports</a>
                     </li>
                 </ul>
             </div>

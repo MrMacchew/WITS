@@ -17,8 +17,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('/login', 'Auth\LoginController@login')->middleware('saml');
-Route::get('/logout', 'Auth\LoginController@logout');
+Route::get('/login', [ 'as' => 'login', 'uses' => 'Auth\LoginController@login'] )->middleware('saml');
+Route::get('/logout', [ 'as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 Route::post('/saml-response', 'Auth\LoginController@saml');
 
 
@@ -36,7 +36,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('departments', 'PagesController@departments');
 	Route::get('settings', 'PagesController@settings');
 	Route::get('locations', 'PagesController@locations');
+
 	Route::get('users', 'PagesController@users');
+	Route::get('users/roles-permissions', 'PagesController@rolesPermissions');
+
+	Route::get('reports', 'PagesController@reports');
 });
 
 

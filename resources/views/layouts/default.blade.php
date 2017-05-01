@@ -7,7 +7,7 @@
 
     <div id="app">
         
-        @if($sidebar)
+        @unless(isset($sidebar))
             @include('includes.header-sidebar')
         @else
             @include('includes.header')

@@ -81,7 +81,7 @@ class LoginController extends Controller
 
         //if user doesn't exist create User
         if(!$user) {
-            $user = User::create(['user' => $saml['sAMAccountName'], 'password' => Str::random(16),
+            $user = User::create(['username' => $saml['sAMAccountName'], 'password' => Str::random(16),
                 'email' => $saml['email'], 'first_name' => $saml['FirstName'], 'last_name' => $saml['LastName']]);
             $user->assignRole('user');
 

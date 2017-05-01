@@ -105,6 +105,10 @@ body {
     background-color: #eee;
 }
 
+.sidebar ul.nav-second-level li.active {
+    background-color: red;
+}
+
 .sidebar .arrow {
     float: right;
 }

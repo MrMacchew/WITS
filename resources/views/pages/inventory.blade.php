@@ -1,5 +1,4 @@
-@extends('layouts.default', ['sidebar' => true])
-
+@extends('layouts.default')
 @section ('page_heading','Inventory')
 @section('content')
 

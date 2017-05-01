@@ -6,7 +6,10 @@
     <!-- /.navbar-header -->
     
     <ul class="nav navbar-top-links navbar-left">
-        <li class="active"><a href="#">Link</a></li>
+        @if(Auth::check())
+        <li><a href="dashboard">dashboard</a></li>
+        @endif
+
     </ul>
 
     <ul class="nav navbar-top-links navbar-right">
