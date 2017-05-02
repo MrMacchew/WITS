@@ -16,6 +16,7 @@ require('./metisMenu');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('vuetable', require('VueBootstrapTable'));
 
 Vue.component(
     'passport-clients',

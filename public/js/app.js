@@ -11545,6 +11545,7 @@ __webpack_require__(38);
  */
 
 Vue.component('example', __webpack_require__(45));
+Vue.component('vuetable', __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"VueBootstrapTable\""); e.code = 'MODULE_NOT_FOUND';; throw e; }())));
 
 Vue.component('passport-clients', __webpack_require__(47));
 
@@ -11567,7 +11568,7 @@ $.ajaxSetup({
 /* 14 */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed: ModuleBuildError: Module build failed: \r\n@import \"node_modules/font-awesome/css/font-awesome\";\r\n^\r\n      File to import not found or unreadable: node_modules/font-awesome/css/font-awesome.\nParent style sheet: stdin\r\n      in C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\sass\\app.scss (line 11, column 1)\n    at C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\webpack\\lib\\NormalModule.js:141:35\n    at C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\loader-runner\\lib\\LoaderRunner.js:364:11\n    at C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\loader-runner\\lib\\LoaderRunner.js:230:18\n    at context.callback (C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\sass-loader\\lib\\loader.js:51:13)\n    at Object.<anonymous> (C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\async\\dist\\async.js:2237:31)\n    at apply (C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\async\\dist\\async.js:20:25)\n    at Object.<anonymous> (C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\async\\dist\\async.js:56:12)\n    at Object.callback (C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\async\\dist\\async.js:843:16)\n    at options.error (C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\node-sass\\lib\\index.js:294:32)");
 
 /***/ }),
 /* 15 */
@@ -32997,7 +32998,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/Example.vue"
+Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -33035,7 +33036,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/passport/AuthorizedClients.vue"
+Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\passport\\AuthorizedClients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] AuthorizedClients.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -33073,7 +33074,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/passport/Clients.vue"
+Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\passport\\Clients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Clients.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -33111,7 +33112,7 @@ var Component = __webpack_require__(2)(
   /* cssModules */
   null
 )
-Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/passport/PersonalAccessTokens.vue"
+Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\passport\\PersonalAccessTokens.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] PersonalAccessTokens.vue: functional components are not supported with templates, they should use render functions.")}
 

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         {
             //Staging Seeds
 
-            // $this->call(UsersSeeder::class);
+            $this->call(UsersSeeder::class);
             // $this->call(CampusSeeder::class);
             // $this->call(DepartmentOrgSeeder::class);
             // $this->call(BuildingDepartmentSeeder::class);

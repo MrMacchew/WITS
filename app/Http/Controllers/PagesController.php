@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\User;
 
 class PagesController extends Controller
 {
@@ -29,9 +30,21 @@ class PagesController extends Controller
 
     public function users()
     {
-        return view('pages/users');
+
+        $users = User::with('roles', 'departments')->get();
+        // foreach ($users as $user) {
+        //     dump($user->roles->first());
+        // }
+
+        $data = [
+            "users" => $users,
+            "roles" => Role::all(),
+        ];
+
+        // dd(collect($data)->toArray());
+        return view('pages/users', $data);
     }
-    
+
     public function rolesPermissions()
     {
 
