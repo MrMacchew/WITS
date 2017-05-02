@@ -31,17 +31,20 @@ class PagesController extends Controller
     public function users()
     {
 
+        //users
         $users = User::with('roles', 'departments')->get();
-        // foreach ($users as $user) {
-        //     dump($user->roles->first());
-        // }
+
+        //roles
+        $roles = Role::all();
+        $rolesList = $roles->pluck('name')->toArray();
+        array_unshift($rolesList, "");
 
         $data = [
             "users" => $users,
-            "roles" => Role::all(),
+            "roles" => $roles,
+            "rolesList" => $rolesList,
         ];
 
-        // dd(collect($data)->toArray());
         return view('pages/users', $data);
     }
 

@@ -2,3 +2,12 @@
    padding: 0 !important;
    margin: 0 !important;
 }
+
+[aria-expanded=true] .fa-chevron-right {
+    cursor: pointer;
+    display: none;
+}
+[aria-expanded=false] .fa-chevron-down {
+    cursor: pointer;
+    display: none;
+}

@@ -33,5 +33,6 @@
     </div>
 
     <script src="{{ asset('js/app.js') }}"></script>
+    @yield('page_scripts')
 </body>
 </html>
