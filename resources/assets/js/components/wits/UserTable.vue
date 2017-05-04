@@ -92,6 +92,7 @@
 
 <script>
   import Fuse from 'fuse.js';
+  import _ from 'lodash';
 
 
   export default {
@@ -140,7 +141,7 @@
         ]
       };
 
-      
+
 
       axios.get('/api/v1/users?with=roles,departments')
       .then(function (response) {
