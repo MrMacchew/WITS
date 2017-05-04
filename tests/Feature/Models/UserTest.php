@@ -53,7 +53,7 @@ class UserTest extends TestCase
         $this->assertTrue($response->status() == 200);
         $response->assertJsonFragment(['username' => 'demouser']);
 
-        $data = (array) $response->decodeResponseJson()['data'];
+        $data = (array) $response->decodeResponseJson();
 
         $this->assertEquals(1, count($data));
         $this->assertNotEquals(2, count($data));
@@ -75,7 +75,7 @@ class UserTest extends TestCase
         //Assert
         $this->assertTrue($response->status() == 200);
 
-        $data = (array) $response->decodeResponseJson()['data'];
+        $data = (array) $response->decodeResponseJson();
 
         $this->assertEquals(2, count($data));
 
@@ -101,10 +101,12 @@ class UserTest extends TestCase
         $this->createUsersWithRoles();
 
         //Act
-        $response = $this->get('/api/v1/users?fields=id,email');        //Assert
+        $response = $this->get('/api/v1/users?fields=id,email');
+
+        //Assert
         $this->assertTrue($response->status() == 200);
 
-        $data = (array) $response->decodeResponseJson()['data'];
+        $data = (array) $response->decodeResponseJson();
         // dd($data);
         // //has Keys
         $this->assertTrue(array_key_exists("id",$data[0]));
