@@ -67,14 +67,13 @@ class UserController extends ApiController
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user, Request $request)
+    public function show($id, Request $request)
     {
 
         $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
         $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
 
-        $user->load($with);
-        return $user;
+        return User::with($with)->find($id, $fields);
     }
 
     /**

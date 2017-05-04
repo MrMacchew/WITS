@@ -157,6 +157,31 @@ class UserTest extends TestCase
 
     }
 
+    /** @test */
+    public function it_grabs_the_first_user_with_fields(){
+         //Arrange
+        $this->createUsersWithRoles();
+
+        //Act
+        $response = $this->get('/api/v1/users/1?fields=id,email');
+
+        //Assert
+
+        //page loads
+        $this->assertTrue($response->status() == 200);
+
+        $data = (array) $response->decodeResponseJson();
+        // dd($data);
+
+        //has Keys
+        $this->assertTrue(array_key_exists("id",$data));
+        $this->assertTrue(array_key_exists("email",$data));
+
+        //role == user
+        $this->assertEquals('demo@weber.edu',$data['email']);
+
+    }
+
     private function createUsersWithRoles(){
         Role::create(['name' => 'user']);
         Role::create(['name' => 'admin']);
