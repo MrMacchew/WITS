@@ -14,8 +14,9 @@ class UsersSeeder extends Seeder
         factory(App\User::class, 10)->create()->each(function ($user) {
 
             $user->assignRole('user');
-            // dump($campus->buildings->toArray());
 
+            //add department
+            // $user->department
         });
     }
 }

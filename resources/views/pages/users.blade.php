@@ -7,7 +7,9 @@
 
 <div class="container-fluid">
 
- <table class="table table-striped" style="border-collapse:collapse;">
+<user-table></user-table>
+
+{{--  <table class="table table-striped" style="border-collapse:collapse;">
     <thead>
       <tr>
         <th></th>
@@ -92,18 +94,7 @@
 
     </tbody>
   </table>
-
+ --}}
 
 </div>
-@stop
-
-@section('page_scripts')
-<script>
-
-
-
-
-
-
-</script>
 @stop

@@ -21,9 +21,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return App\User::all();
 // });
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'v1','namespace' => 'Api\v1'], function () {
-// Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
-    Route::resource('user', 'UserController');
+// Route::group(['middleware' => 'auth:api', 'prefix' => 'v1','namespace' => 'Api\v1'], function () {
+Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
+    // Route::get('users/{id?}',  'ApiController@users');
+    Route::resource('users', 'UserController');
     Route::resource('asset', 'AssetController');
     Route::resource('campus', 'CampusController');
     Route::resource('building', 'BuildingController');

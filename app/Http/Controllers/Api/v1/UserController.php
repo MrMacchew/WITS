@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\User;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class UserController extends ApiController
@@ -12,9 +14,30 @@ class UserController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return User::find(1);
+        //search usage - api/v1/users?search=de
+        //relations usage - api/v1/users?with=roles,departments
+        //fields usage - api/v1/users?fields=email,id,username
+        //all usages - api/v1/users?search=de&fields=email,id,username&with=roles,departments
+
+        //search
+        //with - get relations
+        //fields
+
+        $search = !empty($request->query('search')) ? explode(',', $request->query('search')) : null;
+        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
+        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
+        $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
+
+
+        // dump("search", $search);
+        // dump("with", $with);
+        // dump("fields", $fields);
+        // dump("limit", $limit );
+
+
+        return User::where('email', 'LIKE', "%$search[0]%")->with($with)->paginate($limit, $fields, 'mypage');
     }
 
     /**
@@ -44,9 +67,14 @@ class UserController extends ApiController
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(User $user, Request $request)
     {
-        //
+
+        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
+        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
+
+        $user->load($with);
+        return $user;
     }
 
     /**
