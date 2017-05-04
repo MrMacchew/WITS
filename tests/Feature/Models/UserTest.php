@@ -43,26 +43,8 @@ class UserTest extends TestCase
     /** @test */
     public function it_uses_request_all_params(){
         //Arrange
-        Role::create(['name' => 'user']);
-        Role::create(['name' => 'admin']);
 
-        $demoUser = \App\User::create([
-                "first_name" => "demo",
-                "last_name" => "user",
-                "username" => "demouser",
-                "email" => "demo@weber.edu",
-                "password" => bcrypt('demodemo')
-                ])->assignRole('user');
-
-        $adminUser = \App\User::create([
-                "first_name" => "admin",
-                "last_name" => "user",
-                "username" => "adminuser",
-                "email" => "admin@weber.edu",
-                "password" => bcrypt('adminadmin')
-                ])->assignRole('admin');
-
-        $this->assertEquals(2, \App\User::all()->count());
+        $this->createUsersWithRoles();
 
         // //Act
         $response = $this->get('/api/v1/users?search=demo&with=roles,departments&fields=email,id,username');
@@ -85,33 +67,12 @@ class UserTest extends TestCase
     public function it_can_request_with(){
 
         //Arrange
-        Role::create(['name' => 'user']);
-        Role::create(['name' => 'admin']);
-
-        $demoUser = \App\User::create([
-                "first_name" => "demo",
-                "last_name" => "user",
-                "username" => "demouser",
-                "email" => "demo@weber.edu",
-                "password" => bcrypt('demodemo')
-                ]);
-        $demoUser->assignRole('user');
-
-        $adminUser = \App\User::create([
-                "first_name" => "admin",
-                "last_name" => "user",
-                "username" => "adminuser",
-                "email" => "admin@weber.edu",
-                "password" => bcrypt('adminadmin')
-                ]);
-        $adminUser->assignRole('admin');
-
-        $this->assertEquals(2, \App\User::all()->count());
+        $this->createUsersWithRoles();
 
         // //Act
         $response = $this->get('/api/v1/users?with=roles,departments');
 
-        // //Assert
+        //Assert
         $this->assertTrue($response->status() == 200);
 
         $data = (array) $response->decodeResponseJson()['data'];
@@ -134,38 +95,28 @@ class UserTest extends TestCase
         $response = $this->get('/api/v1/users?search=de');
         $this->assertTrue($response->status() == 200);
     }
-
-
-
     /** @test */
     public function it_can_request_fields(){
-        $response = $this->get('/api/v1/users?fields=id,email');
+        //Arrange
+        $this->createUsersWithRoles();
+
+        //Act
+        $response = $this->get('/api/v1/users?fields=id,email');        //Assert
         $this->assertTrue($response->status() == 200);
-    }
 
+        $data = (array) $response->decodeResponseJson()['data'];
+        // dd($data);
+        // //has Keys
+        $this->assertTrue(array_key_exists("id",$data[0]));
+        $this->assertTrue(array_key_exists("email",$data[0]));
 
-    /** @test */
+        //shouldn't have keys
+        $this->assertFalse(array_key_exists("first_name",$data[0]));
+        $this->assertFalse(array_key_exists("last_name",$data[0]));
+    }    /** @test */
     public function it_grabs_the_first_user(){
          //Arrange
-        Role::create(['name' => 'user']);
-        Role::create(['name' => 'admin']);
-
-        $demoUser = \App\User::create([
-                "first_name" => "demo",
-                "last_name" => "user",
-                "username" => "demouser",
-                "email" => "demo@weber.edu",
-                "password" => bcrypt('demodemo')
-                ])->assignRole('user');
-        $adminUser = \App\User::create([
-                "first_name" => "admin",
-                "last_name" => "user",
-                "username" => "adminuser",
-                "email" => "admin@weber.edu",
-                "password" => bcrypt('adminadmin')
-                ])->assignRole('admin');
-
-        $this->assertEquals(2, \App\User::all()->count());
+        $this->createUsersWithRoles();
 
         //Act
         $response = $this->get('/api/v1/users/1');
@@ -184,26 +135,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_grabs_the_first_user_with_withs(){
          //Arrange
-        Role::create(['name' => 'user']);
-        Role::create(['name' => 'admin']);
-
-        $demoUser = \App\User::create([
-                "first_name" => "demo",
-                "last_name" => "user",
-                "username" => "demouser",
-                "email" => "demo@weber.edu",
-                "password" => bcrypt('demodemo')
-                ])->assignRole('user');
-
-        $adminUser = \App\User::create([
-                "first_name" => "admin",
-                "last_name" => "user",
-                "username" => "adminuser",
-                "email" => "admin@weber.edu",
-                "password" => bcrypt('adminadmin')
-                ])->assignRole('admin');
-
-        $this->assertEquals(2, \App\User::all()->count());
+        $this->createUsersWithRoles();
 
         //Act
         $response = $this->get('/api/v1/users/1?with=roles,departments');
@@ -225,5 +157,27 @@ class UserTest extends TestCase
 
     }
 
+    private function createUsersWithRoles(){
+        Role::create(['name' => 'user']);
+        Role::create(['name' => 'admin']);
+
+        $demoUser = \App\User::create([
+                "first_name" => "demo",
+                "last_name" => "user",
+                "username" => "demouser",
+                "email" => "demo@weber.edu",
+                "password" => bcrypt('demodemo')
+                ])->assignRole('user');
+
+        $adminUser = \App\User::create([
+                "first_name" => "admin",
+                "last_name" => "user",
+                "username" => "adminuser",
+                "email" => "admin@weber.edu",
+                "password" => bcrypt('adminadmin')
+                ])->assignRole('admin');
+
+        $this->assertEquals(2, \App\User::all()->count());
+    }
 
 }

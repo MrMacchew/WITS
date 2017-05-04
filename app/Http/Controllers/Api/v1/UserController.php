@@ -37,7 +37,7 @@ class UserController extends ApiController
         // dump("limit", $limit );
 
 
-        return User::where('email', 'LIKE', "%$search[0]%")->with($with)->paginate($limit, $fields, 'mypage');
+        return User::where('email', 'LIKE', "%$search[0]%")->with($with)->paginate($limit, $fields);
     }
 
     /**
