@@ -2,7 +2,8 @@
 /public/storage
 /public/hot
 /storage/*.key
-/vendor
+vendor/
+!resources/assets/js/vendor/
 /.idea
 Homestead.json
 Homestead.yaml
@@ -81,7 +82,6 @@ fabric.properties
 .idea/sonarlint
 
 ### Laravel ###
-vendor/
 node_modules/
 npm-debug.log
 
@@ -163,3 +163,4 @@ bh_unicode_properties.cache
 GitHub.sublime-settings
 
 # End of https://www.gitignore.io/api/macos,laravel,intellij,sublimetext
+

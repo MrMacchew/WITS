@@ -19,7 +19,7 @@ class CreateRoomTable extends Migration
             $table->string('name');
             $table->string('style_id');
             $table->integer('capacity');
-            $table->integer('support_id');
+            $table->integer('support_id')->nullable();
             $table->timestamps();
         });
     }
