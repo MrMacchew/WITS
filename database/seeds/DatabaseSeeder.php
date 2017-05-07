@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         if (App::environment('local', 'testing'))
         {
             //Staging Seeds
+            $this->call(RoomSeeder::class);
 
             // $this->call(BuildingDepartmentSeeder::class);
             $this->call(UsersSeeder::class);

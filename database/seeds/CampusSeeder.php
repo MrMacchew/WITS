@@ -12,6 +12,7 @@ class CampusSeeder extends Seeder
     public function run()
     {
         DB::table('campus')->insert(['name' => "WSU", "campus_code"=>'1']);
+        DB::table('campus')->insert(['name' => "Davis", "campus_code"=>'2']);
 
     }
 }

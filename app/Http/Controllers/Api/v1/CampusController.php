@@ -45,9 +45,6 @@ class CampusController extends ApiController
         $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
         $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
 
-
-
-        // return User::where('email', 'LIKE', "%$search[0]%")->with($with)->paginate($limit, $fields);
         return Campus::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 
