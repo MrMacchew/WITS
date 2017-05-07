@@ -109,18 +109,6 @@ body {
     background-color: red;
 }
 
-.sidebar .arrow {
-    float: right;
-}
-
-.sidebar .fa.arrow:before {
-    content: "\f104";
-}
-
-.sidebar .active>a>.fa.arrow:before {
-    content: "\f107";
-}
-
 .sidebar .nav-second-level li,
 .sidebar .nav-third-level li {
     border-bottom: 0!important;

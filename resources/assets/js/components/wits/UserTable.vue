@@ -1,6 +1,12 @@
 <template>
   <div>
-  <input id="search" type="text" v-model="search">
+
+    <div class="btn-group">
+      <i class="fa fa-filter"></i>
+      <input id="search" type="text" v-model="search">
+      <span id="searchclear" @click="search = ''" class="glyphicon glyphicon-remove-circle"></span>
+    </div>
+
 
     <table class="table table-striped" style="border-collapse:collapse;">
       <thead>
@@ -26,9 +32,11 @@
             <td>{{user.first_name}}</td>
             <td>{{user.last_name}}</td>
             <td>{{user.email}}</td>
-            <td >
+            <td>
               <select name="" class='form-control '>
-                <option v-for="role in roles" :value="role.name" :selected="role.name == user.roles[0].name"> {{role.name}} </option>
+                <option v-for="role in roles"
+                :value="role.name"
+                :selected="role.name == user.roles[0].name"> {{role.name}} </option>
               </select>
             </td>
             <td>{{user.department}}</td>
@@ -69,12 +77,6 @@
                       </div>
                     </div>
                   </div>
-
-                  <form>
-
-                    Form
-
-                  </form>
 
                 </div>
 
@@ -150,6 +152,15 @@
 
         vm.fuse = new Fuse(response.data, options);
         vm.result = vm.users
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      axios.get('/api/v1/roles?fields=id,name')
+      .then(function (response) {
+        console.log(response);
+        vm.roles = response.data;
       })
       .catch(function (error) {
         console.log(error);

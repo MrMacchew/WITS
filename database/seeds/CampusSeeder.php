@@ -11,11 +11,7 @@ class CampusSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Campus::class, 10)->create()->each(function ($campus) {
+        DB::table('campus')->insert(['name' => "WSU", "campus_code"=>'1']);
 
-            $campus->buildings()->save(factory(App\Building::class)->make());
-            // dump($campus->buildings->toArray());
-
-        });
     }
 }

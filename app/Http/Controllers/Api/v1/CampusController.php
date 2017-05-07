@@ -38,9 +38,17 @@ class CampusController extends ApiController
      *     deprecated=false
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Campus::all();
+        $search = !empty($request->query('search')) ? explode(',', $request->query('search')) : null;
+        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
+        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
+        $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
+
+
+
+        // return User::where('email', 'LIKE', "%$search[0]%")->with($with)->paginate($limit, $fields);
+        return Campus::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 
     /**
@@ -66,8 +74,7 @@ class CampusController extends ApiController
         'campus_code' => 'required|unique:campus',
         ]);
 
-        $campus = Campus::create($request->all());
-        return $campus;
+        return Campus::create($request->all());
     }
 
     /**
@@ -76,9 +83,12 @@ class CampusController extends ApiController
      * @param  \App\Campus  $campus
      * @return \Illuminate\Http\Response
      */
-    public function show(Campus $campus)
+    public function show($id, Request $request)
     {
-        //
+        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
+        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
+
+        return Campus::with($with)->find($id, $fields);
     }
 
     /**

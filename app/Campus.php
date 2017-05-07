@@ -30,6 +30,6 @@ class Campus extends Model
 
     public function buildings()
     {
-        return $this->hasMany('App\Building', 'id');
+        return $this->hasMany('App\Building', 'campus_id', 'id');
     }
 }

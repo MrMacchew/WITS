@@ -7,6 +7,13 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+
 @import "sb-admin-2.css";
+
+
 @import "node_modules/font-awesome/scss/font-awesome";
 @import "helpers";
+@import "bs-tinynavbar";
+@import "/wits/menus.scss";
+

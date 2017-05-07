@@ -11525,11 +11525,12 @@ module.exports = g;
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
 /* WEBPACK VAR INJECTION */(function($) {__webpack_require__(38);
 __webpack_require__(40);
-__webpack_require__(39);
+__webpack_require__(81);
 __webpack_require__(41);
 
 $.ajaxSetup({
@@ -11539,7 +11540,10 @@ $.ajaxSetup({
 });
 
 Vue.component('example', __webpack_require__(47));
+
 Vue.component('user-table', __webpack_require__(51));
+Vue.component('locations', __webpack_require__(79));
+
 Vue.component('passport-clients', __webpack_require__(49));
 Vue.component('passport-authorized-clients', __webpack_require__(48));
 Vue.component('passport-personal-access-tokens', __webpack_require__(50));
@@ -11547,7 +11551,7 @@ Vue.component('passport-personal-access-tokens', __webpack_require__(50));
 var app = new Vue({
   el: '#app'
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
 /* 14 */
@@ -13360,6 +13364,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -13406,6 +13412,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       vm.fuse = new __WEBPACK_IMPORTED_MODULE_0_fuse_js___default.a(response.data, options);
       vm.result = vm.users;
+    }).catch(function (error) {
+      console.log(error);
+    });
+
+    axios.get('/api/v1/roles?fields=id,name').then(function (response) {
+      console.log(response);
+      vm.roles = response.data;
     }).catch(function (error) {
       console.log(error);
     });
@@ -13471,128 +13484,7 @@ window.axios.defaults.headers.common = {
 // });
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(jQuery) {/*
- * metismenu - v1.1.3
- * Easy menu jQuery plugin for Twitter Bootstrap 3
- * https://github.com/onokumus/metisMenu
- *
- * Made by Osman Nuri Okumus
- * Under MIT License
- */
-;(function ($, window, document, undefined) {
-
-    var pluginName = "metisMenu",
-        defaults = {
-        toggle: true,
-        doubleTapToGo: false
-    };
-
-    function Plugin(element, options) {
-        this.element = $(element);
-        this.settings = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.init();
-    }
-
-    Plugin.prototype = {
-        init: function init() {
-
-            var $this = this.element,
-                $toggle = this.settings.toggle,
-                obj = this;
-
-            if (this.isIE() <= 9) {
-                $this.find("li.active").has("ul").children("ul").collapse("show");
-                $this.find("li").not(".active").has("ul").children("ul").collapse("hide");
-            } else {
-                $this.find("li.active").has("ul").children("ul").addClass("collapse in");
-                $this.find("li").not(".active").has("ul").children("ul").addClass("collapse");
-            }
-
-            //add the "doubleTapToGo" class to active items if needed
-            if (obj.settings.doubleTapToGo) {
-                $this.find("li.active").has("ul").children("a").addClass("doubleTapToGo");
-            }
-
-            $this.find("li").has("ul").children("a").on("click" + "." + pluginName, function (e) {
-                e.preventDefault();
-
-                //Do we need to enable the double tap
-                if (obj.settings.doubleTapToGo) {
-
-                    //if we hit a second time on the link and the href is valid, navigate to that url
-                    if (obj.doubleTapToGo($(this)) && $(this).attr("href") !== "#" && $(this).attr("href") !== "") {
-                        e.stopPropagation();
-                        document.location = $(this).attr("href");
-                        return;
-                    }
-                }
-
-                $(this).parent("li").toggleClass("active").children("ul").collapse("toggle");
-
-                if ($toggle) {
-                    $(this).parent("li").siblings().removeClass("active").children("ul.in").collapse("hide");
-                }
-            });
-        },
-
-        isIE: function isIE() {
-            //https://gist.github.com/padolsey/527683
-            var undef,
-                v = 3,
-                div = document.createElement("div"),
-                all = div.getElementsByTagName("i");
-
-            while (div.innerHTML = "<!--[if gt IE " + ++v + "]><i></i><![endif]-->", all[0]) {
-                return v > 4 ? v : undef;
-            }
-        },
-
-        //Enable the link on the second click.
-        doubleTapToGo: function doubleTapToGo(elem) {
-            var $this = this.element;
-
-            //if the class "doubleTapToGo" exists, remove it and return
-            if (elem.hasClass("doubleTapToGo")) {
-                elem.removeClass("doubleTapToGo");
-                return true;
-            }
-
-            //does not exists, add a new class and return false
-            if (elem.parent().children("ul").length) {
-                //first remove all other class
-                $this.find(".doubleTapToGo").removeClass("doubleTapToGo");
-                //add the class on the current element
-                elem.addClass("doubleTapToGo");
-                return false;
-            }
-        },
-
-        remove: function remove() {
-            this.element.off("." + pluginName);
-            this.element.removeData(pluginName);
-        }
-
-    };
-
-    $.fn[pluginName] = function (options) {
-        this.each(function () {
-            var el = $(this);
-            if (el.data(pluginName)) {
-                el.data(pluginName).remove();
-            }
-            el.data(pluginName, new Plugin(this, options));
-        });
-        return this;
-    };
-})(jQuery, window, document);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
+/* 39 */,
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -33352,7 +33244,11 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('input', {
+  return _c('div', [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('i', {
+    staticClass: "fa fa-filter"
+  }), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -33372,7 +33268,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.search = $event.target.value
       }
     }
-  }), _vm._v(" "), _c('table', {
+  }), _vm._v(" "), _c('span', {
+    staticClass: "glyphicon glyphicon-remove-circle",
+    attrs: {
+      "id": "searchclear"
+    },
+    on: {
+      "click": function($event) {
+        _vm.search = ''
+      }
+    }
+  })]), _vm._v(" "), _c('table', {
     staticClass: "table table-striped",
     staticStyle: {
       "border-collapse": "collapse"
@@ -33438,7 +33344,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       domProps: {
         "value": user.email
       }
-    })]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _vm._m(2, true)]), _vm._v(" "), _vm._m(3, true)]), _vm._v(" "), _c('form', [_vm._v("\n\n                  Form\n\n                ")])])])])])]
+    })]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _vm._m(2, true)]), _vm._v(" "), _vm._m(3, true)])])])])])]
   })], 2)])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th'), _vm._v(" "), _c('th', [_vm._v("id")]), _vm._v(" "), _c('th', [_vm._v("First")]), _vm._v(" "), _c('th', [_vm._v("Last")]), _vm._v(" "), _c('th', [_vm._v("Email")]), _vm._v(" "), _c('th', [_vm._v("Role")]), _vm._v(" "), _c('th', [_vm._v("Department")])])])
@@ -44385,6 +44291,644 @@ module.exports = Fuse;
 /******/ ]);
 });
 //# sourceMappingURL=fuse.js.map
+
+/***/ }),
+/* 78 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuse_js__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuse_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fuse_js__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = {
+	data: function data() {
+		return {
+			search: '',
+			campuses: [],
+			fuse: null,
+			result: []
+
+		};
+	},
+	watch: {
+		search: function search() {
+			if (this.search.trim() === '') {
+				this.result = this.users;
+			} else {
+				this.result = this.fuse.search(this.search.trim());
+			}
+		}
+	},
+	mounted: function mounted() {
+		var vm = this;
+		console.log('Component mounted.');
+
+		var options = {
+			caseSensitive: false,
+			tokenize: true,
+			threshold: 0.6,
+			location: 0,
+			distance: 900,
+			maxPatternLength: 32,
+			minMatchCharLength: 1,
+			keys: ["id", 'name']
+		};
+
+		axios.get('/api/v1/campus?with=buildings').then(function (response) {
+			console.log(response);
+			vm.campuses = response.data;
+
+			vm.fuse = new __WEBPACK_IMPORTED_MODULE_0_fuse_js___default.a(vm.campuses, options);
+			vm.result = vm.campuses;
+		}).catch(function (error) {
+			console.log(error);
+		});
+
+		// axios.get('/api/v1/roles?fields=id,name')
+		// .then(function (response) {
+		// 	console.log(response);
+		// 	vm.roles = response.data;
+		// })
+		// .catch(function (error) {
+		// 	console.log(error);
+		// });
+
+		// axios.get('/api/v1/roles?fields=id,name')
+		// .then(function (response) {
+		// 	console.log(response);
+		// 	vm.roles = response.data;
+		// })
+		// .catch(function (error) {
+		// 	console.log(error);
+		// });
+
+	}
+};
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(78),
+  /* template */
+  __webpack_require__(80),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/wits/Locations.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Locations.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-efdd3f76", Component.options)
+  } else {
+    hotAPI.reload("data-v-efdd3f76", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "container-fluid"
+  }, [_c('aside', {
+    staticClass: "col-md-3 col-xs-12"
+  }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('i', {
+    staticClass: "fa fa-filter"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.search),
+      expression: "search"
+    }],
+    attrs: {
+      "id": "search",
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.search)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.search = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "glyphicon glyphicon-remove-circle",
+    attrs: {
+      "id": "searchclear"
+    },
+    on: {
+      "click": function($event) {
+        _vm.search = ''
+      }
+    }
+  })]), _vm._v(" "), _vm._l((_vm.campuses), function(campus, campusKey) {
+    return _c('ul', {
+      attrs: {
+        "id": "location-menu"
+      }
+    }, [_c('li', [_c('a', {
+      staticClass: "accordion-toggle",
+      attrs: {
+        "data-toggle": "collapse",
+        "data-target": '#campus' + campusKey,
+        "aria-expanded": "false"
+      }
+    }, [_vm._v(_vm._s(campus.name) + " " + _vm._s(campusKey) + " ")])]), _vm._v(" "), _vm._l((campus.buildings), function(building, buildingKey) {
+      return _c('li', [_c('ul', {
+        staticClass: "accordian-body collapse",
+        attrs: {
+          "id": 'campus' + campusKey
+        }
+      }, [_c('li', [_c('a', {
+        staticClass: "accordion-toggle",
+        attrs: {
+          "data-toggle": "collapse",
+          "data-target": '#building' + buildingKey,
+          "aria-expanded": "false"
+        }
+      }, [_vm._v(" " + _vm._s(building.name) + " " + _vm._s(buildingKey) + "  " + _vm._s(campus.id) + "." + _vm._s(building.id))]), _vm._v(" "), _c('ul', {
+        staticClass: "accordian-body collapse",
+        attrs: {
+          "id": 'building' + buildingKey
+        }
+      }, _vm._l((2), function(k) {
+        return _c('li', [_c('a', [_vm._v("Room " + _vm._s(campus.id) + "." + _vm._s(building.id) + "." + _vm._s(k))])])
+      }))])])])
+    })], 2)
+  })], 2), _vm._v(" "), _c('div', {
+    staticClass: "col-xs-12 col-md-9",
+    staticStyle: {
+      "background": "red"
+    }
+  }, [_vm._v(".col-xs-12 .col-md-8")])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-efdd3f76", module.exports)
+  }
+}
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(jQuery) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * metismenu - v2.7.0
+ * A jQuery menu plugin
+ * https://github.com/onokumus/metismenu#readme
+ *
+ * Made by Osman Nuri Okumus <onokumus@gmail.com> (https://github.com/onokumus)
+ * Under MIT License
+ */
+
+(function (global, factory) {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else if (typeof exports !== "undefined") {
+    factory(require('jquery'));
+  } else {
+    var mod = {
+      exports: {}
+    };
+    factory(global.jquery);
+    global.metisMenu = mod.exports;
+  }
+})(this, function (_jquery) {
+  'use strict';
+
+  var _jquery2 = _interopRequireDefault(_jquery);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  };
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var Util = function ($) {
+    var transition = false;
+
+    var TransitionEndEvent = {
+      WebkitTransition: 'webkitTransitionEnd',
+      MozTransition: 'transitionend',
+      OTransition: 'oTransitionEnd otransitionend',
+      transition: 'transitionend'
+    };
+
+    function getSpecialTransitionEndEvent() {
+      return {
+        bindType: transition.end,
+        delegateType: transition.end,
+        handle: function handle(event) {
+          if ($(event.target).is(this)) {
+            return event.handleObj.handler.apply(this, arguments);
+          }
+          return undefined;
+        }
+      };
+    }
+
+    function transitionEndTest() {
+      if (window.QUnit) {
+        return false;
+      }
+
+      var el = document.createElement('mm');
+
+      for (var name in TransitionEndEvent) {
+        if (el.style[name] !== undefined) {
+          return {
+            end: TransitionEndEvent[name]
+          };
+        }
+      }
+
+      return false;
+    }
+
+    function transitionEndEmulator(duration) {
+      var _this2 = this;
+
+      var called = false;
+
+      $(this).one(Util.TRANSITION_END, function () {
+        called = true;
+      });
+
+      setTimeout(function () {
+        if (!called) {
+          Util.triggerTransitionEnd(_this2);
+        }
+      }, duration);
+
+      return this;
+    }
+
+    function setTransitionEndSupport() {
+      transition = transitionEndTest();
+      $.fn.emulateTransitionEnd = transitionEndEmulator;
+
+      if (Util.supportsTransitionEnd()) {
+        $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
+      }
+    }
+
+    var Util = {
+      TRANSITION_END: 'mmTransitionEnd',
+
+      triggerTransitionEnd: function triggerTransitionEnd(element) {
+        $(element).trigger(transition.end);
+      },
+      supportsTransitionEnd: function supportsTransitionEnd() {
+        return Boolean(transition);
+      }
+    };
+
+    setTransitionEndSupport();
+
+    return Util;
+  }(jQuery);
+
+  var MetisMenu = function ($) {
+
+    var NAME = 'metisMenu';
+    var DATA_KEY = 'metisMenu';
+    var EVENT_KEY = '.' + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var TRANSITION_DURATION = 350;
+
+    var Default = {
+      toggle: true,
+      preventDefault: true,
+      activeClass: 'active',
+      collapseClass: 'collapse',
+      collapseInClass: 'in',
+      collapsingClass: 'collapsing',
+      triggerElement: 'a',
+      parentTrigger: 'li',
+      subMenu: 'ul'
+    };
+
+    var Event = {
+      SHOW: 'show' + EVENT_KEY,
+      SHOWN: 'shown' + EVENT_KEY,
+      HIDE: 'hide' + EVENT_KEY,
+      HIDDEN: 'hidden' + EVENT_KEY,
+      CLICK_DATA_API: 'click' + EVENT_KEY + DATA_API_KEY
+    };
+
+    var MetisMenu = function () {
+      function MetisMenu(element, config) {
+        _classCallCheck(this, MetisMenu);
+
+        this._element = element;
+        this._config = this._getConfig(config);
+        this._transitioning = null;
+
+        this.init();
+      }
+
+      MetisMenu.prototype.init = function init() {
+        var self = this;
+        $(this._element).find(this._config.parentTrigger + '.' + this._config.activeClass).has(this._config.subMenu).children(this._config.subMenu).attr('aria-expanded', true).addClass(this._config.collapseClass + ' ' + this._config.collapseInClass);
+
+        $(this._element).find(this._config.parentTrigger).not('.' + this._config.activeClass).has(this._config.subMenu).children(this._config.subMenu).attr('aria-expanded', false).addClass(this._config.collapseClass);
+
+        $(this._element).find(this._config.parentTrigger).has(this._config.subMenu).children(this._config.triggerElement).on(Event.CLICK_DATA_API, function (e) {
+          var _this = $(this);
+          var _parent = _this.parent(self._config.parentTrigger);
+          var _siblings = _parent.siblings(self._config.parentTrigger).children(self._config.triggerElement);
+          var _list = _parent.children(self._config.subMenu);
+          if (self._config.preventDefault) {
+            e.preventDefault();
+          }
+          if (_this.attr('aria-disabled') === 'true') {
+            return;
+          }
+          if (_parent.hasClass(self._config.activeClass)) {
+            _this.attr('aria-expanded', false);
+            self._hide(_list);
+          } else {
+            self._show(_list);
+            _this.attr('aria-expanded', true);
+            if (self._config.toggle) {
+              _siblings.attr('aria-expanded', false);
+            }
+          }
+
+          if (self._config.onTransitionStart) {
+            self._config.onTransitionStart(e);
+          }
+        });
+      };
+
+      MetisMenu.prototype._show = function _show(element) {
+        if (this._transitioning || $(element).hasClass(this._config.collapsingClass)) {
+          return;
+        }
+        var _this = this;
+        var _el = $(element);
+
+        var startEvent = $.Event(Event.SHOW);
+        _el.trigger(startEvent);
+
+        if (startEvent.isDefaultPrevented()) {
+          return;
+        }
+
+        _el.parent(this._config.parentTrigger).addClass(this._config.activeClass);
+
+        if (this._config.toggle) {
+          this._hide(_el.parent(this._config.parentTrigger).siblings().children(this._config.subMenu + '.' + this._config.collapseInClass).attr('aria-expanded', false));
+        }
+
+        _el.removeClass(this._config.collapseClass).addClass(this._config.collapsingClass).height(0);
+
+        this.setTransitioning(true);
+
+        var complete = function complete() {
+
+          _el.removeClass(_this._config.collapsingClass).addClass(_this._config.collapseClass + ' ' + _this._config.collapseInClass).height('').attr('aria-expanded', true);
+
+          _this.setTransitioning(false);
+
+          _el.trigger(Event.SHOWN);
+        };
+
+        if (!Util.supportsTransitionEnd()) {
+          complete();
+          return;
+        }
+
+        _el.height(_el[0].scrollHeight).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
+      };
+
+      MetisMenu.prototype._hide = function _hide(element) {
+
+        if (this._transitioning || !$(element).hasClass(this._config.collapseInClass)) {
+          return;
+        }
+        var _this = this;
+        var _el = $(element);
+
+        var startEvent = $.Event(Event.HIDE);
+        _el.trigger(startEvent);
+
+        if (startEvent.isDefaultPrevented()) {
+          return;
+        }
+
+        _el.parent(this._config.parentTrigger).removeClass(this._config.activeClass);
+        _el.height(_el.height())[0].offsetHeight;
+
+        _el.addClass(this._config.collapsingClass).removeClass(this._config.collapseClass).removeClass(this._config.collapseInClass);
+
+        this.setTransitioning(true);
+
+        var complete = function complete() {
+          if (_this._transitioning && _this._config.onTransitionEnd) {
+            _this._config.onTransitionEnd();
+          }
+
+          _this.setTransitioning(false);
+          _el.trigger(Event.HIDDEN);
+
+          _el.removeClass(_this._config.collapsingClass).addClass(_this._config.collapseClass).attr('aria-expanded', false);
+        };
+
+        if (!Util.supportsTransitionEnd()) {
+          complete();
+          return;
+        }
+
+        _el.height() == 0 || _el.css('display') == 'none' ? complete() : _el.height(0).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
+      };
+
+      MetisMenu.prototype.setTransitioning = function setTransitioning(isTransitioning) {
+        this._transitioning = isTransitioning;
+      };
+
+      MetisMenu.prototype.dispose = function dispose() {
+        $.removeData(this._element, DATA_KEY);
+
+        $(this._element).find(this._config.parentTrigger).has(this._config.subMenu).children(this._config.triggerElement).off('click');
+
+        this._transitioning = null;
+        this._config = null;
+        this._element = null;
+      };
+
+      MetisMenu.prototype._getConfig = function _getConfig(config) {
+        config = $.extend({}, Default, config);
+        return config;
+      };
+
+      MetisMenu._jQueryInterface = function _jQueryInterface(config) {
+        return this.each(function () {
+          var $this = $(this);
+          var data = $this.data(DATA_KEY);
+          var _config = $.extend({}, Default, $this.data(), (typeof config === 'undefined' ? 'undefined' : _typeof(config)) === 'object' && config);
+
+          if (!data && /dispose/.test(config)) {
+            this.dispose();
+          }
+
+          if (!data) {
+            data = new MetisMenu(this, _config);
+            $this.data(DATA_KEY, data);
+          }
+
+          if (typeof config === 'string') {
+            if (data[config] === undefined) {
+              throw new Error('No method named "' + config + '"');
+            }
+            data[config]();
+          }
+        });
+      };
+
+      return MetisMenu;
+    }();
+
+    /**
+     * ------------------------------------------------------------------------
+     * jQuery
+     * ------------------------------------------------------------------------
+     */
+
+    $.fn[NAME] = MetisMenu._jQueryInterface;
+    $.fn[NAME].Constructor = MetisMenu;
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return MetisMenu._jQueryInterface;
+    };
+    return MetisMenu;
+  }(jQuery);
+});
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ })
 /******/ ]);

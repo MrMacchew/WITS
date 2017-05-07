@@ -16,16 +16,17 @@ class DatabaseSeeder extends Seeder
         //PRODUCTION SEEDS
         //roles & properties
         $this->call(PermissionSeeder::class);
+        $this->call(CampusSeeder::class);
+        $this->call(BuildingSeeder::class);
 
 
         if (App::environment('local', 'testing'))
         {
             //Staging Seeds
 
-            $this->call(UsersSeeder::class);
-            // $this->call(CampusSeeder::class);
-            // $this->call(DepartmentOrgSeeder::class);
             // $this->call(BuildingDepartmentSeeder::class);
+            $this->call(UsersSeeder::class);
+            // $this->call(DepartmentOrgSeeder::class);
             // $this->call(RoomStyleSeeder::class);
             // $this->call(SupportSeeder::class);
             // $this->call(RoomSoftwareSeeder::class);
