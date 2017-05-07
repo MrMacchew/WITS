@@ -148,6 +148,7 @@ $factory->define(App\Room::class, function (Faker\Generator $faker) {
     $faker->seed(1);
     $data = [
         'id'=> null,
+        'building_id'=>1,
         'number' => $faker->unique()->regexify('\d{3}[A-Z]?'),
         'name' => $faker->word(),
         'style_id' => $faker->unique()->numberBetween(1,11),
