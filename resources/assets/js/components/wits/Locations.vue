@@ -4,25 +4,27 @@
 
 		<aside class="col-md-3 col-xs-12">
 
-			<!-- <div class="btn-group">
+			<div class="btn-group">
 				<i class="fa fa-filter"></i>
-				<input id="search" type="text" v-model="search">
-				<span id="searchclear" @click="search = ''" class="glyphicon glyphicon-remove-circle"></span>
+				<input id="search" type="text" v-model="search" placeholder="campus, building, room" style="
+    width: 180px;">
+				<span id="searchclear" @click="resetSearch()" class="glyphicon glyphicon-remove-circle"></span>
 			</div>
-			 -->
+
 
 			<template>
-				<ul id="location-menu" v-for="(campus, campusKey) in campuses">
+				<ul id="location-menu" v-for="(campus, campusKey) in results">
 
 					<a @click="selectedItem = campus"
 					data-toggle="collapse"
 					:data-target="'.campus'+campusKey"
 					data-parent="#location-menu"
 					class="accordion-toggle"
-					aria-expanded="false">{{campus.name}} ({{campus.buildings.length}})</a>
+					aria-expanded="true">{{campus.name}} ({{campus.buildings.length}})</a>
 
 					<template>
-					<li v-for="(building, buildingKey) in campus.buildings" :class="'campus'+campusKey" class="accordian-body collapse">
+					<li v-for="(building, buildingKey) in campus.buildings"
+					:class="'campus'+campusKey" class="accordian-body collapse">
 						<ul >
 							<li>
 								<a @click="selectedItem = building"
@@ -30,7 +32,7 @@
 								:data-target="'.building'+buildingKey"
 								data-parent="#location-menu"
 								class="accordion-toggle"
-								aria-expanded="false"> {{building.name}} ({{building.rooms.length}})</i></a>
+								aria-expanded="true"> {{building.name}} ({{building.rooms.length}})</i></a>
 
 								<ul class="accordian-body collapse" :class="'building'+buildingKey">
 									<li v-for="(room, roomKey) in building.rooms">
@@ -55,14 +57,8 @@
 			map-type-id="terrain"
 			style="width: 100%; height: 300px"
 			>
-				
-				<gmap-marker
-      v-for="m in markers"
-      :position="m.position"
-      :clickable="true"
-      :draggable="true"
-      @click="center=m.position"
-    ></gmap-marker>
+
+
 
 			</gmap-map>
 
@@ -83,69 +79,83 @@
     load: {
       key: 'AIzaSyBaB3pP8S65JEZ9gvA5XxYn5urVMgpoxuU',
       v: '3.27',
-      // libraries: 'places', //// If you need to use place input 
+      // libraries: 'places', //// If you need to use place input
     }
   });
 
 	export default{
 		data: function(){
 			return {
-				// search: '',
+				search: '',
 				selectedItem: {},
 				campuses: [],
-				// result: [],
-				// fuse: null,
+				buildings: [],
+				rooms: [],
 				center: {lat: 41.192638470302114, lng: -111.9427574918045},
-        markers: [{
-          position: {lat: 10.0, lng: 10.0}
-        }, {
-          position: {lat: 11.0, lng: 11.0}
-        }]
+        // markers: [{
+        //   position: {lat: 10.0, lng: 10.0}
+        // }, {
+        //   position: {lat: 11.0, lng: 11.0}
+        // }]
 
 			}
 		},
-		watch: {
-			search: function() {
-				if (this.search.trim() === ''){
-					this.result = this.users
+		methods:{
+			resetSearch: function(){
+				this.search = '';
+				this.campuses.$forceUpdate();
+
+			}
+		},
+		computed: {
+			results: function() {
+				console.clear();
+
+				if (this.search == "") {
+					return this.campuses;
 				}
-				else{
-					this.result = this.fuse.search(this.search.trim())
-				}
+
+				var filteredData =  _.cloneDeep(this.campuses),
+						q = this.search.split(",");
+
+
+				filteredData = filteredData.filter(function(o,i){
+					return o.name.toLowerCase().match(new RegExp(q[0]))
+				})
+
+				_.each(filteredData, function(cv,ck){
+
+					filteredData[ck].buildings = cv.buildings.filter(function(o,i){
+						if(o.name.toLowerCase().match(new RegExp(q[1]))){
+							return o.name
+						}
+					})
+
+
+					_.each(filteredData[ck].buildings, function(rv,rk){
+						filteredData[ck].buildings[rk].rooms = rv.rooms.filter(function(room,i){
+							if(room.name.toLowerCase().match(new RegExp(q[2]))){
+								return room.name
+							}
+						})
+					})
+
+				})
+
+
+				console.log(q)
+				console.log('data', filteredData);
+				return filteredData;
 			}
 		},
 		mounted() {
 			var vm = this;
 			console.log('Component mounted.')
 
-
-			var options = {
-				caseSensitive: false,
-				tokenize: true,
-				threshold: 0.6,
-				location: 0,
-				distance: 900,
-				maxPatternLength: 32,
-				minMatchCharLength: 1,
-				keys: [
-				"id",
-				"name",
-				"buildings.name",
-				"buildings.latlong"
-				]
-			};
-
-
-
 			axios.get('/api/v1/campus?with=buildings,buildings.rooms')
 			.then(function (response) {
 				console.log(response);
 				vm.campuses = response.data;
-
-				// vm.fuse = new Fuse(vm.campuses, options);
-				// vm.result = fuse.search(search);
-
-
 			})
 			.catch(function (error) {
 				console.log(error);

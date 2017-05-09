@@ -44374,10 +44374,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -44395,51 +44391,64 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
 /* harmony default export */ __webpack_exports__["default"] = {
 	data: function data() {
 		return {
-			// search: '',
+			search: '',
 			selectedItem: {},
 			campuses: [],
-			// result: [],
-			// fuse: null,
-			center: { lat: 41.192638470302114, lng: -111.9427574918045 },
-			markers: [{
-				position: { lat: 10.0, lng: 10.0 }
-			}, {
-				position: { lat: 11.0, lng: 11.0 }
-			}]
-
+			buildings: [],
+			rooms: [],
+			center: { lat: 41.192638470302114, lng: -111.9427574918045 }
 		};
 	},
-	watch: {
-		search: function search() {
-			if (this.search.trim() === '') {
-				this.result = this.users;
-			} else {
-				this.result = this.fuse.search(this.search.trim());
+	methods: {
+		resetSearch: function resetSearch() {
+			this.search = '';
+			this.campuses.$forceUpdate();
+		}
+	},
+	computed: {
+		results: function results() {
+			console.clear();
+
+			if (this.search == "") {
+				return this.campuses;
 			}
+
+			var filteredData = _.cloneDeep(this.campuses),
+			    q = this.search.split(",");
+
+			filteredData = filteredData.filter(function (o, i) {
+				return o.name.toLowerCase().match(new RegExp(q[0]));
+			});
+
+			_.each(filteredData, function (cv, ck) {
+
+				filteredData[ck].buildings = cv.buildings.filter(function (o, i) {
+					if (o.name.toLowerCase().match(new RegExp(q[1]))) {
+						return o.name;
+					}
+				});
+
+				_.each(filteredData[ck].buildings, function (rv, rk) {
+					filteredData[ck].buildings[rk].rooms = rv.rooms.filter(function (room, i) {
+						if (room.name.toLowerCase().match(new RegExp(q[2]))) {
+							return room.name;
+						}
+					});
+				});
+			});
+
+			console.log(q);
+			console.log('data', filteredData);
+			return filteredData;
 		}
 	},
 	mounted: function mounted() {
 		var vm = this;
 		console.log('Component mounted.');
 
-		var options = {
-			caseSensitive: false,
-			tokenize: true,
-			threshold: 0.6,
-			location: 0,
-			distance: 900,
-			maxPatternLength: 32,
-			minMatchCharLength: 1,
-			keys: ["id", "name", "buildings.name", "buildings.latlong"]
-		};
-
 		axios.get('/api/v1/campus?with=buildings,buildings.rooms').then(function (response) {
 			console.log(response);
 			vm.campuses = response.data;
-
-			// vm.fuse = new Fuse(vm.campuses, options);
-			// vm.result = fuse.search(search);
-
 		}).catch(function (error) {
 			console.log(error);
 		});
@@ -44489,7 +44498,45 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "container-fluid"
   }, [_c('aside', {
     staticClass: "col-md-3 col-xs-12"
-  }, [_vm._l((_vm.campuses), function(campus, campusKey) {
+  }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('i', {
+    staticClass: "fa fa-filter"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.search),
+      expression: "search"
+    }],
+    staticStyle: {
+      "width": "180px"
+    },
+    attrs: {
+      "id": "search",
+      "type": "text",
+      "placeholder": "campus, building, room"
+    },
+    domProps: {
+      "value": (_vm.search)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.search = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "glyphicon glyphicon-remove-circle",
+    attrs: {
+      "id": "searchclear"
+    },
+    on: {
+      "click": function($event) {
+        _vm.resetSearch()
+      }
+    }
+  })]), _vm._v(" "), _vm._l((_vm.results), function(campus, campusKey) {
     return _c('ul', {
       attrs: {
         "id": "location-menu"
@@ -44500,7 +44547,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "data-toggle": "collapse",
         "data-target": '.campus' + campusKey,
         "data-parent": "#location-menu",
-        "aria-expanded": "false"
+        "aria-expanded": "true"
       },
       on: {
         "click": function($event) {
@@ -44517,7 +44564,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           "data-toggle": "collapse",
           "data-target": '.building' + buildingKey,
           "data-parent": "#location-menu",
-          "aria-expanded": "false"
+          "aria-expanded": "true"
         },
         on: {
           "click": function($event) {
@@ -44552,20 +44599,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "zoom": 16,
       "map-type-id": "terrain"
     }
-  }, _vm._l((_vm.markers), function(m) {
-    return _c('gmap-marker', {
-      attrs: {
-        "position": m.position,
-        "clickable": true,
-        "draggable": true
-      },
-      on: {
-        "click": function($event) {
-          _vm.center = m.position
-        }
-      }
-    })
-  })), _vm._v("\n\n\t\t" + _vm._s(_vm.selectedItem.name) + "\n\n\t\t")], 1)])
+  }), _vm._v("\n\n\t\t" + _vm._s(_vm.selectedItem.name) + "\n\n\t\t")], 1)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
