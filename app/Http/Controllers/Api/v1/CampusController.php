@@ -70,8 +70,8 @@ class CampusController extends ApiController
         'name' => 'required|unique:campus',
         'campus_code' => 'required|unique:campus',
         ]);
-
-        return Campus::create($request->all());
+        $campus = Campus::create($request->all());
+        return Campus::with('buildings', 'buildings.rooms')->find($campus->id);
     }
 
     /**
