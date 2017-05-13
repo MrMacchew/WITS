@@ -108,7 +108,7 @@ class CampusController extends ApiController
      */
     public function update(Request $request, Campus $campus)
     {
-        //
+
     }
 
     /**
@@ -119,7 +119,7 @@ class CampusController extends ApiController
      */
     public function destroy(Campus $campus)
     {
-        //
+
     }
 
     protected function formatValidationErrors(Validator $validator)

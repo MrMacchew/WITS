@@ -25,7 +25,7 @@ class Campus extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'campus_code'
+        'name', 'campus_code', 'latlong'
     ];
 
     public function buildings()

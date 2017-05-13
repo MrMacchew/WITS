@@ -42280,6 +42280,105 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -42288,111 +42387,166 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2_google_maps__, {
-    load: {
-        key: 'AIzaSyBaB3pP8S65JEZ9gvA5XxYn5urVMgpoxuU',
-        v: '3.27'
-    }
+  load: {
+    key: 'AIzaSyBaB3pP8S65JEZ9gvA5XxYn5urVMgpoxuU',
+    v: '3.27'
+  }
 });
 
 /* harmony default export */ __webpack_exports__["default"] = {
-    data: function data() {
-        return {
-            search: '',
-            showCampus: false,
-            selectedItem: {},
-            campuses: [],
-            buildings: [],
-            rooms: [],
+  data: function data() {
+    return {
+      lastId: 1,
+      search: '',
+      showAddCampus: false,
+      showAddBuilding: false,
+      showAddRoom: false,
+      currentItem: null,
+      currentType: "",
+      campuses: [],
 
-            center: { lat: 41.192638470302114, lng: -111.9427574918045 },
-            newCampus: {
-                name: '',
-                campus_code: ''
-            },
-            markers: [{
-                position: { lat: 41.19279206612305, lng: -111.9447934627533, enabled: true }
-            }, {
-                position: { lat: 41.19437443833441, lng: 111.94445013999939 }
-            }]
+      center: { lat: 41.192638470302114, lng: -111.9427574918045 },
+      newCampus: {
+        name: '',
+        campus_code: ''
+      },
+      newBuilding: {
+        name: ''
+      },
+      newRoom: {
+        name: ''
+      },
+      markers: [{ position: { lat: 41.19279206612305, lng: -111.9447934627533 } }],
+      infoContent: 'test'
 
-        };
+    };
+  },
+  methods: {
+    resetSearch: function resetSearch() {
+      this.search = '';
     },
-    methods: {
-        resetSearch: function resetSearch() {
-            this.search = '';
-        },
-        toggleCampus: function toggleCampus() {
-            this.showCampus = !this.showCampus;
-        },
-        onSubmitCampus: function onSubmitCampus(e) {
-            console.log(this, e);
-            var vm = this;
-            axios.post('/api/v1/campus', this.newCampus).then(function (response) {
-                console.log(response);
-                vm.campuses.push(response.data);
-            }).catch(function (error) {
-                console.log(error);
-            });
-
-            //reset new campus
-            this.newCampus = {
-                name: '',
-                campus_code: ''
-            }, this.toggleCampus();
-        },
-        onSelectMenuItem: function onSelectMenuItem(item) {
-            this.selectedItem = item;
-            console.log(item);
-        }
+    toggleAdd: function toggleAdd(type) {
+      this.showAddCampus = type == 'campus' ? true : false;
+      this.showAddBuilding = type == 'building' ? true : false;
+      this.showAddRoom = type == 'room' ? true : false;
     },
-    computed: {
-        results: function results() {
-            console.clear();
+    onSubmitCampus: function onSubmitCampus(e) {
+      console.log(this, e);
+      var vm = this;
+      axios.post('/api/v1/campus', this.newCampus).then(function (response) {
+        console.log(response);
+        vm.campuses.push(response.data);
+      }).catch(function (error) {
+        console.log(error);
+      });
 
-            if (this.search == "") {
-                return this.campuses;
-            }
-
-            var filteredData = _.cloneDeep(this.campuses),
-                q = this.search.split(",");
-
-            filteredData = filteredData.filter(function (o, i) {
-                return o.name.toLowerCase().match(new RegExp(q[0]));
-            });
-
-            _.each(filteredData, function (cv, ck) {
-
-                filteredData[ck].buildings = cv.buildings.filter(function (o, i) {
-                    if (o.name.toLowerCase().match(new RegExp(q[1]))) {
-                        return o.name;
-                    }
-                });
-
-                _.each(filteredData[ck].buildings, function (rv, rk) {
-                    filteredData[ck].buildings[rk].rooms = rv.rooms.filter(function (room, i) {
-                        if (room.name.toLowerCase().match(new RegExp(q[2]))) {
-                            return room.name;
-                        }
-                    });
-                });
-            });
-
-            console.log(q);
-            console.log('data', filteredData);
-            return filteredData;
-        }
+      //reset new campus
+      this.newCampus = {
+        name: '',
+        campus_code: ''
+      }, this.toggleCampus();
     },
-    mounted: function mounted() {
-        var vm = this;
-        // console.log('Component mounted.')
+    onSelectMenuItem: function onSelectMenuItem(type, obj) {
+      this.currentType = type;
+      this.currentItem = obj;
+      console.log(this.currentType, obj);
 
-        axios.get('/api/v1/campus?with=buildings,buildings.rooms').then(function (response) {
-            console.log(response);
-            vm.campuses = response.data;
-        }).catch(function (error) {
-            console.log(error);
-        });
+      // _.each(Object.keys(obj), function(item){
+      //   console.log(type, obj[item])
+      // })
+    },
+
+    mapClicked: function mapClicked(mouseArgs) {
+      console.log('map clicked', mouseArgs); // eslint-disable-line no-console
+    },
+
+    mapRclicked: function mapRclicked(mouseArgs) {
+      var createdMarker = this.addMarker();
+      // this.toggleCampus();
+
+      createdMarker.position.lat = mouseArgs.latLng.lat();
+      createdMarker.position.lng = mouseArgs.latLng.lng();
+    },
+
+    addMarker: function addMarker() {
+      this.lastId++;
+
+      this.markers.push({
+        id: this.lastId,
+        position: {
+          lat: 48.8538302,
+          lng: 2.2982161
+        },
+        opacity: 1,
+        draggable: true,
+        enabled: true,
+        clicked: 0,
+        rightClicked: 0,
+        dragended: 0,
+        ifw: true,
+        ifw2text: 'This text is bad please change me :( '
+      });
+      return this.markers[this.markers.length - 1];
     }
+
+  },
+  computed: {
+    results: function results() {
+      // console.clear();
+
+      if (this.search == "") {
+        return this.campuses;
+      }
+
+      var filteredData = _.cloneDeep(this.campuses),
+          q = this.search.split(",");
+
+      filteredData = filteredData.filter(function (o, i) {
+        return o.name.toLowerCase().match(new RegExp(q[0]));
+      });
+
+      _.each(filteredData, function (cv, ck) {
+
+        filteredData[ck].buildings = cv.buildings.filter(function (o, i) {
+          if (o.name.toLowerCase().match(new RegExp(q[1]))) {
+            return o.name;
+          }
+        });
+
+        _.each(filteredData[ck].buildings, function (rv, rk) {
+          filteredData[ck].buildings[rk].rooms = rv.rooms.filter(function (room, i) {
+            if (room.name.toLowerCase().match(new RegExp(q[2]))) {
+              return room.number || room.name;
+            }
+          });
+        });
+      });
+
+      console.log(q);
+      console.log('data', filteredData);
+      return filteredData;
+    }
+  },
+  filters: {
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  },
+  mounted: function mounted() {
+    var vm = this;
+    // console.log('Component mounted.')
+
+    axios.get('/api/v1/campus?with=buildings,buildings.rooms').then(function (response) {
+      console.log(response);
+      vm.campuses = response.data;
+      vm.currentItem = response.data[0];
+      vm.currentType = 'campus';
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
 };
 
 /***/ }),
@@ -49667,8 +49821,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: (_vm.showCampus),
-      expression: "showCampus"
+      value: (_vm.showAddCampus),
+      expression: "showAddCampus"
     }],
     staticClass: "panel panel-default"
   }, [_c('div', {
@@ -49681,7 +49835,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onSubmitCampus($event)
       }
     }
-  }, [_c('h1', [_vm._v("Add Campus")]), _vm._v(" "), _c('div', {
+  }, [_c('h2', [_vm._v("Add Campus")]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('label', {
     staticClass: "col-sm-2 control-label",
@@ -49698,7 +49852,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "newCampus.name"
     }],
     attrs: {
-      "type": "text"
+      "type": "text",
+      "id": "addCampus"
     },
     domProps: {
       "value": (_vm.newCampus.name)
@@ -49741,16 +49896,168 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   })])]), _vm._v(" "), _vm._m(0)])])]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.showAddBuilding),
+      expression: "showAddBuilding"
+    }],
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_c('form', {
+    staticClass: "form-horizontal",
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        _vm.onSubmitBuilding($event)
+      }
+    }
+  }, [_c('h2', [_vm._v("Add Building "), _c('span', [_vm._v("to " + _vm._s(_vm.currentItem.name))])]), _vm._v(" "), _c('p', {
+    staticClass: "text-muted"
+  }, [_vm._v(" Select campus to add building too. ")]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "col-sm-2 control-label",
+    attrs: {
+      "for": "building_name"
+    }
+  }, [_vm._v("Name")]), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-10"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newBuilding.name),
+      expression: "newBuilding.name"
+    }],
+    attrs: {
+      "type": "text",
+      "id": "addBuilding"
+    },
+    domProps: {
+      "value": (_vm.newBuilding.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.newBuilding.name = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _vm._m(1)])])]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.showAddRoom),
+      expression: "showAddRoom"
+    }],
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_c('form', {
+    staticClass: "form-horizontal",
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        _vm.onSubmitRoom($event)
+      }
+    }
+  }, [_c('h2', [_vm._v("Add Room "), _c('span', [_vm._v("to " + _vm._s(_vm.currentItem.name))])]), _vm._v(" "), _c('p', {
+    staticClass: "text-muted"
+  }, [_vm._v(" Select Bulding to add room too. ")]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "col-sm-2 control-label",
+    attrs: {
+      "for": "room_name"
+    }
+  }, [_vm._v("Name")]), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-10"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newRoom.name),
+      expression: "newRoom.name"
+    }],
+    attrs: {
+      "type": "text",
+      "id": "addRoom"
+    },
+    domProps: {
+      "value": (_vm.newRoom.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.newRoom.name = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-sm-offset-2 col-sm-10"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "submit",
+      "disable": _vm.currentType !== 'building'
+    }
+  }, [_vm._v("Add Room")])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('span', {
     staticClass: "fa-stack",
+    attrs: {
+      "data-toggle": "tooltip",
+      "title": "Add Campus"
+    },
     on: {
       "click": function($event) {
-        _vm.toggleCampus()
+        _vm.toggleAdd('campus')
       }
     }
   }, [_c('i', {
-    staticClass: "fa fa-building"
+    staticClass: "fa fa-university"
+  }), _vm._v(" "), _c('i', {
+    staticClass: "fa fa-plus",
+    staticStyle: {
+      "left": "9px",
+      "position": "absolute",
+      "top": "-3px"
+    }
+  })]), _vm._v(" "), _c('span', {
+    staticClass: "fa-stack",
+    attrs: {
+      "data-toggle": "tooltip",
+      "title": "Add Building"
+    },
+    on: {
+      "click": function($event) {
+        _vm.toggleAdd('building')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-cubes"
+  }), _vm._v(" "), _c('i', {
+    staticClass: "fa fa-plus",
+    staticStyle: {
+      "left": "9px",
+      "position": "absolute",
+      "top": "-3px"
+    }
+  })]), _vm._v(" "), _c('span', {
+    staticClass: "fa-stack",
+    attrs: {
+      "data-toggle": "tooltip",
+      "title": "Add Room"
+    },
+    on: {
+      "click": function($event) {
+        _vm.toggleAdd('room')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-cube"
   }), _vm._v(" "), _c('i', {
     staticClass: "fa fa-plus",
     staticStyle: {
@@ -49810,7 +50117,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       on: {
         "click": function($event) {
-          _vm.onSelectMenuItem('campus')
+          _vm.onSelectMenuItem('campus', campus)
         }
       }
     }, [_vm._v(_vm._s(campus.name) + " (" + _vm._s(campus.buildings.length) + ")")]), _vm._v(" "), _vm._l((campus.buildings), function(building, buildingKey) {
@@ -49822,12 +50129,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         attrs: {
           "data-toggle": "collapse",
           "data-target": '.building' + buildingKey,
-          "data-parent": "#location-menu",
           "aria-expanded": "true"
         },
         on: {
           "click": function($event) {
-            _vm.onSelectMenuItem('building')
+            _vm.onSelectMenuItem('building', building)
           }
         }
       }, [_vm._v(" " + _vm._s(building.name) + " (" + _vm._s(building.rooms.length) + ")")]), _vm._v(" "), _c('ul', {
@@ -49837,10 +50143,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         return _c('li', [_c('a', {
           on: {
             "click": function($event) {
-              _vm.onSelectMenuItem('room')
+              _vm.onSelectMenuItem('room', room)
             }
           }
-        }, [_vm._v(_vm._s(room.name))])])
+        }, [_vm._v(_vm._s(room.number || room.name))])])
       }))])])])
     })], 2)
   })], 2), _vm._v(" "), _c('div', {
@@ -49858,10 +50164,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         },
         "zoom": 17,
         "map-type-id": "terrain"
+      },
+      on: {
+        "rightclick": _vm.mapRclicked
       }
-    }), _vm._v(" "), _vm._l((_vm.markers), function(m, index) {
+    }, _vm._l((_vm.markers), function(m, index) {
       return _c('gmap-marker', {
-        key: index,
         attrs: {
           "position": m.position,
           "clickable": true,
@@ -49872,12 +50180,145 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             _vm.center = m.position
           }
         }
-      })
-    })], _vm._v("\n\n\n\n\n\n\n\n    " + _vm._s(_vm.selectedItem.name) + "\n\n    "), _c('div', {
+      }, [_vm._v("\"m.ifw\\\" :content=\\\"m.ifw2text\\\">")])
+    }))], _vm._v(" "), (_vm.currentItem) ? _c('div', {
       attrs: {
         "id": "current-item"
       }
-    })
+    }, [_c('h2', [_vm._v(_vm._s(_vm._f("capitalize")(_vm.currentType)) + ": " + _vm._s(_vm.currentItem.number || _vm.currentItem.name) + " ")]), _vm._v(" "), (_vm.currentType == 'campus') ? _c('form', [_c('div', {
+      staticClass: "form-group"
+    }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.currentItem.name),
+        expression: "currentItem.name"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        "type": "text"
+      },
+      domProps: {
+        "value": (_vm.currentItem.name)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.currentItem.name = $event.target.value
+        }
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "form-group"
+    }, [_c('label', {
+      attrs: {
+        "for": "exampleInputPassword1"
+      }
+    }, [_vm._v("Campus Code")]), _vm._v(" "), _c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.currentItem.campus_code),
+        expression: "currentItem.campus_code"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        "type": "text"
+      },
+      domProps: {
+        "value": (_vm.currentItem.campus_code)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.currentItem.campus_code = $event.target.value
+        }
+      }
+    })]), _vm._v(" "), _vm._m(2), _vm._v(" "), _vm._m(3), _vm._v(" "), _c('button', {
+      staticClass: "btn btn-default",
+      attrs: {
+        "type": "submit"
+      }
+    }, [_vm._v("Submit")])]) : _vm._e(), _vm._v(" "), (_vm.currentType == 'building') ? _c('form', [_c('div', {
+      staticClass: "form-group"
+    }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.currentItem.name),
+        expression: "currentItem.name"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        "type": "text"
+      },
+      domProps: {
+        "value": (_vm.currentItem.name)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.currentItem.name = $event.target.value
+        }
+      }
+    })]), _vm._v(" "), _c('button', {
+      staticClass: "btn btn-default",
+      attrs: {
+        "type": "submit"
+      }
+    }, [_vm._v("Submit")])]) : _vm._e(), _vm._v(" "), (_vm.currentType == 'room') ? _c('form', [_c('div', {
+      staticClass: "form-group"
+    }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.currentItem.name),
+        expression: "currentItem.name"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        "type": "text"
+      },
+      domProps: {
+        "value": (_vm.currentItem.name)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.currentItem.name = $event.target.value
+        }
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "form-group"
+    }, [_c('label', {
+      attrs: {
+        "for": "exampleInputPassword1"
+      }
+    }, [_vm._v("Campus Code")]), _vm._v(" "), _c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.currentItem.campus_code),
+        expression: "currentItem.campus_code"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        "type": "text"
+      },
+      domProps: {
+        "value": (_vm.currentItem.campus_code)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.currentItem.campus_code = $event.target.value
+        }
+      }
+    })]), _vm._v(" "), _vm._m(4), _vm._v(" "), _vm._m(5), _vm._v(" "), _c('button', {
+      staticClass: "btn btn-default",
+      attrs: {
+        "type": "submit"
+      }
+    }, [_vm._v("Submit")])]) : _vm._e()]) : _vm._e()
   ], 2)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
@@ -49890,6 +50331,63 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "submit"
     }
   }, [_vm._v("Add Campus")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "form-group"
+  }, [_c('div', {
+    staticClass: "col-sm-offset-2 col-sm-10"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_vm._v("Add Building")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    attrs: {
+      "for": "exampleInputFile"
+    }
+  }, [_vm._v("File input")]), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "file",
+      "id": "exampleInputFile"
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "help-block"
+  }, [_vm._v("Example block-level help text here.")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "checkbox"
+  }, [_c('label', [_c('input', {
+    attrs: {
+      "type": "checkbox"
+    }
+  }), _vm._v(" Check me out\n            ")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    attrs: {
+      "for": "exampleInputFile"
+    }
+  }, [_vm._v("File input")]), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "file",
+      "id": "exampleInputFile"
+    }
+  }), _vm._v(" "), _c('p', {
+    staticClass: "help-block"
+  }, [_vm._v("Example block-level help text here.")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "checkbox"
+  }, [_c('label', [_c('input', {
+    attrs: {
+      "type": "checkbox"
+    }
+  }), _vm._v(" Check me out\n            ")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
