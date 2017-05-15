@@ -108,6 +108,11 @@ class CampusController extends ApiController
      */
     public function update(Request $request, Campus $campus)
     {
+        $this->validate($request, [
+        'name' => 'unique:campus',
+        'campus_code' => 'unique:campus',
+        ]);
+
         $campus = Campus::find($campus->id);
         $campus->fill($request->all());
 

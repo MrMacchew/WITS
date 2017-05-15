@@ -1,22 +1,7 @@
 <template>
   <div class="container-fluid">
     <aside class="col-md-3 col-xs-12">
-      <div class="pull-right">
-        <span v-if="currentItem.type == null" class="fa-stack" @click="toggleAdd('campus')" data-toggle="tooltip" title="Add Campus">
-          <i class="fa fa-university"></i>
-          <i class="fa fa-plus" style="left: 9px; position: absolute; top: -3px;"></i>
-        </span>
-
-        <span v-if="currentItem.type == 'campus'" class="fa-stack" @click="toggleAdd('building')" data-toggle="tooltip" title="Add Building">
-          <i class="fa fa-cubes"></i>
-          <i class="fa fa-plus" style="left: 9px; position: absolute; top: -3px;"></i>
-        </span>
-
-        <span v-if="currentItem.type == 'building'" class="fa-stack" @click="toggleAdd('room')"data-toggle="tooltip" title="Add Room">
-          <i class="fa fa-cube"></i>
-          <i class="fa fa-plus" style="left: 9px; position: absolute; top: -3px;"></i>
-        </span>
-      </div>
+       
 
       <div id="selectDropdowns">
 
@@ -27,7 +12,7 @@
 
 
         <!-- add campuse -->
-        <div class="panel panel-default" v-show="showAddCampus">
+        <div class="panel panel-default" v-if="selectedCampus==''">
           <div class="panel-body">
             <form class="form-horizontal" v-on:submit.prevent="onSubmitCampus">
               <h2>Add Campus</h2>
@@ -58,7 +43,7 @@
         </select>
 
         <!-- add building -->
-        <div class="panel panel-default" v-show="showAddBuilding">
+        <div class="panel panel-default" v-if="selectedCampus && selectedBuilding==''">
           <div class="panel-body">
             <form class="form-horizontal" v-on:submit.prevent="onSubmitBuilding">
               <h4>Add Building <span>to {{currentItem.name}}</span></h4>
@@ -85,7 +70,7 @@
         </select>
 
         <!-- add room -->
-        <div class="panel panel-default" v-show="showAddRoom">
+        <div class="panel panel-default" v-if="selectedCampus && selectedBuilding && selectedCampus && selectedRoom==''">
           <div class="panel-body">
             <form class="form-horizontal" v-on:submit.prevent="onSubmitRoom">
               <h4>Add Room <span>to {{currentItem.name}}</span></h4>
@@ -217,6 +202,7 @@
   import Fuse from 'fuse.js';
   import * as VueGoogleMaps from 'vue2-google-maps';
   import Vue from 'vue';
+  import toastr from 'toastr';
 
 
   Vue.use(VueGoogleMaps, {
@@ -278,42 +264,26 @@
 
     methods:{
 
-      toggleAdd: function (type, show) {
-
-        switch(type) {
-          case 'campus':
-          this.showAddCampus = show || !this.showAddCampus;
-          break;
-
-          case 'building':
-          this.showAddBuilding = show || !this.showAddBuilding;
-          break;
-
-          case 'room':
-          this.showAddRoom = show || !this.showAddRoom;
-          break;
-
-          case 'all':
-          this.showAddCampus = show;
-          this.showAddBuilding = show;
-          this.showAddRoom = show;
-          break;
-        }
-      },
-
       onSubmitCampus: function(e){
         var vm = this;
         axios.post('/api/v1/campus', this.newCampus)
         .then(function (response) {
           console.log(response);
           vm.campuses.push(response.data);
-        })
 
-        this.newCampus = {
-          name:'',
-          campus_code:''
-        },
-        this.toggleAdd('all', false)
+          toastr["success"]("Added Campus: " + response.data.name)
+
+          this.newCampus = {
+            name:'',
+            campus_code:''
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          toastr["error"](error.response.data)
+       });
+
+
       },
 
       onSubmitBuilding: function(e){
@@ -325,15 +295,21 @@
           var campus = $.grep(vm.campuses, function (e) {
             return e.id == vm.currentItem.campus_id;
           })[0];
-          console.log(campus, campus.buildings);
-          campus.buildings.push(response.data)
-        })
 
-        this.newBuilding = {
-          name:'',
-          campus_id:''
-        },
-        this.toggleAdd('all', false)
+          campus.buildings.push(response.data)
+          toastr["success"]("Added building: " + response.data.name)
+
+          this.newBuilding = {
+            name:'',
+            campus_id:''
+          }
+        })
+        .catch(function (error) {
+         toastr["error"](error.response.data)
+       });
+
+
+
       },
 
       onSubmitRoom: function(e){
@@ -358,12 +334,19 @@
 
           }
 
-        });
+          toastr["success"]("Added Room: " + response.data.name)
 
-        this.newRoom = {
-          name:''
-        },
-        this.toggleAdd('all', false)
+          this.newRoom = {
+            name:''
+          }
+
+        })
+        .catch(function (error) {
+         toastr["error"](error.response.data)
+       });
+
+
+
       },
 
       onUpdateCampus: function(e){
@@ -376,15 +359,18 @@
 
         axios.post('/api/v1/campus/'+ this.currentItem.id, this.newCampus)
         .then(function (response) {
-          // console.log(response);
-          // vm.campuses.push(response.data);
-        })
+          toastr["success"]("Updated Campus: " + response.data.name)
+          this.newCampus = {
+            name:'',
+            campus_code:''
+          }
 
-        this.newCampus = {
-          name:'',
-          campus_code:''
-        },
-        this.toggleAdd('all', false)
+        })
+        .catch(function (error) {
+         toastr["error"](error.response.data)
+       })
+
+
       },
 
       onUpdateBuilding: function(e){
@@ -394,14 +380,16 @@
 
         axios.post('/api/v1/buildings/'+ this.currentItem.id, this.newBuilding)
         .then(function (response) {
-          // var campus = $.grep(vm.campuses, function (e) {
-          //   return e.id == vm.currentItem.campus_id;
-          // })[0];
-          // console.log(campus, campus.buildings);
-          // campus.buildings.push(response.data)
+          toastr["success"]("Updated Building: " + response.data.name)
+          
         })
+        .catch(function (error) {
+          console.log(error.response)
+         toastr["error"](error.response)
+       });
 
-        this.toggleAdd('all', false)
+
+
       },
 
       onUpdateRoom: function(e){
@@ -414,13 +402,18 @@
         console.log(this.newRoom);
         axios.post('/api/v1/rooms/'+ this.currentItem.id, this.newRoom)
         .then(function (response) {
+          toastr["success"]("Updated Building: " + response.data.name)
+          this.newRoom = {
+            name:''
+          }
+          
+        })
+        .catch(function (error) {
+         toastr["error"](error.response.data)
+       });
 
-        });
 
-        this.newRoom = {
-          name:''
-        },
-        this.toggleAdd('all', false)
+
       },
 
       mapClicked: function mapClicked(mouseArgs) {
@@ -447,22 +440,36 @@
             case "campus":
             axios.post('/api/v1/campus/'+this.currentItem.id, data)
             .then(function (response) {
-              console.log(response);
+              toastr["success"]("Marker Placed")
+
             })
+            .catch(function (error) {
+             toastr["error"](error.response.data)
+           });
+
             break;
 
             case "building":
             axios.post('/api/v1/buildings/'+this.currentItem.id, data)
             .then(function (response) {
-              console.log(response);
+              toastr["success"]("Marker Placed")
+
             })
+            .catch(function (error) {
+             toastr["error"](error.response.data)
+           });
+
             break;
 
             case "room":
             axios.post('/api/v1/rooms/'+this.currentItem.id, data)
             .then(function (response) {
-              console.log(response);
+              toastr["success"]("Marker Placed")
             })
+            .catch(function (error) {
+             toastr["error"](error.response.data)
+           });
+
             break;
           }
         }
@@ -483,24 +490,34 @@
           case "campus":
           axios.post('/api/v1/campus/'+this.currentItem.id, data)
           .then(function (response) {
-            console.log(response);
-            vm.campuses.push(response.data);
+            toastr["success"]("Marker Placed")
           })
+          .catch(function (error) {
+           toastr["error"](error.response.data)
+         });
+
           break;
 
           case "building":
           axios.post('/api/v1/buildings/'+this.currentItem.id, data)
           .then(function (response) {
-            console.log(response);
-            vm.campuses.push(response.data);
+            toastr["success"]("Marker Placed")
           })
+          .catch(function (error) {
+           toastr["error"](error.response.data)
+         });
+
           break;
 
           case "room":
           axios.post('/api/v1/rooms/'+this.currentItem.id, data)
           .then(function (response) {
-            console.log(response);
+            toastr["success"]("Marker Placed")
           })
+          .catch(function (error) {
+           toastr["error"](error.response.data)
+         });
+
           break;
         }
       },
@@ -541,7 +558,6 @@
         this.currentItem = item
         this.currentItem.type = 'campus'
 
-        this.toggleAdd('all', false)
       },
 
       selectedBuilding: function(item){
@@ -557,7 +573,6 @@
         this.currentItem.type = 'building'
 
 
-        this.toggleAdd('all', false)
       },
 
       selectedRoom: function(item){
@@ -570,7 +585,6 @@
         this.currentItem = item
         this.currentItem.type = 'room'
 
-        this.toggleAdd('all', false)
       }
     },
 
@@ -639,7 +653,7 @@
       axios.get('/api/v1/campus?with=buildings,buildings.rooms')
       .then(function (response) {
         vm.campuses = response.data;
-        // vm.currentItem = response.data[0];
+        toastr["success"]("Loaded Locations")
       })
       .catch(function (error) {
         console.log(error);
@@ -648,12 +662,31 @@
       axios.get('/api/v1/roomstyle')
       .then(function (response) {
         vm.roomStyles = response.data;
-        // vm.currentItem = response.data[0];
       })
       .catch(function (error) {
-        console.log(error);
-      });
+       toastr["error"](error)
+     });
+
+
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "2000",
+        "timeOut": "5000",
+        "extendedTimeOut": "10000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
     }
 
   }
 </script>
+

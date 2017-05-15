@@ -3,7 +3,6 @@ require('./sb-admin-2');
 require('metisMenu');
 require('./wits-ui');
 
-
 $.ajaxSetup({
   headers: {
     Authorization: 'Bearer:' + $('meta[name="api-token"]').attr("content")
