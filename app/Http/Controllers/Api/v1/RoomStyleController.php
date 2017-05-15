@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Building;
+use App\RoomStyle;
 use Illuminate\Http\Request;
+use Validator;
 
-class BuildingController extends ApiController
+
+class RoomStyleController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +23,7 @@ class BuildingController extends ApiController
 
 
 
-        return Building::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
+        return RoomStyle::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 
     /**
@@ -43,33 +45,33 @@ class BuildingController extends ApiController
     public function store(Request $request)
     {
         $this->validate($request, [
-        'name' => 'required|unique:building',
+        'name' => 'required|unique:campus',
+        'campus_code' => 'required|unique:campus',
         ]);
+        $campus = Room::create($request->all());
+        return Room::with('buildings', 'buildings.rooms')->find($campus->id);
+        
 
-        return Building::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Building  $building
+     * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function show($id, Request $request)
+    public function show(Room $room)
     {
-        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
-        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
-
-        return Building::with($with)->find($id, $fields);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Building  $building
+     * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function edit(Building $building)
+    public function edit(Room $room)
     {
         //
     }
@@ -78,31 +80,21 @@ class BuildingController extends ApiController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Building  $building
+     * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Building $building)
+    public function update(Request $request, Room $room)
     {
-
-        $this->validate($request, [
-        'name' => 'unique:building',
-        ]);
-
-        $building = Building::find($building->id);
-        $building->fill($request->all());
-
-        $building->save();
-        return $building;
-
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Building  $building
+     * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Building $building)
+    public function destroy(Room $room)
     {
         //
     }

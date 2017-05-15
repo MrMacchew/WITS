@@ -16,17 +16,19 @@ class RoomTest extends TestCase
     {
         $roomstyle = factory(\App\RoomStyle::class)->create();
         $support = factory(\App\Support::class)->create();
+        $building = factory(\App\Building::class)->create();
 
 
         $data = [
         'style_id' => $roomstyle->id,
         'support_id' => $support->id,
+        'building_id' => $building->id,
         'number' => '100',
         'name' => 'roomname',
         'capacity' => 10,
         ];
 
-        $response = $this->json('POST', '/room', $data);
+        $response = $this->json('POST', '/rooms', $data);
         $response ->assertStatus(200);
         $this->assertJson($response->content());
 

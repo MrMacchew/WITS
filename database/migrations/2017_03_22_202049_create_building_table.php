@@ -17,7 +17,7 @@ class CreateBuildingTable extends Migration
             $table->increments('id');
             $table->integer('campus_id');
             $table->string('name');
-            $table->string('latlong'); //json string
+            $table->string('latlong')->nullable(); //json string
 
         });
     }

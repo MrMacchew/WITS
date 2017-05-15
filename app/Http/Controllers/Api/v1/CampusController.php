@@ -108,7 +108,11 @@ class CampusController extends ApiController
      */
     public function update(Request $request, Campus $campus)
     {
+        $campus = Campus::find($campus->id);
+        $campus->fill($request->all());
 
+        $campus->save();
+        return $campus;
     }
 
     /**

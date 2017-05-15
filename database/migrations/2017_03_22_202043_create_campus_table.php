@@ -17,7 +17,7 @@ class CreateCampusTable extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('campus_code')->unique();
-            $table->string('latlong'); //json string
+            $table->string('latlong')->nullable(); //json string
         });
     }
 

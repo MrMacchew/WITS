@@ -23,7 +23,7 @@ Route::post('/saml-response', 'Auth\LoginController@saml');
 
 
 Route::resource('assets', 'Api\v1\AssetController');
-Route::resource('room', 'Api\v1\RoomController');
+Route::resource('rooms', 'Api\v1\RoomController');
 
 Route::get('dashboard', 'DashboardController@index');
 

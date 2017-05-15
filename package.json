@@ -17,6 +17,7 @@
     "lodash": "^4.17.4",
     "metismenu": "^2.7.0",
     "vue": "^2.1.10",
-    "vue2-google-maps": "^0.7.5"
+    "vue2-google-maps": "^0.7.5",
+    "vuejs-autocomplete": "^0.1.1"
   }
 }

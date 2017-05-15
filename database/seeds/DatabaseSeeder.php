@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(CampusSeeder::class);
         $this->call(BuildingSeeder::class);
+        $this->call(RoomStyleSeeder::class);
 
 
         if (App::environment('local', 'testing'))

@@ -19,9 +19,11 @@ class Room extends Model
     protected $fillable = [
             'number',
             'name',
+            'building_id',
             'style_id',
             'capacity',
             'support_id',
+            'latlong',
     ];
 
     protected $table = "room";
@@ -34,4 +36,8 @@ class Room extends Model
     {
         return $this->belongsToMany('App\Software', 'room_software', 'room_id', 'software_id');
     }
+    public function building(){
+        return $this->belongsTo('App\Building');
+    }
+
 }

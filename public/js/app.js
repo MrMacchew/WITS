@@ -17468,8 +17468,8 @@ module.exports = {
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var store  = __webpack_require__(52)('wks')
-  , uid    = __webpack_require__(54)
+var store  = __webpack_require__(53)('wks')
+  , uid    = __webpack_require__(55)
   , Symbol = __webpack_require__(9).Symbol;
 module.exports = function(name){
   return store[name] || (store[name] =
@@ -29693,7 +29693,7 @@ module.exports = __webpack_require__(36);
 var $at  = __webpack_require__(171)(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__(51)(String, 'String', function(iterated){
+__webpack_require__(52)(String, 'String', function(iterated){
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -30967,255 +30967,6 @@ module.exports = Fuse;
 
 /***/ }),
 /* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = handler;
-// Observed bug with Vue 2.1.6 under certain circumstances:
-// If you pass an object constant into :center, the deep watch
-// is still triggered
-function isChanged(prop, val, oldVal) {
-  var oldProp = typeof oldVal[prop] === 'number' ? oldVal[prop] : typeof oldVal[prop] === 'function' ? oldVal[prop].apply(oldVal) : oldVal[prop]; // don't know how to handle
-  var newProp = typeof val[prop] === 'number' ? val[prop] : typeof val[prop] === 'function' ? val[prop].apply(val) : val[prop]; // don't know how to handle
-  return oldProp !== newProp;
-}
-
-function handler(action) {
-  return function (val, oldVal) {
-    // Check if the value has really changed
-    if (isChanged('lat', val, oldVal) || isChanged('lng', val, oldVal)) {
-      action.apply(this, [val, oldVal]);
-    }
-  };
-}
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-//This piece of code was orignally written by amirnissim and can be seen here
-//http://stackoverflow.com/a/11703018/2694653
-//This has been ported to Vanilla.js by GuillaumeLeclerc
-exports.default = function (input) {
-  var _addEventListener = input.addEventListener ? input.addEventListener : input.attachEvent;
-
-  function addEventListenerWrapper(type, listener) {
-    // Simulate a 'down arrow' keypress on hitting 'return' when no pac suggestion is selected,
-    // and then trigger the original listener.
-    if (type == 'keydown') {
-      var orig_listener = listener;
-      listener = function listener(event) {
-        var suggestion_selected = document.getElementsByClassName('pac-item-selected').length > 0;
-        if (event.which == 13 && !suggestion_selected) {
-          var simulatedEvent = document.createEvent('Event');
-          simulatedEvent.keyCode = 40;
-          simulatedEvent.which = 40;
-          orig_listener.apply(input, [simulatedEvent]);
-        }
-        orig_listener.apply(input, [event]);
-      };
-    }
-    _addEventListener.apply(input, [type, listener]);
-  }
-
-  input.addEventListener = addEventListenerWrapper;
-  input.attachEvent = addEventListenerWrapper;
-};
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _isIterable2 = __webpack_require__(139);
-
-var _isIterable3 = _interopRequireDefault(_isIterable2);
-
-var _getIterator2 = __webpack_require__(138);
-
-var _getIterator3 = _interopRequireDefault(_getIterator2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  function sliceIterator(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"]) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if ((0, _isIterable3.default)(Object(arr))) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var LIBRARY        = __webpack_require__(37)
-  , $export        = __webpack_require__(23)
-  , redefine       = __webpack_require__(39)
-  , hide           = __webpack_require__(36)
-  , has            = __webpack_require__(35)
-  , Iterators      = __webpack_require__(13)
-  , $iterCreate    = __webpack_require__(159)
-  , setToStringTag = __webpack_require__(25)
-  , getProto       = __webpack_require__(5).getProto
-  , ITERATOR       = __webpack_require__(2)('iterator')
-  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
-  , FF_ITERATOR    = '@@iterator'
-  , KEYS           = 'keys'
-  , VALUES         = 'values';
-
-var returnThis = function(){ return this; };
-
-module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
-  $iterCreate(Constructor, NAME, next);
-  var getMethod = function(kind){
-    if(!BUGGY && kind in proto)return proto[kind];
-    switch(kind){
-      case KEYS: return function keys(){ return new Constructor(this, kind); };
-      case VALUES: return function values(){ return new Constructor(this, kind); };
-    } return function entries(){ return new Constructor(this, kind); };
-  };
-  var TAG        = NAME + ' Iterator'
-    , DEF_VALUES = DEFAULT == VALUES
-    , VALUES_BUG = false
-    , proto      = Base.prototype
-    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
-    , $default   = $native || getMethod(DEFAULT)
-    , methods, key;
-  // Fix native
-  if($native){
-    var IteratorPrototype = getProto($default.call(new Base));
-    // Set @@toStringTag to native iterators
-    setToStringTag(IteratorPrototype, TAG, true);
-    // FF fix
-    if(!LIBRARY && has(proto, FF_ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
-    // fix Array#{values, @@iterator}.name in V8 / FF
-    if(DEF_VALUES && $native.name !== VALUES){
-      VALUES_BUG = true;
-      $default = function values(){ return $native.call(this); };
-    }
-  }
-  // Define iterator
-  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
-    hide(proto, ITERATOR, $default);
-  }
-  // Plug for library
-  Iterators[NAME] = $default;
-  Iterators[TAG]  = returnThis;
-  if(DEFAULT){
-    methods = {
-      values:  DEF_VALUES  ? $default : getMethod(VALUES),
-      keys:    IS_SET      ? $default : getMethod(KEYS),
-      entries: !DEF_VALUES ? $default : getMethod('entries')
-    };
-    if(FORCED)for(key in methods){
-      if(!(key in proto))redefine(proto, key, methods[key]);
-    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
-  }
-  return methods;
-};
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__(9)
-  , SHARED = '__core-js_shared__'
-  , store  = global[SHARED] || (global[SHARED] = {});
-module.exports = function(key){
-  return store[key] || (store[key] = {});
-};
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports) {
-
-// 7.1.4 ToInteger
-var ceil  = Math.ceil
-  , floor = Math.floor;
-module.exports = function(it){
-  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-};
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports) {
-
-var id = 0
-  , px = Math.random();
-module.exports = function(key){
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var classof   = __webpack_require__(32)
-  , ITERATOR  = __webpack_require__(2)('iterator')
-  , Iterators = __webpack_require__(13);
-module.exports = __webpack_require__(7).getIteratorMethod = function(it){
-  if(it != undefined)return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40400,6 +40151,255 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19), __webpack_require__(27)))
 
 /***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = handler;
+// Observed bug with Vue 2.1.6 under certain circumstances:
+// If you pass an object constant into :center, the deep watch
+// is still triggered
+function isChanged(prop, val, oldVal) {
+  var oldProp = typeof oldVal[prop] === 'number' ? oldVal[prop] : typeof oldVal[prop] === 'function' ? oldVal[prop].apply(oldVal) : oldVal[prop]; // don't know how to handle
+  var newProp = typeof val[prop] === 'number' ? val[prop] : typeof val[prop] === 'function' ? val[prop].apply(val) : val[prop]; // don't know how to handle
+  return oldProp !== newProp;
+}
+
+function handler(action) {
+  return function (val, oldVal) {
+    // Check if the value has really changed
+    if (isChanged('lat', val, oldVal) || isChanged('lng', val, oldVal)) {
+      action.apply(this, [val, oldVal]);
+    }
+  };
+}
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+//This piece of code was orignally written by amirnissim and can be seen here
+//http://stackoverflow.com/a/11703018/2694653
+//This has been ported to Vanilla.js by GuillaumeLeclerc
+exports.default = function (input) {
+  var _addEventListener = input.addEventListener ? input.addEventListener : input.attachEvent;
+
+  function addEventListenerWrapper(type, listener) {
+    // Simulate a 'down arrow' keypress on hitting 'return' when no pac suggestion is selected,
+    // and then trigger the original listener.
+    if (type == 'keydown') {
+      var orig_listener = listener;
+      listener = function listener(event) {
+        var suggestion_selected = document.getElementsByClassName('pac-item-selected').length > 0;
+        if (event.which == 13 && !suggestion_selected) {
+          var simulatedEvent = document.createEvent('Event');
+          simulatedEvent.keyCode = 40;
+          simulatedEvent.which = 40;
+          orig_listener.apply(input, [simulatedEvent]);
+        }
+        orig_listener.apply(input, [event]);
+      };
+    }
+    _addEventListener.apply(input, [type, listener]);
+  }
+
+  input.addEventListener = addEventListenerWrapper;
+  input.attachEvent = addEventListenerWrapper;
+};
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _isIterable2 = __webpack_require__(139);
+
+var _isIterable3 = _interopRequireDefault(_isIterable2);
+
+var _getIterator2 = __webpack_require__(138);
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if ((0, _isIterable3.default)(Object(arr))) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var LIBRARY        = __webpack_require__(37)
+  , $export        = __webpack_require__(23)
+  , redefine       = __webpack_require__(39)
+  , hide           = __webpack_require__(36)
+  , has            = __webpack_require__(35)
+  , Iterators      = __webpack_require__(13)
+  , $iterCreate    = __webpack_require__(159)
+  , setToStringTag = __webpack_require__(25)
+  , getProto       = __webpack_require__(5).getProto
+  , ITERATOR       = __webpack_require__(2)('iterator')
+  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+  , FF_ITERATOR    = '@@iterator'
+  , KEYS           = 'keys'
+  , VALUES         = 'values';
+
+var returnThis = function(){ return this; };
+
+module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function(kind){
+    if(!BUGGY && kind in proto)return proto[kind];
+    switch(kind){
+      case KEYS: return function keys(){ return new Constructor(this, kind); };
+      case VALUES: return function values(){ return new Constructor(this, kind); };
+    } return function entries(){ return new Constructor(this, kind); };
+  };
+  var TAG        = NAME + ' Iterator'
+    , DEF_VALUES = DEFAULT == VALUES
+    , VALUES_BUG = false
+    , proto      = Base.prototype
+    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+    , $default   = $native || getMethod(DEFAULT)
+    , methods, key;
+  // Fix native
+  if($native){
+    var IteratorPrototype = getProto($default.call(new Base));
+    // Set @@toStringTag to native iterators
+    setToStringTag(IteratorPrototype, TAG, true);
+    // FF fix
+    if(!LIBRARY && has(proto, FF_ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+    // fix Array#{values, @@iterator}.name in V8 / FF
+    if(DEF_VALUES && $native.name !== VALUES){
+      VALUES_BUG = true;
+      $default = function values(){ return $native.call(this); };
+    }
+  }
+  // Define iterator
+  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG]  = returnThis;
+  if(DEFAULT){
+    methods = {
+      values:  DEF_VALUES  ? $default : getMethod(VALUES),
+      keys:    IS_SET      ? $default : getMethod(KEYS),
+      entries: !DEF_VALUES ? $default : getMethod('entries')
+    };
+    if(FORCED)for(key in methods){
+      if(!(key in proto))redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(9)
+  , SHARED = '__core-js_shared__'
+  , store  = global[SHARED] || (global[SHARED] = {});
+module.exports = function(key){
+  return store[key] || (store[key] = {});
+};
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports) {
+
+// 7.1.4 ToInteger
+var ceil  = Math.ceil
+  , floor = Math.floor;
+module.exports = function(it){
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports) {
+
+var id = 0
+  , px = Math.random();
+module.exports = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof   = __webpack_require__(32)
+  , ITERATOR  = __webpack_require__(2)('iterator')
+  , Iterators = __webpack_require__(13);
+module.exports = __webpack_require__(7).getIteratorMethod = function(it){
+  if(it != undefined)return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -42142,12 +42142,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuse_js__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuse_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fuse_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_google_maps__ = __webpack_require__(137);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_google_maps___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue2_google_maps__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue__);
 //
 //
@@ -42363,23 +42363,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
@@ -42398,74 +42381,255 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
     return {
       lastId: 1,
       search: '',
+
       showAddCampus: false,
       showAddBuilding: false,
       showAddRoom: false,
-      currentItem: null,
-      currentType: "",
+
+      selectedCampus: "",
+      selectedBuilding: "",
+      selectedRoom: "",
+
       campuses: [],
 
-      center: { lat: 41.192638470302114, lng: -111.9427574918045 },
+      currentCampus: {},
+      currentBuilding: {},
+      currentRoom: {},
+
+      roomStyles: [],
+      roomStyle: '',
+
+      center: { lat: 41.192638470302114, lng: -111.9427574918045 }, //{lat: 41.192638470302114, lng: -111.9427574918045}
       newCampus: {
         name: '',
-        campus_code: ''
+        campus_code: '',
+        latlong: ''
       },
       newBuilding: {
-        name: ''
+        name: '',
+        campus_id: ''
       },
       newRoom: {
-        name: ''
+        name: '',
+        number: '',
+        style_id: '',
+        building_id: '',
+        capacity: ''
+
       },
-      markers: [{ position: { lat: 41.19279206612305, lng: -111.9447934627533 } }],
-      infoContent: 'test'
+      markers: [], //[{position: JSON.parse(currentItem.latlong)}],
+      infoContent: ''
 
     };
   },
+
   methods: {
-    resetSearch: function resetSearch() {
-      this.search = '';
+
+    toggleAdd: function toggleAdd(type, show) {
+
+      switch (type) {
+        case 'campus':
+          this.showAddCampus = show || !this.showAddCampus;
+          break;
+
+        case 'building':
+          this.showAddBuilding = show || !this.showAddBuilding;
+          break;
+
+        case 'room':
+          this.showAddRoom = show || !this.showAddRoom;
+          break;
+
+        case 'all':
+          this.showAddCampus = show;
+          this.showAddBuilding = show;
+          this.showAddRoom = show;
+          break;
+      }
     },
-    toggleAdd: function toggleAdd(type) {
-      this.showAddCampus = type == 'campus' ? true : false;
-      this.showAddBuilding = type == 'building' ? true : false;
-      this.showAddRoom = type == 'room' ? true : false;
-    },
+
     onSubmitCampus: function onSubmitCampus(e) {
-      console.log(this, e);
       var vm = this;
       axios.post('/api/v1/campus', this.newCampus).then(function (response) {
         console.log(response);
         vm.campuses.push(response.data);
-      }).catch(function (error) {
-        console.log(error);
       });
 
-      //reset new campus
       this.newCampus = {
         name: '',
         campus_code: ''
-      }, this.toggleCampus();
+      }, this.toggleAdd('all', false);
     },
-    onSelectMenuItem: function onSelectMenuItem(type, obj) {
-      this.currentType = type;
-      this.currentItem = obj;
-      console.log(this.currentType, obj);
 
-      // _.each(Object.keys(obj), function(item){
-      //   console.log(type, obj[item])
-      // })
+    onSubmitBuilding: function onSubmitBuilding(e) {
+      var vm = this;
+      this.newBuilding.campus_id = this.currentItem.campus_id;
+
+      axios.post('/api/v1/buildings', this.newBuilding).then(function (response) {
+        var campus = $.grep(vm.campuses, function (e) {
+          return e.id == vm.currentItem.campus_id;
+        })[0];
+        console.log(campus, campus.buildings);
+        campus.buildings.push(response.data);
+      });
+
+      this.newBuilding = {
+        name: '',
+        campus_id: ''
+      }, this.toggleAdd('all', false);
+    },
+
+    onSubmitRoom: function onSubmitRoom(e) {
+      var vm = this;
+
+      this.newRoom.building_id = this.currentItem.id;
+      this.newRoom.style_id = this.roomStyle;
+      console.log(this.newRoom);
+      axios.post('/api/v1/rooms', this.newRoom).then(function (response) {
+
+        var campus_index = vm.campuses.map(function (campus) {
+          return campus.id;
+        }).indexOf(vm.currentItem.campus_id);
+        var campus = vm.campuses[campus_index];
+        var building_index = campus.buildings.map(function (building) {
+          return building.id;
+        }).indexOf(vm.currentItem.id);
+
+        var building = campus.buildings[building_index];
+        if (campus.buildings[building_index].rooms) {
+          building.rooms.push(response.data);
+        } else {
+          building.rooms = [];
+          building.rooms.push(response.data);
+        }
+      });
+
+      this.newRoom = {
+        name: ''
+      }, this.toggleAdd('all', false);
+    },
+
+    onUpdateCampus: function onUpdateCampus(e) {
+      var vm = this;
+      this.newCampus._method = 'PATCH';
+      this.newCampus.name = this.currentItem.name;
+      this.newCampus.campus_code = this.currentItem.campus_code;
+
+      console.log(this.newCampus);
+
+      axios.post('/api/v1/campus/' + this.currentItem.id, this.newCampus).then(function (response) {
+        // console.log(response);
+        // vm.campuses.push(response.data);
+      });
+
+      this.newCampus = {
+        name: '',
+        campus_code: ''
+      }, this.toggleAdd('all', false);
+    },
+
+    onUpdateBuilding: function onUpdateBuilding(e) {
+      var vm = this;
+      this.newBuilding = this.currentItem;
+      this.newBuilding._method = 'PATCH';
+
+      axios.post('/api/v1/buildings/' + this.currentItem.id, this.newBuilding).then(function (response) {
+        // var campus = $.grep(vm.campuses, function (e) {
+        //   return e.id == vm.currentItem.campus_id;
+        // })[0];
+        // console.log(campus, campus.buildings);
+        // campus.buildings.push(response.data)
+      });
+
+      this.toggleAdd('all', false);
+    },
+
+    onUpdateRoom: function onUpdateRoom(e) {
+      var vm = this;
+
+      this.newRoom = this.currentItem;
+      this.newRoom._method = 'PATCH';
+
+      console.log(this.newRoom);
+      axios.post('/api/v1/rooms/' + this.currentItem.id, this.newRoom).then(function (response) {});
+
+      this.newRoom = {
+        name: ''
+      }, this.toggleAdd('all', false);
     },
 
     mapClicked: function mapClicked(mouseArgs) {
-      console.log('map clicked', mouseArgs); // eslint-disable-line no-console
+      console.log('map clicked', mouseArgs);
     },
 
     mapRclicked: function mapRclicked(mouseArgs) {
       var createdMarker = this.addMarker();
-      // this.toggleCampus();
 
       createdMarker.position.lat = mouseArgs.latLng.lat();
       createdMarker.position.lng = mouseArgs.latLng.lng();
+
+      if (this.currentItem) {
+
+        this.currentItem.latlong = JSON.stringify(createdMarker.position);
+
+        var data = {
+          _method: 'PATCH',
+          latlong: this.currentItem.latlong
+        };
+
+        switch (this.currentItem.type) {
+          case "campus":
+            axios.post('/api/v1/campus/' + this.currentItem.id, data).then(function (response) {
+              console.log(response);
+            });
+            break;
+
+          case "building":
+            axios.post('/api/v1/buildings/' + this.currentItem.id, data).then(function (response) {
+              console.log(response);
+            });
+            break;
+
+          case "room":
+            axios.post('/api/v1/rooms/' + this.currentItem.id, data).then(function (response) {
+              console.log(response);
+            });
+            break;
+        }
+      }
+    },
+
+    mapDragend: function mapDragend(mouseArgs) {
+      this.currentItem.latlong = JSON.stringify({ "lat": mouseArgs.latLng.lat(), "lng": mouseArgs.latLng.lng() });
+
+      var data = {
+        _method: 'PATCH',
+        latlong: this.currentItem.latlong
+      };
+
+      console.log(data);
+
+      switch (this.currentItem.type) {
+        case "campus":
+          axios.post('/api/v1/campus/' + this.currentItem.id, data).then(function (response) {
+            console.log(response);
+            vm.campuses.push(response.data);
+          });
+          break;
+
+        case "building":
+          axios.post('/api/v1/buildings/' + this.currentItem.id, data).then(function (response) {
+            console.log(response);
+            vm.campuses.push(response.data);
+          });
+          break;
+
+        case "room":
+          axios.post('/api/v1/rooms/' + this.currentItem.id, data).then(function (response) {
+            console.log(response);
+          });
+          break;
+      }
     },
 
     addMarker: function addMarker() {
@@ -42488,45 +42652,99 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
       });
       return this.markers[this.markers.length - 1];
     }
-
   },
-  computed: {
-    results: function results() {
-      // console.clear();
 
-      if (this.search == "") {
-        return this.campuses;
+  watch: {
+    selectedCampus: function selectedCampus(item) {
+      this.selectedBuilding = "";
+      this.selectedRoom = "";
+
+      if (item == "") {
+        this.currentItem = {};
+        return;
       }
 
-      var filteredData = _.cloneDeep(this.campuses),
-          q = this.search.split(",");
+      this.currentItem = item;
+      this.currentItem.type = 'campus';
 
-      filteredData = filteredData.filter(function (o, i) {
-        return o.name.toLowerCase().match(new RegExp(q[0]));
-      });
+      this.toggleAdd('all', false);
+    },
 
-      _.each(filteredData, function (cv, ck) {
+    selectedBuilding: function selectedBuilding(item) {
+      this.selectedRoom = "";
 
-        filteredData[ck].buildings = cv.buildings.filter(function (o, i) {
-          if (o.name.toLowerCase().match(new RegExp(q[1]))) {
-            return o.name;
-          }
-        });
+      if (item == "") {
+        this.currentItem = {};
+        return;
+      }
 
-        _.each(filteredData[ck].buildings, function (rv, rk) {
-          filteredData[ck].buildings[rk].rooms = rv.rooms.filter(function (room, i) {
-            if (room.name.toLowerCase().match(new RegExp(q[2]))) {
-              return room.number || room.name;
-            }
-          });
-        });
-      });
+      this.currentItem = item;
+      this.currentItem.type = 'building';
 
-      console.log(q);
-      console.log('data', filteredData);
-      return filteredData;
+      this.toggleAdd('all', false);
+    },
+
+    selectedRoom: function selectedRoom(item) {
+      if (item == "") {
+        this.currentItem = {};
+        return;
+      }
+
+      this.currentItem = item;
+      this.currentItem.type = 'room';
+
+      this.toggleAdd('all', false);
     }
   },
+
+  computed: {
+    currentItem: function currentItem() {
+
+      this.markers = [];
+
+      if (_.isObject(this.selectedCampus) && _.isObject(this.selectedBuilding) && _.isObject(this.selectedRoom)) {
+        var currentItem = this.selectedRoom;
+        currentItem.type = 'room';
+        currentItem.campus_id = this.selectedCampus.id;
+        currentItem.building_id = this.selectedBuilding.id;
+
+        if (currentItem.latlong) {
+          this.markers = [{ position: JSON.parse(currentItem.latlong) }];
+          this.center = JSON.parse(currentItem.latlong);
+        }
+        console.log(this.center);
+        return currentItem;
+      }
+
+      if (_.isObject(this.selectedCampus) && _.isObject(this.selectedBuilding)) {
+        var currentItem = this.selectedBuilding;
+        currentItem.campus_id = this.selectedCampus.id;
+
+        currentItem.type = 'building';
+
+        if (currentItem.latlong) {
+          this.markers = [{ position: JSON.parse(currentItem.latlong) }];
+          this.center = JSON.parse(currentItem.latlong);
+        }
+        return currentItem;
+      }
+
+      if (_.isObject(this.selectedCampus)) {
+        var currentItem = this.selectedCampus;
+        currentItem.campus_id = this.selectedCampus.id;
+        currentItem.type = 'campus';
+
+        if (currentItem.latlong) {
+          this.markers = [{ position: JSON.parse(currentItem.latlong) }];
+          this.center = JSON.parse(currentItem.latlong);
+        }
+        return currentItem;
+      }
+
+      return { type: null };
+    }
+  },
+
   filters: {
     capitalize: function capitalize(value) {
       if (!value) return '';
@@ -42534,20 +42752,26 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
       return value.charAt(0).toUpperCase() + value.slice(1);
     }
   },
+
   mounted: function mounted() {
     var vm = this;
-    // console.log('Component mounted.')
 
     axios.get('/api/v1/campus?with=buildings,buildings.rooms').then(function (response) {
-      console.log(response);
       vm.campuses = response.data;
-      vm.currentItem = response.data[0];
-      vm.currentType = 'campus';
+      // vm.currentItem = response.data[0];
+    }).catch(function (error) {
+      console.log(error);
+    });
+
+    axios.get('/api/v1/roomstyle').then(function (response) {
+      vm.roomStyles = response.data;
+      // vm.currentItem = response.data[0];
     }).catch(function (error) {
       console.log(error);
     });
   }
 };
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(10)))
 
 /***/ }),
 /* 83 */
@@ -42738,7 +42962,7 @@ var _propsBinder = __webpack_require__(4);
 
 var _propsBinder2 = _interopRequireDefault(_propsBinder);
 
-var _simulateArrowDown = __webpack_require__(49);
+var _simulateArrowDown = __webpack_require__(50);
 
 var _simulateArrowDown2 = _interopRequireDefault(_simulateArrowDown);
 
@@ -42987,7 +43211,7 @@ var _mountableMixin = __webpack_require__(30);
 
 var _mountableMixin2 = _interopRequireDefault(_mountableMixin);
 
-var _latlngChangedHandler = __webpack_require__(48);
+var _latlngChangedHandler = __webpack_require__(49);
 
 var _latlngChangedHandler2 = _interopRequireDefault(_latlngChangedHandler);
 
@@ -43156,7 +43380,7 @@ var _propsBinder = __webpack_require__(4);
 
 var _propsBinder2 = _interopRequireDefault(_propsBinder);
 
-var _simulateArrowDown = __webpack_require__(49);
+var _simulateArrowDown = __webpack_require__(50);
 
 var _simulateArrowDown2 = _interopRequireDefault(_simulateArrowDown);
 
@@ -43288,7 +43512,7 @@ var _mountableMixin = __webpack_require__(30);
 
 var _mountableMixin2 = _interopRequireDefault(_mountableMixin);
 
-var _latlngChangedHandler = __webpack_require__(48);
+var _latlngChangedHandler = __webpack_require__(49);
 
 var _latlngChangedHandler2 = _interopRequireDefault(_latlngChangedHandler);
 
@@ -43427,7 +43651,7 @@ __webpack_require__(92);
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = __webpack_require__(57);
+window.Vue = __webpack_require__(48);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -48563,7 +48787,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\vue2-google-maps\\dist\\components\\autocomplete.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/node_modules/vue2-google-maps/dist/components/autocomplete.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] autocomplete.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48597,7 +48821,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\vue2-google-maps\\dist\\components\\infoWindow.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/node_modules/vue2-google-maps/dist/components/infoWindow.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] infoWindow.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48635,7 +48859,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\vue2-google-maps\\dist\\components\\map.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/node_modules/vue2-google-maps/dist/components/map.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] map.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48669,7 +48893,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\vue2-google-maps\\dist\\components\\placeInput.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/node_modules/vue2-google-maps/dist/components/placeInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] placeInput.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48707,7 +48931,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\node_modules\\vue2-google-maps\\dist\\components\\streetViewPanorama.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/node_modules/vue2-google-maps/dist/components/streetViewPanorama.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] streetViewPanorama.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48741,7 +48965,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\Example.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48779,7 +49003,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\passport\\AuthorizedClients.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/passport/AuthorizedClients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] AuthorizedClients.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48817,7 +49041,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\passport\\Clients.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/passport/Clients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Clients.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48855,7 +49079,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\passport\\PersonalAccessTokens.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/passport/PersonalAccessTokens.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] PersonalAccessTokens.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48889,7 +49113,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\wits\\Locations.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/wits/Locations.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Locations.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48923,7 +49147,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\dustinwoodard\\sites\\wits\\resources\\assets\\js\\components\\wits\\UserTable.vue"
+Component.options.__file = "/Users/dwoodard/sites/wits/resources/assets/js/components/wits/UserTable.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] UserTable.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -49818,6 +50042,101 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('aside', {
     staticClass: "col-md-3 col-xs-12"
   }, [_c('div', {
+    staticClass: "pull-right"
+  }, [(_vm.currentItem.type == null) ? _c('span', {
+    staticClass: "fa-stack",
+    attrs: {
+      "data-toggle": "tooltip",
+      "title": "Add Campus"
+    },
+    on: {
+      "click": function($event) {
+        _vm.toggleAdd('campus')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-university"
+  }), _vm._v(" "), _c('i', {
+    staticClass: "fa fa-plus",
+    staticStyle: {
+      "left": "9px",
+      "position": "absolute",
+      "top": "-3px"
+    }
+  })]) : _vm._e(), _vm._v(" "), (_vm.currentItem.type == 'campus') ? _c('span', {
+    staticClass: "fa-stack",
+    attrs: {
+      "data-toggle": "tooltip",
+      "title": "Add Building"
+    },
+    on: {
+      "click": function($event) {
+        _vm.toggleAdd('building')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-cubes"
+  }), _vm._v(" "), _c('i', {
+    staticClass: "fa fa-plus",
+    staticStyle: {
+      "left": "9px",
+      "position": "absolute",
+      "top": "-3px"
+    }
+  })]) : _vm._e(), _vm._v(" "), (_vm.currentItem.type == 'building') ? _c('span', {
+    staticClass: "fa-stack",
+    attrs: {
+      "data-toggle": "tooltip",
+      "title": "Add Room"
+    },
+    on: {
+      "click": function($event) {
+        _vm.toggleAdd('room')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-cube"
+  }), _vm._v(" "), _c('i', {
+    staticClass: "fa fa-plus",
+    staticStyle: {
+      "left": "9px",
+      "position": "absolute",
+      "top": "-3px"
+    }
+  })]) : _vm._e()]), _vm._v(" "), _c('div', {
+    attrs: {
+      "id": "selectDropdowns"
+    }
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectedCampus),
+      expression: "selectedCampus"
+    }],
+    staticClass: "form-control",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.selectedCampus = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select/Add a Campus")]), _vm._v(" "), _vm._l((_vm.campuses), function(campus) {
+    return _c('option', {
+      domProps: {
+        "value": campus
+      }
+    }, [_vm._v(_vm._s(campus.name))])
+  })], 2), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -49895,7 +50214,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$forceUpdate()
       }
     }
-  })])]), _vm._v(" "), _vm._m(0)])])]), _vm._v(" "), _c('div', {
+  })])]), _vm._v(" "), _vm._m(0)])])]), _vm._v(" "), (_vm.selectedCampus) ? _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectedBuilding),
+      expression: "selectedBuilding"
+    }],
+    staticClass: "form-control",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.selectedBuilding = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select/Add a Building")]), _vm._v(" "), _vm._l((_vm.selectedCampus.buildings), function(building) {
+    return _c('option', {
+      domProps: {
+        "value": building
+      }
+    }, [_vm._v(" " + _vm._s(building.name))])
+  })], 2) : _vm._e(), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -49913,9 +50261,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onSubmitBuilding($event)
       }
     }
-  }, [_c('h2', [_vm._v("Add Building "), _c('span', [_vm._v("to " + _vm._s(_vm.currentItem.name))])]), _vm._v(" "), _c('p', {
-    staticClass: "text-muted"
-  }, [_vm._v(" Select campus to add building too. ")]), _vm._v(" "), _c('div', {
+  }, [_c('h4', [_vm._v("Add Building "), _c('span', [_vm._v("to " + _vm._s(_vm.currentItem.name))])]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('label', {
     staticClass: "col-sm-2 control-label",
@@ -49944,7 +50290,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.newBuilding.name = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _vm._m(1)])])]), _vm._v(" "), _c('div', {
+  })])]), _vm._v(" "), _vm._m(1)])])]), _vm._v(" "), (_vm.selectedBuilding && _vm.selectedCampus) ? _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectedRoom),
+      expression: "selectedRoom"
+    }],
+    staticClass: "form-control",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.selectedRoom = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select/Add a Room")]), _vm._v(" "), _vm._l((_vm.selectedBuilding.rooms), function(room) {
+    return _c('option', {
+      domProps: {
+        "value": room
+      }
+    }, [_vm._v(_vm._s(room.number || room.name))])
+  })], 2) : _vm._e(), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -49962,17 +50337,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onSubmitRoom($event)
       }
     }
-  }, [_c('h2', [_vm._v("Add Room "), _c('span', [_vm._v("to " + _vm._s(_vm.currentItem.name))])]), _vm._v(" "), _c('p', {
-    staticClass: "text-muted"
-  }, [_vm._v(" Select Bulding to add room too. ")]), _vm._v(" "), _c('div', {
+  }, [_c('h4', [_vm._v("Add Room "), _c('span', [_vm._v("to " + _vm._s(_vm.currentItem.name))])]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('label', {
-    staticClass: "col-sm-2 control-label",
+    staticClass: "col-sm-3 control-label",
     attrs: {
       "for": "room_name"
     }
   }, [_vm._v("Name")]), _vm._v(" "), _c('div', {
-    staticClass: "col-sm-10"
+    staticClass: "col-sm-9"
   }, [_c('input', {
     directives: [{
       name: "model",
@@ -49981,8 +50354,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "newRoom.name"
     }],
     attrs: {
-      "type": "text",
-      "id": "addRoom"
+      "type": "text"
     },
     domProps: {
       "value": (_vm.newRoom.name)
@@ -49995,161 +50367,64 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })])]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
-  }, [_c('div', {
-    staticClass: "col-sm-offset-2 col-sm-10"
-  }, [_c('button', {
-    staticClass: "btn btn-default",
+  }, [_c('label', {
+    staticClass: "col-sm-3 control-label",
     attrs: {
-      "type": "submit",
-      "disable": _vm.currentType !== 'building'
+      "for": "room_name"
     }
-  }, [_vm._v("Add Room")])])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "pull-right"
-  }, [_c('span', {
-    staticClass: "fa-stack",
-    attrs: {
-      "data-toggle": "tooltip",
-      "title": "Add Campus"
-    },
-    on: {
-      "click": function($event) {
-        _vm.toggleAdd('campus')
-      }
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-university"
-  }), _vm._v(" "), _c('i', {
-    staticClass: "fa fa-plus",
-    staticStyle: {
-      "left": "9px",
-      "position": "absolute",
-      "top": "-3px"
-    }
-  })]), _vm._v(" "), _c('span', {
-    staticClass: "fa-stack",
-    attrs: {
-      "data-toggle": "tooltip",
-      "title": "Add Building"
-    },
-    on: {
-      "click": function($event) {
-        _vm.toggleAdd('building')
-      }
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-cubes"
-  }), _vm._v(" "), _c('i', {
-    staticClass: "fa fa-plus",
-    staticStyle: {
-      "left": "9px",
-      "position": "absolute",
-      "top": "-3px"
-    }
-  })]), _vm._v(" "), _c('span', {
-    staticClass: "fa-stack",
-    attrs: {
-      "data-toggle": "tooltip",
-      "title": "Add Room"
-    },
-    on: {
-      "click": function($event) {
-        _vm.toggleAdd('room')
-      }
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-cube"
-  }), _vm._v(" "), _c('i', {
-    staticClass: "fa fa-plus",
-    staticStyle: {
-      "left": "9px",
-      "position": "absolute",
-      "top": "-3px"
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "btn-group"
-  }, [_c('i', {
-    staticClass: "fa fa-filter"
-  }), _vm._v(" "), _c('input', {
+  }, [_vm._v("Number")]), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-9"
+  }, [_c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.search),
-      expression: "search"
+      value: (_vm.newRoom.number),
+      expression: "newRoom.number"
     }],
-    staticStyle: {
-      "width": "180px"
-    },
     attrs: {
-      "id": "search",
-      "type": "text",
-      "placeholder": "campus, building, room"
+      "type": "text"
     },
     domProps: {
-      "value": (_vm.search)
+      "value": (_vm.newRoom.number)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.search = $event.target.value
+        _vm.newRoom.number = $event.target.value
       }
     }
-  }), _vm._v(" "), _c('span', {
-    staticClass: "glyphicon glyphicon-remove-circle",
-    attrs: {
-      "id": "searchclear"
-    },
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "col-sm-3 control-label"
+  }, [_vm._v("Room Style")]), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-9"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.roomStyle),
+      expression: "roomStyle"
+    }],
+    staticClass: "form-control",
     on: {
-      "click": function($event) {
-        _vm.resetSearch()
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.roomStyle = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
       }
     }
-  })]), _vm._v(" "), _vm._l((_vm.results), function(campus, campusKey) {
-    return _c('ul', {
-      attrs: {
-        "id": "location-menu"
+  }, _vm._l((_vm.roomStyles), function(roomstyle) {
+    return _c('option', {
+      domProps: {
+        "value": roomstyle.id
       }
-    }, [_c('a', {
-      staticClass: "accordion-toggle",
-      attrs: {
-        "data-toggle": "collapse",
-        "data-target": '.campus' + campusKey,
-        "aria-expanded": "true"
-      },
-      on: {
-        "click": function($event) {
-          _vm.onSelectMenuItem('campus', campus)
-        }
-      }
-    }, [_vm._v(_vm._s(campus.name) + " (" + _vm._s(campus.buildings.length) + ")")]), _vm._v(" "), _vm._l((campus.buildings), function(building, buildingKey) {
-      return _c('li', {
-        staticClass: "accordian-body collapse in",
-        class: 'campus' + campusKey
-      }, [_c('ul', [_c('li', [_c('a', {
-        staticClass: "accordion-toggle",
-        attrs: {
-          "data-toggle": "collapse",
-          "data-target": '.building' + buildingKey,
-          "aria-expanded": "true"
-        },
-        on: {
-          "click": function($event) {
-            _vm.onSelectMenuItem('building', building)
-          }
-        }
-      }, [_vm._v(" " + _vm._s(building.name) + " (" + _vm._s(building.rooms.length) + ")")]), _vm._v(" "), _c('ul', {
-        staticClass: "accordian-body collapse in",
-        class: 'building' + buildingKey
-      }, _vm._l((building.rooms), function(room, roomKey) {
-        return _c('li', [_c('a', {
-          on: {
-            "click": function($event) {
-              _vm.onSelectMenuItem('room', room)
-            }
-          }
-        }, [_vm._v(_vm._s(room.number || room.name))])])
-      }))])])])
-    })], 2)
-  })], 2), _vm._v(" "), _c('div', {
+    }, [_vm._v(_vm._s(roomstyle.name))])
+  }))])]), _vm._v(" "), _vm._m(2)])])])])]), _vm._v(" "), _c('div', {
     staticClass: "col-xs-12 col-md-9"
   }, [
     [_c('gmap-map', {
@@ -50158,10 +50433,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "height": "300px"
       },
       attrs: {
-        "center": {
-          lat: 41.19287259976383,
-          lng: -111.9421459481491
-        },
+        "center": _vm.center,
         "zoom": 17,
         "map-type-id": "terrain"
       },
@@ -50178,14 +50450,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         on: {
           "click": function($event) {
             _vm.center = m.position
-          }
+          },
+          "dragend": _vm.mapDragend
         }
-      }, [_vm._v("\"m.ifw\\\" :content=\\\"m.ifw2text\\\">")])
-    }))], _vm._v(" "), (_vm.currentItem) ? _c('div', {
+      })
+    }))], _vm._v(" "), (_vm.currentItem.type) ? _c('div', {
       attrs: {
         "id": "current-item"
       }
-    }, [_c('h2', [_vm._v(_vm._s(_vm._f("capitalize")(_vm.currentType)) + ": " + _vm._s(_vm.currentItem.number || _vm.currentItem.name) + " ")]), _vm._v(" "), (_vm.currentType == 'campus') ? _c('form', [_c('div', {
+    }, [_c('h2', [_c('span', {
+      staticClass: "text-capitalize"
+    }, [_vm._v(_vm._s(_vm.currentItem.type) + ":")]), _vm._v(" " + _vm._s(_vm.currentItem.number || _vm.currentItem.name) + "\n    ")]), _vm._v(" "), (_vm.currentItem.type == 'campus') ? _c('form', {
+      on: {
+        "submit": function($event) {
+          $event.preventDefault();
+          _vm.onUpdateCampus($event)
+        }
+      }
+    }, [_c('div', {
       staticClass: "form-group"
     }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
       directives: [{
@@ -50209,11 +50491,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })]), _vm._v(" "), _c('div', {
       staticClass: "form-group"
-    }, [_c('label', {
-      attrs: {
-        "for": "exampleInputPassword1"
-      }
-    }, [_vm._v("Campus Code")]), _vm._v(" "), _c('input', {
+    }, [_c('label', [_vm._v("Code")]), _vm._v(" "), _c('input', {
       directives: [{
         name: "model",
         rawName: "v-model",
@@ -50233,12 +50511,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.currentItem.campus_code = $event.target.value
         }
       }
-    })]), _vm._v(" "), _vm._m(2), _vm._v(" "), _vm._m(3), _vm._v(" "), _c('button', {
+    })]), _vm._v(" "), _c('button', {
       staticClass: "btn btn-default",
       attrs: {
         "type": "submit"
       }
-    }, [_vm._v("Submit")])]) : _vm._e(), _vm._v(" "), (_vm.currentType == 'building') ? _c('form', [_c('div', {
+    }, [_vm._v("Update Campus")])]) : _vm._e(), _vm._v(" "), (_vm.currentItem.type == 'building') ? _c('form', {
+      on: {
+        "submit": function($event) {
+          $event.preventDefault();
+          _vm.onUpdateBuilding($event)
+        }
+      }
+    }, [_c('div', {
       staticClass: "form-group"
     }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
       directives: [{
@@ -50265,7 +50550,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "type": "submit"
       }
-    }, [_vm._v("Submit")])]) : _vm._e(), _vm._v(" "), (_vm.currentType == 'room') ? _c('form', [_c('div', {
+    }, [_vm._v("Update Building")])]) : _vm._e(), _vm._v(" "), (_vm.currentItem.type == 'room') ? _c('form', {
+      on: {
+        "submit": function($event) {
+          $event.preventDefault();
+          _vm.onUpdateRoom($event)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "form-group"
+    }, [_c('label', [_vm._v("Number")]), _vm._v(" "), _c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.currentItem.number),
+        expression: "currentItem.number"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        "type": "text"
+      },
+      domProps: {
+        "value": (_vm.currentItem.number)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.currentItem.number = $event.target.value
+        }
+      }
+    })]), _vm._v(" "), _c('div', {
       staticClass: "form-group"
     }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
       directives: [{
@@ -50289,36 +50603,58 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })]), _vm._v(" "), _c('div', {
       staticClass: "form-group"
-    }, [_c('label', {
-      attrs: {
-        "for": "exampleInputPassword1"
-      }
-    }, [_vm._v("Campus Code")]), _vm._v(" "), _c('input', {
+    }, [_c('label', [_vm._v("Room Style")]), _vm._v(" "), _c('select', {
       directives: [{
         name: "model",
         rawName: "v-model",
-        value: (_vm.currentItem.campus_code),
-        expression: "currentItem.campus_code"
+        value: (_vm.currentItem.style_id),
+        expression: "currentItem.style_id"
       }],
       staticClass: "form-control",
+      on: {
+        "change": function($event) {
+          var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+            return o.selected
+          }).map(function(o) {
+            var val = "_value" in o ? o._value : o.value;
+            return val
+          });
+          _vm.currentItem.style_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+        }
+      }
+    }, _vm._l((_vm.roomStyles), function(roomstyle) {
+      return _c('option', {
+        domProps: {
+          "value": roomstyle.id,
+          "selected": roomstyle.id == _vm.currentItem.style_id
+        }
+      }, [_vm._v(_vm._s(roomstyle.name))])
+    }))]), _vm._v(" "), _c('div', {
+      staticClass: "form-group"
+    }, [_c('label', {
+      staticClass: "col-sm-3 control-label"
+    }, [_vm._v("Capacity")]), _vm._v(" "), _c('div', {
+      staticClass: "col-sm-9"
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.currentItem.capacity),
+        expression: "currentItem.capacity"
+      }],
       attrs: {
         "type": "text"
       },
       domProps: {
-        "value": (_vm.currentItem.campus_code)
+        "value": (_vm.currentItem.capacity)
       },
       on: {
         "input": function($event) {
           if ($event.target.composing) { return; }
-          _vm.currentItem.campus_code = $event.target.value
+          _vm.currentItem.capacity = $event.target.value
         }
       }
-    })]), _vm._v(" "), _vm._m(4), _vm._v(" "), _vm._m(5), _vm._v(" "), _c('button', {
-      staticClass: "btn btn-default",
-      attrs: {
-        "type": "submit"
-      }
-    }, [_vm._v("Submit")])]) : _vm._e()]) : _vm._e()
+    })])]), _vm._v(" "), _vm._m(3)]) : _vm._e()]) : _vm._e()
   ], 2)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
@@ -50345,49 +50681,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "form-group"
-  }, [_c('label', {
+  }, [_c('div', {
+    staticClass: "col-sm-offset-2 col-sm-10"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
     attrs: {
-      "for": "exampleInputFile"
+      "type": "submit"
     }
-  }, [_vm._v("File input")]), _vm._v(" "), _c('input', {
-    attrs: {
-      "type": "file",
-      "id": "exampleInputFile"
-    }
-  }), _vm._v(" "), _c('p', {
-    staticClass: "help-block"
-  }, [_vm._v("Example block-level help text here.")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "checkbox"
-  }, [_c('label', [_c('input', {
-    attrs: {
-      "type": "checkbox"
-    }
-  }), _vm._v(" Check me out\n            ")])])
+  }, [_vm._v("Add Room")])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "form-group"
-  }, [_c('label', {
+  }, [_c('button', {
+    staticClass: "btn btn-default",
     attrs: {
-      "for": "exampleInputFile"
+      "type": "submit"
     }
-  }, [_vm._v("File input")]), _vm._v(" "), _c('input', {
-    attrs: {
-      "type": "file",
-      "id": "exampleInputFile"
-    }
-  }), _vm._v(" "), _c('p', {
-    staticClass: "help-block"
-  }, [_vm._v("Example block-level help text here.")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "checkbox"
-  }, [_c('label', [_c('input', {
-    attrs: {
-      "type": "checkbox"
-    }
-  }), _vm._v(" Check me out\n            ")])])
+  }, [_vm._v("Update Room")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -50934,7 +51244,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray2 = __webpack_require__(50);
+var _slicedToArray2 = __webpack_require__(51);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -51112,7 +51422,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray2 = __webpack_require__(50);
+var _slicedToArray2 = __webpack_require__(51);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -51503,7 +51813,7 @@ module.exports = __webpack_require__(7).Object.keys;
 /* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(56);
+__webpack_require__(57);
 __webpack_require__(40);
 __webpack_require__(41);
 __webpack_require__(179);
@@ -51514,7 +51824,7 @@ module.exports = __webpack_require__(7).Promise;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(180);
-__webpack_require__(56);
+__webpack_require__(57);
 module.exports = __webpack_require__(7).Symbol;
 
 /***/ }),
@@ -51563,7 +51873,7 @@ var ctx         = __webpack_require__(18)
   , isArrayIter = __webpack_require__(156)
   , anObject    = __webpack_require__(12)
   , toLength    = __webpack_require__(173)
-  , getIterFn   = __webpack_require__(55);
+  , getIterFn   = __webpack_require__(56);
 module.exports = function(iterable, entries, fn, that){
   var iterFn = getIterFn(iterable)
     , f      = ctx(fn, that, entries ? 2 : 1)
@@ -51927,7 +52237,7 @@ module.exports = function(it, Constructor, name){
 /* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__(53)
+var toInteger = __webpack_require__(54)
   , defined   = __webpack_require__(33);
 // true  -> String#at
 // false -> String#codePointAt
@@ -52030,7 +52340,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.15 ToLength
-var toInteger = __webpack_require__(53)
+var toInteger = __webpack_require__(54)
   , min       = Math.min;
 module.exports = function(it){
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
@@ -52051,7 +52361,7 @@ module.exports = function(it){
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(12)
-  , get      = __webpack_require__(55);
+  , get      = __webpack_require__(56);
 module.exports = __webpack_require__(7).getIterator = function(it){
   var iterFn = get(it);
   if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
@@ -52087,7 +52397,7 @@ var addToUnscopables = __webpack_require__(148)
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(51)(Array, 'Array', function(iterated, kind){
+module.exports = __webpack_require__(52)(Array, 'Array', function(iterated, kind){
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -52438,9 +52748,9 @@ var $              = __webpack_require__(5)
   , $export        = __webpack_require__(23)
   , redefine       = __webpack_require__(39)
   , $fails         = __webpack_require__(34)
-  , shared         = __webpack_require__(52)
+  , shared         = __webpack_require__(53)
   , setToStringTag = __webpack_require__(25)
-  , uid            = __webpack_require__(54)
+  , uid            = __webpack_require__(55)
   , wks            = __webpack_require__(2)
   , keyOf          = __webpack_require__(162)
   , $names         = __webpack_require__(152)

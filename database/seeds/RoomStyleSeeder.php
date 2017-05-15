@@ -11,6 +11,8 @@ class RoomStyleSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\RoomStyle::class, 15)->create();
+        DB::table('room_style')->insert(['name' => "classroom", ]);
+        DB::table('room_style')->insert(['name' => "office", ]);
+        DB::table('room_style')->insert(['name' => "hallway", ]);
     }
 }

@@ -28,8 +28,9 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
     Route::resource('roles', 'RoleController');
     Route::resource('asset', 'AssetController');
     Route::resource('campus', 'CampusController');
-    Route::resource('building', 'BuildingController');
-    Route::resource('room', 'RoomController');
+    Route::resource('buildings', 'BuildingController');
+    Route::resource('rooms', 'RoomController');
+    Route::resource('roomstyle', 'RoomStyleController');
     Route::resource('software', 'SoftwareController');
     Route::resource('support', 'SupportController');
     Route::resource('category', 'CategoryController');

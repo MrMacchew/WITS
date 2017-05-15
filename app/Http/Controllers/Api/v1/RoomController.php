@@ -14,9 +14,16 @@ class RoomController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = !empty($request->query('search')) ? explode(',', $request->query('search')) : null;
+        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
+        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
+        $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
+
+
+
+        return Room::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 
     /**
@@ -37,18 +44,16 @@ class RoomController extends ApiController
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-        'name' => 'required',
-        'number' => 'required',
-        'style_id' => 'required',
+        // return ($request->all());
+
+        $this->validate($request, [
+        'name' => 'unique:room',
+        'number' => 'unique:room',
+        'building_id' => 'required'
         ]);
 
-		if ($validator->fails()) {
-            // dd($validator->messages());
-            return new JsonResponse($validator->messages(), 422);
-        }
+        return Room::create($request->all());
 
-       return  Room::create($request->all());
     }
 
     /**
@@ -82,7 +87,17 @@ class RoomController extends ApiController
      */
     public function update(Request $request, Room $room)
     {
-        //
+        $this->validate($request, [
+        'name' => '',
+        'number' => '',
+        'building_id' => ''
+        ]);
+
+        $room = Room::find($room->id);
+        $room->fill($request->all());
+
+        $room->save();
+        return $room;
     }
 
     /**
