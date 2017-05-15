@@ -15,7 +15,7 @@
         <div class="panel panel-default" v-if="selectedCampus==''">
           <div class="panel-body">
             <form class="form-horizontal" v-on:submit.prevent="onSubmitCampus">
-              <h2>Add Campus</h2>
+              <h4>Add Campus</h4>
               <div class="form-group">
                 <label for="campus_name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
@@ -254,7 +254,6 @@
           style_id:'',
           building_id:'',
           capacity: ''
-
         },
         markers: [], //[{position: JSON.parse(currentItem.latlong)}],
         infoContent: '',
@@ -337,7 +336,11 @@
           toastr["success"]("Added Room: " + response.data.name)
 
           this.newRoom = {
-            name:''
+            name:'',
+            number:'',
+            style_id:'',
+            building_id:'',
+            capacity: ''
           }
 
         })
@@ -402,9 +405,10 @@
         console.log(this.newRoom);
         axios.post('/api/v1/rooms/'+ this.currentItem.id, this.newRoom)
         .then(function (response) {
-          toastr["success"]("Updated Building: " + response.data.name)
+          toastr["success"]("Updated Room: " + response.data.name)
           this.newRoom = {
-            name:''
+            name:'',
+            number:''
           }
           
         })

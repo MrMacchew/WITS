@@ -42404,7 +42404,6 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
         style_id: '',
         building_id: '',
         capacity: ''
-
       },
       markers: [], //[{position: JSON.parse(currentItem.latlong)}],
       infoContent: ''
@@ -42480,7 +42479,11 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
         __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["success"]("Added Room: " + response.data.name);
 
         this.newRoom = {
-          name: ''
+          name: '',
+          number: '',
+          style_id: '',
+          building_id: '',
+          capacity: ''
         };
       }).catch(function (error) {
         __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["error"](error.response.data);
@@ -42527,9 +42530,10 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
 
       console.log(this.newRoom);
       axios.post('/api/v1/rooms/' + this.currentItem.id, this.newRoom).then(function (response) {
-        __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["success"]("Updated Building: " + response.data.name);
+        __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["success"]("Updated Room: " + response.data.name);
         this.newRoom = {
-          name: ''
+          name: '',
+          number: ''
         };
       }).catch(function (error) {
         __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["error"](error.response.data);
@@ -50091,7 +50095,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onSubmitCampus($event)
       }
     }
-  }, [_c('h2', [_vm._v("Add Campus")]), _vm._v(" "), _c('div', {
+  }, [_c('h4', [_vm._v("Add Campus")]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('label', {
     staticClass: "col-sm-2 control-label",
