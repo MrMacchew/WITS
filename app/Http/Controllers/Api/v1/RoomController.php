@@ -47,8 +47,8 @@ class RoomController extends ApiController
         // return ($request->all());
 
         $this->validate($request, [
-        'name' => 'unique:room',
-        'number' => 'unique:room',
+        'name' => '',
+        'number' => '',
         'building_id' => 'required'
         ]);
 
