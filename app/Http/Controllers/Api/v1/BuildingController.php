@@ -42,9 +42,9 @@ class BuildingController extends ApiController
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-        'name' => 'required|unique:building',
-        ]);
+        // $this->validate($request, [
+        // 'name' => 'required|unique:building',
+        // ]);
 
         return Building::create($request->all());
     }

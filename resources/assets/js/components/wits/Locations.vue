@@ -1,15 +1,19 @@
 <template>
   <div class="container-fluid">
     <aside class="col-md-3 col-xs-12">
-       
+
 
       <div id="selectDropdowns">
 
-        <select v-model="selectedCampus" class="form-control">
-          <option value="">Select/Add a Campus</option>
-          <option v-for="campus in campuses" :value="campus">{{campus.name}}</option>
-        </select>
-
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <h3 class="panel-title">Campuses</h3>
+          </div>
+          <select v-model="selectedCampus" class="form-control" :size="setSize()" ref="selectItem">
+            <option value="" style="color:#c3c3c3">Select/Add a Campus</option>
+            <option v-for="campus in campuses" :value="campus">{{campus.name}}</option>
+          </select>
+        </div>
 
         <!-- add campuse -->
         <div class="panel panel-default" v-if="selectedCampus==''">
@@ -17,13 +21,13 @@
             <form class="form-horizontal" v-on:submit.prevent="onSubmitCampus">
               <h4>Add Campus</h4>
               <div class="form-group">
-                <label for="campus_name" class="col-sm-2 control-label">Name</label>
+                <label for="addCampus" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
                   <input type="text" v-model="newCampus.name" id="addCampus">
                 </div>
               </div>
               <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label">Code</label>
+                <label class="col-sm-2 control-label">Code</label>
                 <div class="col-sm-10">
                   <input type="number" v-model="newCampus.campus_code">
                 </div>
@@ -37,10 +41,19 @@
           </div>
         </div>
 
-        <select v-model="selectedBuilding" class="form-control" v-if="selectedCampus">
-          <option value="">Select/Add a Building</option>
-          <option v-for="building in selectedCampus.buildings" :value="building"> {{building.name}}</option>
-        </select>
+
+
+
+        <div class="panel panel-default" v-if="selectedCampus" >
+          <div class="panel-heading">
+            <h3 class="panel-title">Buildings</h3>
+          </div>
+          <select v-model="selectedBuilding" class="form-control" :size="setSize()" ref="selectItem">
+            <option value="" style="color:#c3c3c3">Select/Add a Building</option>
+            <option v-for="building in selectedCampus.buildings" :value="building"> {{building.name}}</option>
+          </select>
+        </div>
+
 
         <!-- add building -->
         <div class="panel panel-default" v-if="selectedCampus && selectedBuilding==''">
@@ -64,10 +77,15 @@
           </div>
         </div>
 
-        <select v-model="selectedRoom" class="form-control" v-if="selectedBuilding && selectedCampus">
-          <option value="">Select/Add a Room</option>
-          <option v-for="room in selectedBuilding.rooms" :value="room">{{room.number || room.name}}</option>
-        </select>
+        <div class="panel panel-default" v-if="selectedBuilding && selectedCampus">
+          <div class="panel-heading">
+            <h3 class="panel-title">Rooms</h3>
+          </div>
+          <select v-model="selectedRoom" class="form-control" :size="setSize()">
+            <option value="" style="color:#c3c3c3">Select/Add a Room</option>
+            <option v-for="room in selectedBuilding.rooms" :value="room">{{room.number || room.name}}</option>
+          </select>
+        </div>
 
         <!-- add room -->
         <div class="panel panel-default" v-if="selectedCampus && selectedBuilding && selectedCampus && selectedRoom==''">
@@ -114,7 +132,10 @@
     <div class="col-xs-12 col-md-9">
 
       <template>
-        <gmap-map :center="center" :zoom="17" map-type-id="terrain"
+        <gmap-map ref="map"
+        :center="center"
+        :zoom="16"
+        map-type-id="terrain"
         style="width: 100%; height: 300px"
         @rightclick="mapRclicked"
         >
@@ -134,12 +155,15 @@
 
   <div id="current-item"  v-if="currentItem.type">
 
+
     <h2>
       <span class="text-capitalize">{{currentItem.type}}:</span> {{currentItem.number || currentItem.name}}
     </h2>
 
 
     <form v-if="currentItem.type == 'campus'" v-on:submit.prevent="onUpdateCampus">
+
+      <div class="pull-right"><i class="fa fa-trash fa-2x"></i></div>
       <div class="form-group">
         <label>Name</label>
         <input type="text" class="form-control" v-model="currentItem.name">
@@ -239,6 +263,7 @@
 
 
         center: {lat: 41.192638470302114, lng: -111.9427574918045}, //{lat: 41.192638470302114, lng: -111.9427574918045}
+        zoom: 17,
         newCampus: {
           name:'',
           campus_code:'',
@@ -262,6 +287,17 @@
     },
 
     methods:{
+      setSize: function(){
+
+        // this.currentItem
+        //
+
+        if (this.$refs.selectedItem) {
+          console.log(this.$refs.selectedItem)
+          return this.$refs.selectedItem.value == null ? this.$refs.selectedItem.childElementCount : 1
+        }
+        return 5
+      },
 
       onSubmitCampus: function(e){
         var vm = this;
@@ -281,8 +317,6 @@
           console.log(error);
           toastr["error"](error.response.data)
        });
-
-
       },
 
       onSubmitBuilding: function(e){
@@ -297,18 +331,17 @@
 
           campus.buildings.push(response.data)
           toastr["success"]("Added building: " + response.data.name)
-
-          this.newBuilding = {
-            name:'',
-            campus_id:''
-          }
         })
         .catch(function (error) {
-         toastr["error"](error.response.data)
+         if (error.message) {
+            toastr["error"](error.message)
+          }
        });
 
-
-
+        this.newBuilding = {
+          name:'',
+          campus_id:''
+        }
       },
 
       onSubmitRoom: function(e){
@@ -335,21 +368,23 @@
 
           toastr["success"]("Added Room: " + response.data.name)
 
-          this.newRoom = {
-            name:'',
-            number:'',
-            style_id:'',
-            building_id:'',
-            capacity: ''
-          }
 
         })
         .catch(function (error) {
-         toastr["error"](error.response.data)
+
+
+          if (error.message) {
+            toastr["error"](error.message)
+          }
        });
 
-
-
+        this.newRoom = {
+          name:'',
+          number:'',
+          style_id:'',
+          building_id:'',
+          capacity: ''
+        }
       },
 
       onUpdateCampus: function(e){
@@ -363,16 +398,20 @@
         axios.post('/api/v1/campus/'+ this.currentItem.id, this.newCampus)
         .then(function (response) {
           toastr["success"]("Updated Campus: " + response.data.name)
-          this.newCampus = {
-            name:'',
-            campus_code:''
-          }
+
 
         })
         .catch(function (error) {
-         toastr["error"](error.response.data)
+
+         if (error.message) {
+            toastr["error"](error.message)
+          }
        })
 
+        this.newCampus = {
+          name:'',
+          campus_code:''
+        }
 
       },
 
@@ -384,15 +423,13 @@
         axios.post('/api/v1/buildings/'+ this.currentItem.id, this.newBuilding)
         .then(function (response) {
           toastr["success"]("Updated Building: " + response.data.name)
-          
+
         })
         .catch(function (error) {
-          console.log(error.response)
-         toastr["error"](error.response)
+          if (error.message) {
+            toastr["error"](error.message)
+          }
        });
-
-
-
       },
 
       onUpdateRoom: function(e){
@@ -406,17 +443,13 @@
         axios.post('/api/v1/rooms/'+ this.currentItem.id, this.newRoom)
         .then(function (response) {
           toastr["success"]("Updated Room: " + response.data.name)
-          this.newRoom = {
-            name:'',
-            number:''
-          }
-          
+
         })
         .catch(function (error) {
-         toastr["error"](error.response.data)
+          if (error.message) {
+            toastr["error"](error.message)
+          }
        });
-
-
 
       },
 
@@ -487,9 +520,6 @@
           latlong: this.currentItem.latlong
         }
 
-        console.log(data);
-
-
         switch(this.currentItem.type){
           case "campus":
           axios.post('/api/v1/campus/'+this.currentItem.id, data)
@@ -558,7 +588,6 @@
           return;
         }
 
-
         this.currentItem = item
         this.currentItem.type = 'campus'
 
@@ -572,7 +601,6 @@
           return;
         }
 
-
         this.currentItem = item
         this.currentItem.type = 'building'
 
@@ -580,6 +608,15 @@
       },
 
       selectedRoom: function(item){
+
+        this.newRoom = {
+            name:'',
+            number:'',
+            style_id:'',
+            building_id:'',
+            capacity: ''
+          }
+
         if (item == "") {
           this.currentItem = {}
           return;

@@ -128,7 +128,8 @@ class CampusController extends ApiController
      */
     public function destroy(Campus $campus)
     {
-
+        $campus = Campus::destroy($campus->id);
+        $campus->delete();
     }
 
     protected function formatValidationErrors(Validator $validator)
