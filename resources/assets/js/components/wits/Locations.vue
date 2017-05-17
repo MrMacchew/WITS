@@ -9,7 +9,7 @@
           <div class="panel-heading">
           <h3 class="panel-title">Campuses</h3>
           </div>
-          <select v-model="selectedCampus" class="form-control" :size="setSize()" ref="selectItem">
+          <select v-model="selectedCampus" class="form-control" size="5" ref="selectItem">
             <option value="" style="color:#c3c3c3">Select/Add a Campus</option>
             <option v-for="campus in campuses" :value="campus">{{campus.name}}</option>
           </select>
@@ -48,7 +48,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">Buildings</h3>
           </div>
-          <select v-model="selectedBuilding" class="form-control" :size="setSize()" ref="selectItem">
+          <select v-model="selectedBuilding" class="form-control" size="5" ref="selectItem">
             <option value="" style="color:#c3c3c3">Select/Add a Building</option>
             <option v-for="building in selectedCampus.buildings" :value="building"> {{building.name}}</option>
           </select>
@@ -81,7 +81,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">Rooms</h3>
           </div>
-          <select v-model="selectedRoom" class="form-control" :size="setSize()">
+          <select v-model="selectedRoom" class="form-control" size="5">
             <option value="" style="color:#c3c3c3">Select/Add a Room</option>
             <option v-for="room in selectedBuilding.rooms" :value="room">{{room.number || room.name}}</option>
           </select>
@@ -135,22 +135,17 @@
         <gmap-map ref="map"
         :center="center"
         :zoom="16"
-        map-type-id="terrain"
-        style="width: 100%; height: 300px"
+		map-type-id="terrain"
         @rightclick="mapRclicked"
+        style="width: 100%; height: 300px"
         >
-
-        <gmap-marker
-        v-for="(m, index) in markers"
-        :position="m.position"
-        :clickable="true"
-        :draggable="true" @click="center=m.position"
-        @dragend="mapDragend"
-        >
-
-      </gmap-marker>
-    </gmap-map>
-  </template>
+          <gmap-marker v-for="(m, index) in markers"
+          :position="m.position"
+          :clickable="true"
+          :draggable="true"
+          @click="center=m.position"@dragend="mapDragend"></gmap-marker>
+        </gmap-map>
+      </template>
 
 
   <div id="current-item"  v-if="currentItem.type">
@@ -163,11 +158,15 @@
 
     <form v-if="currentItem.type == 'campus'" v-on:submit.prevent="onUpdateCampus">
 
-      <div class="pull-right"><i class="fa fa-trash fa-2x"></i></div>
+      <div class="pull-right">
+        <i class="fa fa-trash fa-2x" @click="onDeleteCampus"></i>
+      </div>
+
       <div class="form-group">
         <label>Name</label>
         <input type="text" class="form-control" v-model="currentItem.name">
       </div>
+
       <div class="form-group">
         <label>Code</label>
         <input type="text" class="form-control" v-model="currentItem.campus_code">
@@ -176,6 +175,10 @@
     </form>
 
     <form v-if="currentItem.type == 'building'" v-on:submit.prevent="onUpdateBuilding">
+      <div class="pull-right">
+        <i class="fa fa-trash fa-2x" @click="onDeleteBuilding"></i>
+      </div>
+
       <div class="form-group">
         <label>Name</label>
         <input type="text" class="form-control" v-model="currentItem.name">
@@ -184,6 +187,11 @@
     </form>
 
     <form v-if="currentItem.type == 'room'" v-on:submit.prevent="onUpdateRoom" >
+
+      <div class="pull-right">
+        <i class="fa fa-trash fa-2x" @click="onDeleteRoom"></i>
+      </div>
+
       <div class="form-group">
         <label>Number</label>
         <input type="text" class="form-control" v-model="currentItem.number">
@@ -227,6 +235,7 @@
   import * as VueGoogleMaps from 'vue2-google-maps';
   import Vue from 'vue';
   import toastr from 'toastr';
+  import confirm from 'jquery-confirm';
 
 
   Vue.use(VueGoogleMaps, {
@@ -239,7 +248,6 @@
   export default{
     data: function(){
       return {
-        lastId: 1,
         search: '',
 
         showAddCampus: false,
@@ -287,20 +295,58 @@
     },
 
     methods:{
-      setSize: function(){
 
-        // this.currentItem
-        //
+      getCurrentCampusByIndex: function () {
 
-        if (this.$refs.selectedItem) {
-          console.log(this.$refs.selectedItem)
-          return this.$refs.selectedItem.value == null ? this.$refs.selectedItem.childElementCount : 1
-        }
-        return 5
+        var campus_index = this.campuses
+        .map(function(campus) {return campus.id; })
+        .indexOf(this.currentItem.campus_id);
+
+        var campus = this.campuses[campus_index]
+        campus.array_index = campus_index
+        return campus
+      },
+
+      getCurrentBuildingByIndex: function () {
+        var campus = this.getCurrentCampusByIndex()
+
+        var building_index = campus.buildings
+        .map(function(building) {return building.id; })
+        .indexOf(this.currentItem.id);
+
+        var building = campus.buildings[building_index];
+        building.array_index = building_index
+        return building
+      },
+
+
+      getCurrentRoomIndex: function () {
+        var building = this.getCurrentBuildingByIndex();
+
+        var room_index = building.rooms
+        .map(function(room) {return room.id; })
+        .indexOf(this.currentItem.id);
+
+        var room = campus.buildings[building_index].rooms[room_index];
+        room.array_index = room_index
+
+        return room
       },
 
       onSubmitCampus: function(e){
         var vm = this;
+
+
+        if (this.newCampus.name == "") {
+          toastr["warning"]("Need Name of campus")
+          return
+        }
+        if (this.newCampus.campus_code == "") {
+          toastr["warning"]("Need Code of campus")
+          return
+        }
+
+
         axios.post('/api/v1/campus', this.newCampus)
         .then(function (response) {
           console.log(response);
@@ -308,34 +354,41 @@
 
           toastr["success"]("Added Campus: " + response.data.name)
 
-          this.newCampus = {
-            name:'',
-            campus_code:''
-          }
         })
         .catch(function (error) {
           console.log(error);
           toastr["error"](error.response.data)
-       });
+        });
+
+        this.newCampus = {
+          name:'',
+          campus_code:''
+        }
+
       },
 
       onSubmitBuilding: function(e){
         var vm = this;
         this.newBuilding.campus_id = this.currentItem.campus_id
 
+        if (this.newBuilding.name == "") {
+          toastr["warning"]("Need Name of Building")
+          return
+        }
+
+
         axios.post('/api/v1/buildings', this.newBuilding)
         .then(function (response) {
-          var campus = $.grep(vm.campuses, function (e) {
-            return e.id == vm.currentItem.campus_id;
-          })[0];
+          var campus = vm.getCurrentCampusByIndex()
 
           campus.buildings.push(response.data)
+
           toastr["success"]("Added building: " + response.data.name)
         })
         .catch(function (error) {
          if (error.message) {
-            toastr["error"](error.message)
-          }
+          toastr["error"](error.message)
+        }
        });
 
         this.newBuilding = {
@@ -349,16 +402,22 @@
 
         this.newRoom.building_id = this.currentItem.id
         this.newRoom.style_id = this.roomStyle
-        console.log(this.newRoom);
+
+        if (this.newRoom.name == "" && this.newRoom.number == "") {
+          toastr["warning"]("Need Name or Number of room")
+          return
+        }
+        if (!this.roomStyle) {
+          toastr["warning"]("Need Style of room")
+          return
+        }
+
         axios.post('/api/v1/rooms', this.newRoom)
         .then(function (response) {
 
-          var campus_index = vm.campuses.map(function(campus) {return campus.id; }).indexOf(vm.currentItem.campus_id);
-          var campus = vm.campuses[campus_index]
-          var building_index = campus.buildings.map(function(building) {return building.id; }).indexOf(vm.currentItem.id);
+          var building = vm.getCurrentBuildingByIndex()
 
-          var building = campus.buildings[building_index];
-          if(campus.buildings[building_index].rooms){
+          if(building.rooms){
             building.rooms.push(response.data);
           }else{
             building.rooms = []
@@ -371,7 +430,6 @@
 
         })
         .catch(function (error) {
-
 
           if (error.message) {
             toastr["error"](error.message)
@@ -448,6 +506,176 @@
         .catch(function (error) {
           if (error.message) {
             toastr["error"](error.message)
+          }
+       });
+
+      },
+      onDeleteCampus: function(e){
+        var vm = this;
+        this.newCampus._method = 'DELETE'
+        this.newCampus.name = this.currentItem.name
+        this.newCampus.campus_code = this.currentItem.campus_code
+
+        $.confirm({
+          title: 'Are you sure? You are about to delete a campus?',
+          content: 'This is a very Unlikely Action',
+          icon: 'fa fa-question-circle',
+          animation: 'scale',
+          closeAnimation: 'scale',
+          opacity: 0.5,
+          buttons: {
+            'confirm': {
+              text: 'Proceed',
+              btnClass: 'btn-orange',
+              action: function () {
+                $.confirm({
+                  title: 'Delete: ' + vm.currentItem.name,
+                  content: 'Ok... if your absolutely positive',
+                  icon: 'fa fa-warning',
+                  animation: 'zoom',
+                  closeAnimation: 'zoom',
+                  buttons: {
+                    confirm: {
+                      text: 'DELETE!',
+                      btnClass: 'btn-red',
+                      action: function () {
+                       axios.post('/api/v1/campus/'+ vm.currentItem.id, this.newCampus)
+                       .then(function (response) {
+
+                        console.log('delete', response.data)
+                        toastr["success"]("Deleted Campus: " + response.data.name)
+                        console.log(vm.getCurrentCampusByIndex())
+
+                        // //rooms
+                        // vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings[vm.getCurrentBuildingByIndex().array_index].rooms = []
+
+                        //buildings
+                        vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings = []
+
+                        //campus
+                        vm.campuses[vm.getCurrentCampusByIndex().array_index]
+                      })
+                       .catch(function (error) {
+                        console.log(error);
+                         if (error.message) {
+                          toastr["error"](error.message)
+                        }
+                      })
+
+
+
+                     }
+                   }
+                 }
+               });
+              }
+            },
+            cancel: function () {
+              // $.alert('you clicked on <strong>cancel</strong>');
+            },
+          }
+        });
+
+
+        this.newCampus = {
+          name:'',
+          campus_code:''
+        }
+
+      },
+
+      onDeleteBuilding: function(e){
+        var vm = this;
+        this.newBuilding = this.currentItem
+        this.newBuilding._method = 'Delete'
+
+
+
+
+        $.confirm({
+          title: 'Are you sure? You are about to delete a building?',
+          content: 'This is a very Unlikely Action',
+          icon: 'fa fa-question-circle',
+          animation: 'scale',
+          closeAnimation: 'scale',
+          opacity: 0.5,
+          buttons: {
+            'confirm': {
+              text: 'Proceed',
+              btnClass: 'btn-orange',
+              action: function () {
+                $.confirm({
+                  title: 'Delete: ' + vm.currentItem.name,
+                  content: 'Ok... if your absolutely positive',
+                  icon: 'fa fa-warning',
+                  animation: 'zoom',
+                  closeAnimation: 'zoom',
+                  buttons: {
+                    confirm: {
+                      text: 'DELETE!',
+                      btnClass: 'btn-red',
+                      action: function () {
+
+                        axios.post('/api/v1/buildings/'+ vm.currentItem.id, vm.newBuilding)
+                        .then(function (response) {
+                          toastr["success"]("Delete Building: " + response.data.name)
+
+                          //rooms
+                          vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings[vm.getCurrentBuildingByIndex().array_index].rooms = []
+
+                          //buildings
+                          vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings.splice(vm.getCurrentBuildingByIndex().array_index, 1);
+
+                        })
+                        .catch(function (error) {
+                          if (error.message) {
+                            toastr["error"](error.message)
+                          }
+                        });
+                     }
+                   }
+                 }
+               });
+              }
+            },
+            cancel: function () {
+              // $.alert('you clicked on <strong>cancel</strong>');
+            },
+          }
+        });
+
+
+
+
+
+
+      },
+
+      onDeleteRoom: function(e){
+        var vm = this;
+
+        this.newRoom = this.currentItem
+        this.newRoom._method = 'DELETE'
+
+
+        axios.post('/api/v1/rooms/'+ this.currentItem.id, this.newRoom)
+        .then(function (response) {
+          toastr["success"]("Updated Room: " + response.data.name)
+
+
+
+          //rooms
+          console.log(vm.getCurrentRoomIndex().array_index);
+          vm.campuses[vm.getCurrentCampusByIndex().array_index]
+          .buildings[vm.getCurrentBuildingByIndex().array_index]
+          .rooms.splice(vm.getCurrentRoomIndex().array_index, 1)
+
+
+
+        })
+        .catch(function (error) {
+          if (error.message) {
+            toastr["error"]("onDeleteRoom: " + error.message)
           }
        });
 
@@ -557,10 +785,8 @@
       },
 
       addMarker: function addMarker() {
-        this.lastId++;
-
         this.markers.push({
-          id: this.lastId,
+          // id: this.lastId,
           position: {
             lat: 48.8538302,
             lng: 2.2982161
@@ -572,7 +798,7 @@
           rightClicked: 0,
           dragended: 0,
           ifw: true,
-          ifw2text: 'This text is bad please change me :( '
+          // ifw2text: 'This text is bad please change me :( '
         });
         return this.markers[this.markers.length - 1];
       },

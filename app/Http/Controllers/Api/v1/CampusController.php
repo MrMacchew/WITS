@@ -128,8 +128,23 @@ class CampusController extends ApiController
      */
     public function destroy(Campus $campus)
     {
-        $campus = Campus::destroy($campus->id);
+        $campus = Campus::with(['buildings', 'buildings.rooms'])->find($campus->id);
+
+        // return $campus;
+        foreach($campus->buildings as $building)
+        {
+            foreach($building->rooms as $room)
+            {
+                $room->delete();
+            }
+            $building->delete();
+        }
+
+
+
         $campus->delete();
+        return $campus;
+
     }
 
     protected function formatValidationErrors(Validator $validator)

@@ -85,7 +85,7 @@ class BuildingController extends ApiController
     {
 
         $this->validate($request, [
-        'name' => 'unique:building',
+        // 'name' => 'unique:building',
         ]);
 
         $building = Building::find($building->id);
@@ -104,6 +104,14 @@ class BuildingController extends ApiController
      */
     public function destroy(Building $building)
     {
-        //
+        $building = Building::with(['rooms'])->find($building->id);
+        // return $building;
+
+        foreach($building->rooms as $room)
+        {
+            $room->delete();
+        }
+        $building->delete();
+        return $building;
     }
 }
