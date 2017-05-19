@@ -214,7 +214,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">Capacity</label>
         <div class="col-sm-9">
-          <input type="text" v-model="currentItem.capacity">
+          <input type="number" v-model="currentItem.capacity">
         </div>
       </div>
       <div class="form-group">
@@ -296,47 +296,10 @@
 
     methods:{
 
-      getCurrentCampusByIndex: function () {
-
-        var campus_index = this.campuses
-        .map(function(campus) {return campus.id; })
-        .indexOf(this.currentItem.campus_id);
-
-        var campus = this.campuses[campus_index]
-        campus.array_index = campus_index
-        return campus
-      },
-
-      getCurrentBuildingByIndex: function () {
-        var campus = this.getCurrentCampusByIndex()
-
-        var building_index = campus.buildings
-        .map(function(building) {return building.id; })
-        .indexOf(this.currentItem.id);
-
-        var building = campus.buildings[building_index];
-        building.array_index = building_index
-        return building
-      },
-
-
-      getCurrentRoomIndex: function () {
-        var building = this.getCurrentBuildingByIndex();
-
-        var room_index = building.rooms
-        .map(function(room) {return room.id; })
-        .indexOf(this.currentItem.id);
-
-        var room = campus.buildings[building_index].rooms[room_index];
-        room.array_index = room_index
-
-        return room
-      },
-
       onSubmitCampus: function(e){
         var vm = this;
-
-
+        this.newCampus.latlong = "{}"
+        this.newCampus.buildings = []
         if (this.newCampus.name == "") {
           toastr["warning"]("Need Name of campus")
           return
@@ -346,7 +309,6 @@
           return
         }
 
-
         axios.post('/api/v1/campus', this.newCampus)
         .then(function (response) {
           console.log(response);
@@ -355,21 +317,18 @@
           toastr["success"]("Added Campus: " + response.data.name)
 
         })
-        .catch(function (error) {
-          console.log(error);
-          toastr["error"](error.response.data)
-        });
+        .catch(vm.handleError);
 
         this.newCampus = {
           name:'',
           campus_code:''
         }
-
       },
 
       onSubmitBuilding: function(e){
         var vm = this;
         this.newBuilding.campus_id = this.currentItem.campus_id
+        this.newBuilding.latlong = "{}"
 
         if (this.newBuilding.name == "") {
           toastr["warning"]("Need Name of Building")
@@ -379,17 +338,13 @@
 
         axios.post('/api/v1/buildings', this.newBuilding)
         .then(function (response) {
-          var campus = vm.getCurrentCampusByIndex()
+          vm.campuses[vm.currentItem.index.campus]
+          .buildings.push(response.data)
 
-          campus.buildings.push(response.data)
 
           toastr["success"]("Added building: " + response.data.name)
         })
-        .catch(function (error) {
-         if (error.message) {
-          toastr["error"](error.message)
-        }
-       });
+        .catch(vm.handleError);
 
         this.newBuilding = {
           name:'',
@@ -402,6 +357,7 @@
 
         this.newRoom.building_id = this.currentItem.id
         this.newRoom.style_id = this.roomStyle
+        this.newRoom.latlong = "{}"
 
         if (this.newRoom.name == "" && this.newRoom.number == "") {
           toastr["warning"]("Need Name or Number of room")
@@ -414,27 +370,13 @@
 
         axios.post('/api/v1/rooms', this.newRoom)
         .then(function (response) {
-
-          var building = vm.getCurrentBuildingByIndex()
-
-          if(building.rooms){
-            building.rooms.push(response.data);
-          }else{
-            building.rooms = []
-            building.rooms.push(response.data);
-
-          }
+           vm.campuses[vm.currentItem.index.campus]
+          .buildings[vm.currentItem.index.building]
+          .rooms.push(response.data)
 
           toastr["success"]("Added Room: " + response.data.name)
-
-
         })
-        .catch(function (error) {
-
-          if (error.message) {
-            toastr["error"](error.message)
-          }
-       });
+        .catch(vm.handleError);
 
         this.newRoom = {
           name:'',
@@ -459,12 +401,7 @@
 
 
         })
-        .catch(function (error) {
-
-         if (error.message) {
-            toastr["error"](error.message)
-          }
-       })
+        .catch(vm.handleError)
 
         this.newCampus = {
           name:'',
@@ -483,11 +420,7 @@
           toastr["success"]("Updated Building: " + response.data.name)
 
         })
-        .catch(function (error) {
-          if (error.message) {
-            toastr["error"](error.message)
-          }
-       });
+        .catch(vm.handleError);
       },
 
       onUpdateRoom: function(e){
@@ -501,13 +434,8 @@
         axios.post('/api/v1/rooms/'+ this.currentItem.id, this.newRoom)
         .then(function (response) {
           toastr["success"]("Updated Room: " + response.data.name)
-
         })
-        .catch(function (error) {
-          if (error.message) {
-            toastr["error"](error.message)
-          }
-       });
+        .catch(vm.handleError);
 
       },
       onDeleteCampus: function(e){
@@ -515,6 +443,8 @@
         this.newCampus._method = 'DELETE'
         this.newCampus.name = this.currentItem.name
         this.newCampus.campus_code = this.currentItem.campus_code
+
+        var data = this.newCampus
 
         $.confirm({
           title: 'Are you sure? You are about to delete a campus?',
@@ -539,32 +469,35 @@
                       text: 'DELETE!',
                       btnClass: 'btn-red',
                       action: function () {
-                       axios.post('/api/v1/campus/'+ vm.currentItem.id, this.newCampus)
+                      console.log('sending data: ', data);
+                       axios.post('/api/v1/campus/'+ vm.currentItem.id, data)
                        .then(function (response) {
 
                         console.log('delete', response.data)
                         toastr["success"]("Deleted Campus: " + response.data.name)
-                        console.log(vm.getCurrentCampusByIndex())
-
-                        // //rooms
-                        // vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings[vm.getCurrentBuildingByIndex().array_index].rooms = []
 
                         //buildings
-                        vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings = []
+                        vm.campuses[vm.currentItem.index.campus]
+                        .buildings = []
+
 
                         //campus
-                        vm.campuses[vm.getCurrentCampusByIndex().array_index]
-                      })
-                       .catch(function (error) {
-                        console.log(error);
-                         if (error.message) {
-                          toastr["error"](error.message)
-                        }
-                      })
+                        vm.campuses.splice(vm.currentItem.index.campus, 1)
 
 
+                        vm.currentItem = {type:null}
+                        vm.$forceUpdate();
+
+                        console.log(vm.currentItem)
+
+
+                      })
+                       .catch(vm.handleError)
 
                      }
+                   },
+                   close:{
+                    text: "Close"
                    }
                  }
                });
@@ -587,13 +520,12 @@
       onDeleteBuilding: function(e){
         var vm = this;
         this.newBuilding = this.currentItem
-        this.newBuilding._method = 'Delete'
-
-
+        this.newBuilding._method = 'DELETE'
+        var data = this.newBuilding
 
 
         $.confirm({
-          title: 'Are you sure? You are about to delete a building?',
+          title: 'Are you sure? You are about to delete a building:'+ this.currentItem.name+'?',
           content: 'This is a very Unlikely Action',
           icon: 'fa fa-question-circle',
           animation: 'scale',
@@ -616,23 +548,34 @@
                       btnClass: 'btn-red',
                       action: function () {
 
-                        axios.post('/api/v1/buildings/'+ vm.currentItem.id, vm.newBuilding)
+                        console.log('sending data: ', data);
+                        axios.post('/api/v1/buildings/'+ vm.currentItem.id, data)
                         .then(function (response) {
                           toastr["success"]("Delete Building: " + response.data.name)
 
                           //rooms
-                          vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings[vm.getCurrentBuildingByIndex().array_index].rooms = []
+                          vm.campuses[vm.currentItem.index.campus]
+                          .buildings[vm.currentItem.index.building]
+                          .rooms = []
 
                           //buildings
-                          vm.campuses[vm.getCurrentCampusByIndex().array_index].buildings.splice(vm.getCurrentBuildingByIndex().array_index, 1);
+                          vm.campuses[vm.currentItem.index.campus]
+                          .buildings.splice(vm.currentItem.index.building, 1);
+
+
+
+                          vm.currentItem = {type:null}
+                          vm.$forceUpdate();
+                          console.log(vm.currentItem)
+
 
                         })
-                        .catch(function (error) {
-                          if (error.message) {
-                            toastr["error"](error.message)
-                          }
-                        });
+                        .catch(vm.handleError);
                      }
+
+                   },
+                   close:{
+                    text: "Close"
                    }
                  }
                });
@@ -643,42 +586,97 @@
             },
           }
         });
-
-
-
-
-
-
       },
 
       onDeleteRoom: function(e){
         var vm = this;
-
         this.newRoom = this.currentItem
         this.newRoom._method = 'DELETE'
 
+        var data = this.newRoom
 
-        axios.post('/api/v1/rooms/'+ this.currentItem.id, this.newRoom)
-        .then(function (response) {
-          toastr["success"]("Updated Room: " + response.data.name)
+        $.confirm({
+          title: 'Are you sure? You are about to delete a room?',
+          // content: 'This is a very Unlikely Action',
+          icon: 'fa fa-question-circle',
+          animation: 'scale',
+          closeAnimation: 'scale',
+          opacity: 0.5,
+          buttons: {
+            'confirm': {
+              text: 'Proceed',
+              btnClass: 'btn-orange',
+              action: function () {
+                $.confirm({
+                  title: 'Delete: ' + vm.currentItem.name,
+                  content: 'Ok... if your absolutely positive',
+                  icon: 'fa fa-warning',
+                  animation: 'zoom',
+                  closeAnimation: 'zoom',
+                  buttons: {
+                    confirm: {
+                      text: 'DELETE!',
+                      btnClass: 'btn-red',
+                      action: function () {
+                        console.log('sending data: ', data);
+                        axios.post('/api/v1/rooms/'+ vm.currentItem.id, data)
+                        .then(function (response) {
+                          toastr["success"]("Deleted Room: " + response.data.name)
+
+                          vm.campuses[vm.currentItem.index.campus]
+                          .buildings[vm.currentItem.index.building]
+                          .rooms.splice(vm.currentItem.index.room, 1)
+
+                          
+
+                          vm.currentItem = {type:null}
+                          vm.$forceUpdate();
+                          console.log(vm.currentItem)
 
 
-
-          //rooms
-          console.log(vm.getCurrentRoomIndex().array_index);
-          vm.campuses[vm.getCurrentCampusByIndex().array_index]
-          .buildings[vm.getCurrentBuildingByIndex().array_index]
-          .rooms.splice(vm.getCurrentRoomIndex().array_index, 1)
-
-
-
-        })
-        .catch(function (error) {
-          if (error.message) {
-            toastr["error"]("onDeleteRoom: " + error.message)
+                        })
+                        .catch(vm.handleError);
+                     }
+                   },
+                   close:{
+                    text: "Close"
+                   }
+                 }
+               });
+              }
+            },
+            cancel: function () {
+              // $.alert('you clicked on <strong>cancel</strong>');
+            },
           }
-       });
+        });
+      },
 
+      handleError: function (error) {
+        if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        toastr["error"](error.response.data)
+        toastr["error"](error.response.status)
+        toastr["error"](error.response.headers)
+
+        } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+        toastr["error"](error.request)
+
+        } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+        toastr["error"](error.message)
+
+        }
+        console.log(error);
       },
 
       mapClicked: function mapClicked(mouseArgs) {
@@ -686,6 +684,7 @@
       },
 
       mapRclicked: function mapRclicked(mouseArgs) {
+        var vm = this
         var createdMarker = this.addMarker();
 
         createdMarker.position.lat = mouseArgs.latLng.lat();
@@ -708,9 +707,7 @@
               toastr["success"]("Marker Placed")
 
             })
-            .catch(function (error) {
-             toastr["error"](error.response.data)
-           });
+            .catch(vm.handleError);
 
             break;
 
@@ -720,9 +717,7 @@
               toastr["success"]("Marker Placed")
 
             })
-            .catch(function (error) {
-             toastr["error"](error.response.data)
-           });
+            .catch(vm.handleError);
 
             break;
 
@@ -731,9 +726,7 @@
             .then(function (response) {
               toastr["success"]("Marker Placed")
             })
-            .catch(function (error) {
-             toastr["error"](error.response.data)
-           });
+            .catch(vm.handleError);
 
             break;
           }
@@ -754,9 +747,7 @@
           .then(function (response) {
             toastr["success"]("Marker Placed")
           })
-          .catch(function (error) {
-           toastr["error"](error.response.data)
-         });
+          .catch(vm.handleError);
 
           break;
 
@@ -765,9 +756,7 @@
           .then(function (response) {
             toastr["success"]("Marker Placed")
           })
-          .catch(function (error) {
-           toastr["error"](error.response.data)
-         });
+          .catch(vm.handleError);
 
           break;
 
@@ -776,9 +765,7 @@
           .then(function (response) {
             toastr["success"]("Marker Placed")
           })
-          .catch(function (error) {
-           toastr["error"](error.response.data)
-         });
+          .catch(vm.handleError);
 
           break;
         }
@@ -802,6 +789,7 @@
         });
         return this.markers[this.markers.length - 1];
       },
+
     },
 
     watch:{
@@ -816,7 +804,6 @@
 
         this.currentItem = item
         this.currentItem.type = 'campus'
-
       },
 
       selectedBuilding: function(item){
@@ -829,8 +816,6 @@
 
         this.currentItem = item
         this.currentItem.type = 'building'
-
-
       },
 
       selectedRoom: function(item){
@@ -852,12 +837,31 @@
         this.currentItem = item
         this.currentItem.type = 'room'
 
+      },
+      currentItem: function(item){
+
+        if (item.type == null) {
+          return
+        }
+
+        if (item.latlong !== "{}") {
+          var latlong = JSON.parse(item.latlong)
+          var hasLat = _.has(latlong, 'lat');
+          var hasLng = _.has(latlong, 'lng');
+
+          if (hasLat && hasLng) {
+            this.markers = [{position: latlong}];
+            this.center = latlong
+          }
+        }
+
+
       }
     },
 
     computed: {
       currentItem: function(){
-
+        var vm = this
         this.markers = []
 
         if( _.isObject(this.selectedCampus) && _.isObject(this.selectedBuilding) && _.isObject(this.selectedRoom))
@@ -866,44 +870,56 @@
           currentItem.type = 'room'
           currentItem.campus_id = this.selectedCampus.id
           currentItem.building_id = this.selectedBuilding.id
+          //currentItem room id is currentItem.id
 
-          if (currentItem.latlong) {
-            this.markers = [{position: JSON.parse(currentItem.latlong)}];
-            this.center = JSON.parse(currentItem.latlong);
-          }
-          console.log(this.center);
+          //--Position of item in room--//
+          var i,j,k
+
+          i = _.findIndex(this.campuses, function(campus) { return campus.id == vm.selectedCampus.id; });
+          j = _.findIndex(this.campuses[i].buildings, function(building) { return building.id == vm.selectedBuilding.id; });
+          k = _.findIndex(this.campuses[i].buildings[j].rooms, function(room) { return room.id == vm.selectedRoom.id; });
+          console.log(i,j,k)
+          currentItem.index = {campus: i, building: j, room: k} //this.campuses[i].buildings[j].rooms[k]
+          //----//
+
           return currentItem;
         }
 
-        if( _.isObject(this.selectedCampus) && _.isObject(this.selectedBuilding) )
-        {
+        if( _.isObject(this.selectedCampus) && _.isObject(this.selectedBuilding) ){
           var currentItem = this.selectedBuilding
           currentItem.campus_id = this.selectedCampus.id
 
           currentItem.type = 'building'
 
-          if (currentItem.latlong) {
-            this.markers = [{position: JSON.parse(currentItem.latlong)}];
-            this.center = JSON.parse(currentItem.latlong);
-          }
+          //--Position of item in building--//
+          var i,j,k
+
+          i = _.findIndex(this.campuses, function(campus) { return campus.id == vm.selectedCampus.id; });
+          j = _.findIndex(this.campuses[i].buildings, function(building) { return building.id == vm.selectedBuilding.id; });
+          console.log(i,j)
+          currentItem.index = {campus: i, building: j, room: null}
+          //----//
           return currentItem;
         }
 
-        if(_.isObject(this.selectedCampus))
-        {
+        if(_.isObject(this.selectedCampus)){
           var currentItem = this.selectedCampus
           currentItem.campus_id = this.selectedCampus.id
           currentItem.type = 'campus'
 
-          if (currentItem.latlong) {
-            this.markers = [{position: JSON.parse(currentItem.latlong)}];
-            this.center = JSON.parse(currentItem.latlong);
-          }
+          //--Position of item in campus--//
+          var i
+
+          i = _.findIndex(this.campuses, function(campus) { return campus.id == vm.selectedCampus.id; });
+
+          console.log(i)
+          currentItem.index = {campus: i, building: null, room: null}
+          //----//
+
           return currentItem;
         }
 
-        return {type:null}
-      },
+        return {type:null, index: {campus: null, building: null, room: null}} }
     },
 
     filters: {
@@ -913,7 +929,6 @@
         return value.charAt(0).toUpperCase() + value.slice(1)
       }
     },
-
     mounted() {
       var vm = this;
 
@@ -922,17 +937,13 @@
         vm.campuses = response.data;
         toastr["success"]("Loaded Locations")
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch(vm.handleError);
 
       axios.get('/api/v1/roomstyle')
       .then(function (response) {
         vm.roomStyles = response.data;
       })
-      .catch(function (error) {
-       toastr["error"](error)
-     });
+      .catch(vm.handleError);
 
 
       toastr.options = {
