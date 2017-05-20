@@ -52,7 +52,9 @@ class RoomController extends ApiController
         'building_id' => 'required'
         ]);
 
-        return Room::create($request->all());
+        $room = Room::create($request->all());
+        $room->software = [];
+        return $room;
 
     }
 

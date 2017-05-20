@@ -244,7 +244,7 @@
 
           <div role="tabpanel" class="tab-pane" id="software">
 
-            <a id="software-btn" class="btn btn-primary" type="button"
+            <a id="software-btn" class="btn btn-default" type="button"
             data-toggle="collapse" data-target="#addSoftware"
             aria-expanded="false" aria-controls="addSoftware">
               Add Software
@@ -308,7 +308,7 @@
                     <td><a :href="roomsoftware.url">{{roomsoftware.title}}</a></td>
                     <td>{{roomsoftware.filename}}</td>
                     <td>{{roomsoftware.url}}</td>
-                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-times fa-fw" @click="onDeleteSoftware(roomsoftware)"></i></td>
                   </tr>
                 </template>
 
@@ -796,10 +796,10 @@
         if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
+        // console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
-        toastr["error"](error.response.data)
+        // toastr["error"](error.response.data)
         toastr["error"](error.response.status)
         toastr["error"](error.response.headers)
 
@@ -947,9 +947,52 @@
           $('#software-btn').trigger('click')
         })
         .catch(vm.handleError);
-
-
       },
+
+      onDeleteSoftware: function (software) {
+        var vm = this
+        var data = software
+        data._method = 'DELETE'
+        console.log(data)
+
+
+        $.confirm({
+          title: 'Delete: ' + data.title,
+          content: 'Ok... if your absolutely positive',
+          icon: 'fa fa-warning',
+          animation: 'zoom',
+          closeAnimation: 'zoom',
+          buttons: {
+            confirm: {
+              text: 'DELETE!',
+              btnClass: 'btn-red',
+              action: function () {
+                axios.post('/api/v1/software/'+ data.id, data)
+                .then(function (response) {
+                  toastr["success"]("Deleted Software: " + response.data.title)
+
+
+                  var rooms = vm.campuses[vm.currentItem.index.campus]
+                  .buildings[vm.currentItem.index.building]
+                  .rooms[vm.currentItem.index.room]
+
+                  var software_index = _.findIndex(rooms.software, function(room) { return room.id == response.data.id; });
+
+                  vm.campuses[vm.currentItem.index.campus]
+                  .buildings[vm.currentItem.index.building]
+                  .rooms[vm.currentItem.index.room]
+                  .software.splice(software_index,1)
+
+                })
+                .catch(vm.handleError);
+              }
+            },
+            close:{
+              text: "Close"
+            }
+          }
+        });
+      }
     },
 
     watch:{
