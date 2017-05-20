@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             // $this->call(DepartmentOrgSeeder::class);
             // $this->call(RoomStyleSeeder::class);
             // $this->call(SupportSeeder::class);
-            // $this->call(RoomSoftwareSeeder::class);
+            $this->call(RoomSoftwareSeeder::class);
             // $this->call(AssetPropertyNameSeeder::class);
             // $this->call(PropertiesSeeder::class);
             // $this->call(CategorySeeder::class);

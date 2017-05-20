@@ -46,7 +46,9 @@ class BuildingController extends ApiController
         // 'name' => 'required|unique:building',
         // ]);
 
-        return Building::create($request->all());
+        $building = Building::create($request->all());
+        $building->rooms = [];
+        return $building;
     }
 
     /**

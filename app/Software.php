@@ -18,8 +18,15 @@ class Software extends Model
     protected $table = "software";
     public $timestamps = false;
 
+    protected $fillable = [
+    // 'room_id',
+    'title',
+    'filename',
+    'url',
+    ];
+
     public function room()
     {
-    	return $this->belongsToMany('App\Room', 'room_software', 'software_id', 'room_id');
+        return $this->belongsToMany('App\Room', 'room_software', 'software_id', 'room_id');
     }
 }

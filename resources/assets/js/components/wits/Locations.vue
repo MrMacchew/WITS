@@ -1,8 +1,6 @@
 <template>
-  <div class="container-fluid">
+  <div id="location-vue" class="container-fluid">
     <aside class="col-md-3 col-xs-12">
-
-
       <div id="selectDropdowns">
 
         <div class="panel panel-default">
@@ -131,11 +129,19 @@
 
     <div class="col-xs-12 col-md-9">
 
-      <template>
+
+
+
+  <div id="current-item"  v-if="currentItem.type">
+     <h2>
+      <span class="text-capitalize">{{currentItem.type}}:</span> {{currentItem.number || currentItem.name}}
+    </h2>
+
+     <template>
         <gmap-map ref="map"
         :center="center"
         :zoom="16"
-		map-type-id="terrain"
+    map-type-id="terrain"
         @rightclick="mapRclicked"
         style="width: 100%; height: 300px"
         >
@@ -148,79 +154,196 @@
       </template>
 
 
-  <div id="current-item"  v-if="currentItem.type">
+
+      <div id="current-item-tabs" style="margin:20px 0">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" > <a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="text-transform: capitalize">{{currentItem.type}}</a> </li>
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#inventory" aria-controls="inventory" role="tab" data-toggle="tab" style="text-transform: capitalize">inventory</a> </li>
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#software" aria-controls="software" role="tab" data-toggle="tab" class="text-capitalize">software</a> </li>
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#department" aria-controls="department" role="tab" data-toggle="tab" style="text-transform: capitalize">department</a> </li>
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#media" aria-controls="media" role="tab" data-toggle="tab" style="text-transform: capitalize">media</a> </li>
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#something" aria-controls="something" role="tab" data-toggle="tab" style="text-transform: capitalize">Something</a> </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+          <!-- HOME -->
+          <div role="tabpanel" class="tab-pane active" id="home">
 
 
-    <h2>
-      <span class="text-capitalize">{{currentItem.type}}:</span> {{currentItem.number || currentItem.name}}
-    </h2>
+            <form v-if="currentItem.type == 'campus'" v-on:submit.prevent="onUpdateCampus">
+
+              <div class="pull-right">
+                <i class="fa fa-trash fa-2x" @click="onDeleteCampus"></i>
+              </div>
+          <!-- HOME -->
+
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" v-model="currentItem.name">
+              </div>
+
+              <div class="form-group">
+                <label>Code</label>
+                <input type="text" class="form-control" v-model="currentItem.campus_code">
+              </div>
+              <button type="submit" class="btn btn-default">Update Campus</button>
+            </form>
+
+            <form v-if="currentItem.type == 'building'" v-on:submit.prevent="onUpdateBuilding">
+              <div class="pull-right">
+                <i class="fa fa-trash fa-2x" @click="onDeleteBuilding"></i>
+              </div>
+
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" v-model="currentItem.name">
+              </div>
+              <button type="submit" class="btn btn-default">Update Building</button>
+            </form>
+
+            <form v-if="currentItem.type == 'room'" v-on:submit.prevent="onUpdateRoom" >
+
+              <div class="pull-right">
+                <i class="fa fa-trash fa-2x" @click="onDeleteRoom"></i>
+              </div>
+
+              <div class="form-group">
+                <label>Number</label>
+                <input type="text" class="form-control" v-model="currentItem.number">
+              </div>
+
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" v-model="currentItem.name">
+              </div>
+
+              <div class="form-group">
+                <label>Room Style</label>
+                <select v-model='currentItem.style_id' class="form-control">
+                  <option v-for="roomstyle in roomStyles"
+                  :value="roomstyle.id"
+                  :selected="roomstyle.id == currentItem.style_id ">{{roomstyle.name}}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Capacity</label>
+                <div class="col-sm-9">
+                  <input type="number" v-model="currentItem.capacity">
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-default">Update Room</button>
+              </div>
+            </form>
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="software">
+
+            <a id="software-btn" class="btn btn-primary" type="button"
+            data-toggle="collapse" data-target="#addSoftware"
+            aria-expanded="false" aria-controls="addSoftware">
+              Add Software
+            </a>
+
+            <div class="collapse" id="addSoftware">
+              <div class="well">
+                <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
+                  <h4>Add Software <span>to {{currentItem.name || currentItem.number}}</span></h4>
+
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label text-capitalize">Title</label>
+                    <div class="col-sm-11">
+                      <input type="text" v-model="newSoftware.title">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label text-capitalize">filename</label>
+                    <div class="col-sm-11">
+                      <input type="text" v-model="newSoftware.filename">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label text-capitalize">url</label>
+                    <div class="col-sm-11">
+                      <input type="text" v-model="newSoftware.url">
+                    </div>
+                  </div>
 
 
-    <form v-if="currentItem.type == 'campus'" v-on:submit.prevent="onUpdateCampus">
 
-      <div class="pull-right">
-        <i class="fa fa-trash fa-2x" @click="onDeleteCampus"></i>
-      </div>
 
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" class="form-control" v-model="currentItem.name">
-      </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit"  class="btn btn-default">Add Software</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
 
-      <div class="form-group">
-        <label>Code</label>
-        <input type="text" class="form-control" v-model="currentItem.campus_code">
-      </div>
-      <button type="submit" class="btn btn-default">Update Campus</button>
-    </form>
+            <table class="table table-striped" style="border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>title</th>
+                  <th>filename</th>
+                  <th>url</th>
+                  <th>actions</th>
+                </tr>
+              </thead>
+              <tbody>
 
-    <form v-if="currentItem.type == 'building'" v-on:submit.prevent="onUpdateBuilding">
-      <div class="pull-right">
-        <i class="fa fa-trash fa-2x" @click="onDeleteBuilding"></i>
-      </div>
 
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" class="form-control" v-model="currentItem.name">
-      </div>
-      <button type="submit" class="btn btn-default">Update Building</button>
-    </form>
 
-    <form v-if="currentItem.type == 'room'" v-on:submit.prevent="onUpdateRoom" >
+                <template v-for="roomsoftware in currentItem.software">
+                  <tr>
+                    <td></td>
+                    <td><a :href="roomsoftware.url">{{roomsoftware.title}}</a></td>
+                    <td>{{roomsoftware.filename}}</td>
+                    <td>{{roomsoftware.url}}</td>
+                    <td><i class="fa fa-times"></i></td>
+                  </tr>
+                </template>
 
-      <div class="pull-right">
-        <i class="fa fa-trash fa-2x" @click="onDeleteRoom"></i>
-      </div>
 
-      <div class="form-group">
-        <label>Number</label>
-        <input type="text" class="form-control" v-model="currentItem.number">
-      </div>
 
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" class="form-control" v-model="currentItem.name">
-      </div>
+              </tbody>
+            </table>
 
-      <div class="form-group">
-        <label>Room Style</label>
-        <select v-model='currentItem.style_id' class="form-control">
-          <option v-for="roomstyle in roomStyles"
-          :value="roomstyle.id"
-          :selected="roomstyle.id == currentItem.style_id ">{{roomstyle.name}}</option>
-        </select>
-      </div>
 
-      <div class="form-group">
-        <label class="col-sm-3 control-label">Capacity</label>
-        <div class="col-sm-9">
-          <input type="number" v-model="currentItem.capacity">
+          </div>
+
+           <div role="tabpanel" class="tab-pane" id="inventory">
+            inventory
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="department">
+            department
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="media">
+            media
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="something">
+            something
+          </div>
         </div>
+
       </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-default">Update Room</button>
-      </div>
-    </form>
+
+
+
+
+
+
 
 
   </div>
@@ -290,7 +413,13 @@
         },
         markers: [], //[{position: JSON.parse(currentItem.latlong)}],
         infoContent: '',
+        toggleAddSoftware: false,
+        newSoftware: {
+          title: '',
+          filename: '',
+          url: '',
 
+        }
       }
     },
 
@@ -299,7 +428,7 @@
       onSubmitCampus: function(e){
         var vm = this;
         this.newCampus.latlong = "{}"
-        this.newCampus.buildings = []
+        // this.newCampus.buildings = []
         if (this.newCampus.name == "") {
           toastr["warning"]("Need Name of campus")
           return
@@ -315,14 +444,16 @@
           vm.campuses.push(response.data);
 
           toastr["success"]("Added Campus: " + response.data.name)
+          toastr["info"]("Place a marker for " + response.data.name)
 
+
+          vm.newCampus = {
+            name:'',
+            campus_code:''
+          }
         })
         .catch(vm.handleError);
 
-        this.newCampus = {
-          name:'',
-          campus_code:''
-        }
       },
 
       onSubmitBuilding: function(e){
@@ -341,8 +472,9 @@
           vm.campuses[vm.currentItem.index.campus]
           .buildings.push(response.data)
 
-
           toastr["success"]("Added building: " + response.data.name)
+          toastr["info"]("Place a marker for " + response.data.name)
+
         })
         .catch(vm.handleError);
 
@@ -370,11 +502,20 @@
 
         axios.post('/api/v1/rooms', this.newRoom)
         .then(function (response) {
-           vm.campuses[vm.currentItem.index.campus]
-          .buildings[vm.currentItem.index.building]
-          .rooms.push(response.data)
+            try {
+              vm.campuses[vm.currentItem.index.campus]
+              .buildings[vm.currentItem.index.building]
+              .rooms.push(response.data)
+            }
+            catch (e) {
+            // statements to handle any exceptions
+            console.log(e); // pass exception object to error handler
+            }
 
-          toastr["success"]("Added Room: " + response.data.name)
+
+            toastr["success"]("Added Room: " + response.data.name)
+            toastr["info"]("Place a marker for " + response.data.name)
+
         })
         .catch(vm.handleError);
 
@@ -417,8 +558,7 @@
 
         axios.post('/api/v1/buildings/'+ this.currentItem.id, this.newBuilding)
         .then(function (response) {
-          toastr["success"]("Updated Building: " + response.data.name)
-
+            toastr["success"]("Updated Building: " + response.data.name)
         })
         .catch(vm.handleError);
       },
@@ -433,7 +573,7 @@
         console.log(this.newRoom);
         axios.post('/api/v1/rooms/'+ this.currentItem.id, this.newRoom)
         .then(function (response) {
-          toastr["success"]("Updated Room: " + response.data.name)
+          toastr["success"]("Updated Room: " + (response.data.name || response.data.number ))
         })
         .catch(vm.handleError);
 
@@ -627,7 +767,7 @@
                           .buildings[vm.currentItem.index.building]
                           .rooms.splice(vm.currentItem.index.room, 1)
 
-                          
+
 
                           vm.currentItem = {type:null}
                           vm.$forceUpdate();
@@ -690,83 +830,56 @@
         createdMarker.position.lat = mouseArgs.latLng.lat();
         createdMarker.position.lng = mouseArgs.latLng.lng();
 
-        if(this.currentItem){
-
-          this.currentItem.latlong = JSON.stringify(createdMarker.position)
-
+        if(vm.currentItem){
+          vm.currentItem.latlong = JSON.stringify(createdMarker.position)
 
           var data = {
             _method: 'PATCH',
             latlong: this.currentItem.latlong
           }
 
-          switch(this.currentItem.type){
-            case "campus":
-            axios.post('/api/v1/campus/'+this.currentItem.id, data)
-            .then(function (response) {
-              toastr["success"]("Marker Placed")
 
-            })
-            .catch(vm.handleError);
-
-            break;
-
-            case "building":
-            axios.post('/api/v1/buildings/'+this.currentItem.id, data)
-            .then(function (response) {
-              toastr["success"]("Marker Placed")
-
-            })
-            .catch(vm.handleError);
-
-            break;
-
-            case "room":
-            axios.post('/api/v1/rooms/'+this.currentItem.id, data)
-            .then(function (response) {
-              toastr["success"]("Marker Placed")
-            })
-            .catch(vm.handleError);
-
-            break;
-          }
+          vm.setMarker(vm, data)
+          vm.markers = [{position: createdMarker.position}];
         }
       },
 
       mapDragend: function mapDragend(mouseArgs) {
+        var vm = this
         this.currentItem.latlong = JSON.stringify({"lat": mouseArgs.latLng.lat(), "lng":mouseArgs.latLng.lng()})
 
         var data = {
           _method: 'PATCH',
-          latlong: this.currentItem.latlong
+          latlong: vm.currentItem.latlong
         }
 
-        switch(this.currentItem.type){
+        vm.setMarker(vm, data)
+      },
+
+      setMarker: function(vm, data){
+        switch(vm.currentItem.type){
           case "campus":
-          axios.post('/api/v1/campus/'+this.currentItem.id, data)
+          axios.post('/api/v1/campus/'+vm.currentItem.id, data)
           .then(function (response) {
             toastr["success"]("Marker Placed")
           })
           .catch(vm.handleError);
-
           break;
 
           case "building":
-          axios.post('/api/v1/buildings/'+this.currentItem.id, data)
+          axios.post('/api/v1/buildings/'+vm.currentItem.id, data)
           .then(function (response) {
             toastr["success"]("Marker Placed")
           })
           .catch(vm.handleError);
-
           break;
 
           case "room":
-          axios.post('/api/v1/rooms/'+this.currentItem.id, data)
+          axios.post('/api/v1/rooms/'+vm.currentItem.id, data)
           .then(function (response) {
             toastr["success"]("Marker Placed")
           })
           .catch(vm.handleError);
-
           break;
         }
       },
@@ -790,6 +903,53 @@
         return this.markers[this.markers.length - 1];
       },
 
+      onAddSoftware: function(e){
+        console.log("onAddSoftware")
+        var vm = this;
+
+        this.newSoftware.room_id = this.currentItem.id
+
+        if (this.newSoftware.title == "") {
+          toastr["warning"]("Need Title of software")
+          return
+        }
+
+        if (this.newSoftware.filename == "") {
+          toastr["warning"]("Need filename of software")
+          return
+        }
+
+        if (this.newSoftware.url == "") {
+          toastr["warning"]("Need url of software")
+          return
+        }
+
+        // this.newSoftware
+
+        axios.post('/api/v1/software', this.newSoftware)
+        .then(function (response) {
+          console.log(response);
+
+          vm.campuses[vm.currentItem.index.campus]
+              .buildings[vm.currentItem.index.building]
+              .rooms[vm.currentItem.index.room]
+              .software.push(response.data)
+
+
+
+          toastr["success"]("Added Software: " + response.data.title)
+
+          vm.newSoftware = {
+            title: '',
+            filename: '',
+            url: '',
+          }
+          $('#software-btn').trigger('click')
+        })
+        .catch(vm.handleError);
+
+
+      },
     },
 
     watch:{
@@ -932,7 +1092,7 @@
     mounted() {
       var vm = this;
 
-      axios.get('/api/v1/campus?with=buildings,buildings.rooms')
+      axios.get('/api/v1/campus?with=buildings,buildings.rooms,buildings.rooms.software')
       .then(function (response) {
         vm.campuses = response.data;
         toastr["success"]("Loaded Locations")
