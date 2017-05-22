@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrgTable extends Migration
+class CreateHierarchyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateOrgTable extends Migration
      */
     public function up()
     {
-        Schema::create('org', function (Blueprint $table) {
+        Schema::create('hierarchy', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('department_id')->unsigned();
-            $table->foreign('department_id')->references('id')->on('division_department_teams');
-            $table->string('name');
-            $table->string('code');
-            // $table->timestamps();
+            $table->integer('division_id')->nullable();
+            $table->integer('department_id')->nullable();
+            $table->integer('team_id')->nullable();
         });
     }
 
@@ -30,6 +28,6 @@ class CreateOrgTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('org');
+        Schema::drop('hierarchy');
     }
 }

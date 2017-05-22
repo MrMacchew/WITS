@@ -36,6 +36,7 @@ class Room extends Model
     {
         return $this->belongsToMany('App\Software', 'room_software', 'room_id', 'software_id');
     }
+
     public function building(){
         return $this->belongsTo('App\Building');
     }

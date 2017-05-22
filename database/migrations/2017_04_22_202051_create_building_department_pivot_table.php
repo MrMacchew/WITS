@@ -18,7 +18,7 @@ class CreateBuildingDepartmentPivotTable extends Migration
             $table->integer('building_id')->unsigned()->index();
             $table->foreign('building_id')->references('id')->on('building')->onDelete('cascade');
             $table->integer('department_id')->unsigned()->index();
-            $table->foreign('department_id')->references('id')->on('department')->onDelete('cascade');
+            $table->foreign('department_id')->references('id')->on('division_department_teams')->onDelete('cascade');
             $table->primary(['building_id', 'department_id']);
         });
     }

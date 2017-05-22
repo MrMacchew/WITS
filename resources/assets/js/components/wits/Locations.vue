@@ -7,7 +7,7 @@
           <div class="panel-heading">
           <h3 class="panel-title">Campuses</h3>
           </div>
-          <select v-model="selectedCampus" class="form-control" size="5" ref="selectItem">
+          <select v-model="selectedCampus" class="form-control" :size="setSelectSizeCampus()" ref="selectItem">
             <option value="" style="color:#c3c3c3">Select/Add a Campus</option>
             <option v-for="campus in campuses" :value="campus">{{campus.name}}</option>
           </select>
@@ -39,14 +39,11 @@
           </div>
         </div>
 
-
-
-
         <div class="panel panel-default" v-if="selectedCampus" >
           <div class="panel-heading">
             <h3 class="panel-title">Buildings</h3>
           </div>
-          <select v-model="selectedBuilding" class="form-control" size="5" ref="selectItem">
+          <select v-model="selectedBuilding" class="form-control" :size="setSelectSizeBuilding()" ref="selectItem">
             <option value="" style="color:#c3c3c3">Select/Add a Building</option>
             <option v-for="building in selectedCampus.buildings" :value="building"> {{building.name}}</option>
           </select>
@@ -79,7 +76,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">Rooms</h3>
           </div>
-          <select v-model="selectedRoom" class="form-control" size="5">
+          <select v-model="selectedRoom" class="form-control" :size="setSelectSizeRoom()">
             <option value="" style="color:#c3c3c3">Select/Add a Room</option>
             <option v-for="room in selectedBuilding.rooms" :value="room">{{room.number || room.name}}</option>
           </select>
@@ -124,6 +121,7 @@
             </form>
           </div>
         </div>
+
       </div>
     </aside>
 
@@ -132,15 +130,15 @@
 
 
 
-  <div id="current-item"  v-if="currentItem.type">
+  <div id="current-item">
      <h2>
-      <span class="text-capitalize">{{currentItem.type}}:</span> {{currentItem.number || currentItem.name}}
+      <span class="text-capitalize">{{currentItem.type || "Select a Campus"}}:</span> {{currentItem.number || currentItem.name}}
     </h2>
 
      <template>
         <gmap-map ref="map"
         :center="center"
-        :zoom="16"
+        :zoom="currentItem.zoom || 15"
     map-type-id="terrain"
         @rightclick="mapRclicked"
         style="width: 100%; height: 300px"
@@ -159,12 +157,21 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" > <a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="text-transform: capitalize">{{currentItem.type}}</a> </li>
-          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#inventory" aria-controls="inventory" role="tab" data-toggle="tab" style="text-transform: capitalize">inventory</a> </li>
-          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#software" aria-controls="software" role="tab" data-toggle="tab" class="text-capitalize">software</a> </li>
-          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#department" aria-controls="department" role="tab" data-toggle="tab" style="text-transform: capitalize">department</a> </li>
-          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#media" aria-controls="media" role="tab" data-toggle="tab" style="text-transform: capitalize">media</a> </li>
-          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#something" aria-controls="something" role="tab" data-toggle="tab" style="text-transform: capitalize">Something</a> </li>
+
+          <li role="presentation" > <a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="text-capitalize">{{currentItem.type}}</a> </li>
+
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#inventory" aria-controls="inventory" role="tab" data-toggle="tab" class="text-capitalize">inventory</a> </li>
+
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#software" aria-controls="software" role="tab" data-toggle="tab" class="text-capitalize">software <i id="software-btn" class="fa fa-plus fa-fw"
+            data-toggle="collapse" data-target="#addSoftware"
+            aria-expanded="false" aria-controls="addSoftware"
+            /></a> </li>
+
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#department" aria-controls="department" role="tab" data-toggle="tab" class="text-capitalize">department</a> </li>
+
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#media" aria-controls="media" role="tab" data-toggle="tab" class="text-capitalize">media</a> </li>
+
+          <li role="presentation" v-show="currentItem.type == 'room'"> <a href="#something" aria-controls="something" role="tab" data-toggle="tab" cl="text-transform: capitalize">Something</a> </li>
         </ul>
 
         <!-- Tab panes -->
@@ -172,15 +179,13 @@
 
           <!-- HOME -->
           <div role="tabpanel" class="tab-pane active" id="home">
-
-
             <form v-if="currentItem.type == 'campus'" v-on:submit.prevent="onUpdateCampus">
 
               <div class="pull-right">
                 <i class="fa fa-trash fa-2x" @click="onDeleteCampus"></i>
               </div>
-          <!-- HOME -->
 
+              <!-- HOME -->
               <div class="form-group">
                 <label>Name</label>
                 <input type="text" class="form-control" v-model="currentItem.name">
@@ -244,11 +249,8 @@
 
           <div role="tabpanel" class="tab-pane" id="software">
 
-            <a id="software-btn" class="btn btn-default" type="button"
-            data-toggle="collapse" data-target="#addSoftware"
-            aria-expanded="false" aria-controls="addSoftware">
-              Add Software
-            </a>
+
+
 
             <div class="collapse" id="addSoftware">
               <div class="well">
@@ -295,7 +297,7 @@
                   <th>title</th>
                   <th>filename</th>
                   <th>url</th>
-                  <th>actions</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -392,9 +394,7 @@
         roomStyles: [],
         roomStyle: '',
 
-
-        center: {lat: 41.192638470302114, lng: -111.9427574918045}, //{lat: 41.192638470302114, lng: -111.9427574918045}
-        zoom: 17,
+        
         newCampus: {
           name:'',
           campus_code:'',
@@ -411,19 +411,63 @@
           building_id:'',
           capacity: ''
         },
+        center: {lat: 41.192638470302114, lng: -111.9427574918045}, //{lat: 41.192638470302114, lng: -111.9427574918045}
+
         markers: [], //[{position: JSON.parse(currentItem.latlong)}],
+        
         infoContent: '',
+        
         toggleAddSoftware: false,
+        
         newSoftware: {
           title: '',
           filename: '',
           url: '',
-
         }
       }
     },
 
     methods:{
+      setSelectSizeCampus: function(e){
+        if (this.currentItem.type == 'building') {
+          return 1
+        }
+        if (this.currentItem.type == 'campus') {
+          return 1
+        }
+        if (this.currentItem.type == null) {
+          return 10
+        }
+      },
+
+      setSelectSizeBuilding: function(e){
+
+        if (this.currentItem.type == 'room') {
+          return 1
+        }
+        if (this.currentItem.type == 'building') {
+          return 1
+
+        }
+        if (this.currentItem.type == 'campus') {
+          return 10
+        }
+      },
+
+      setSelectSizeRoom: function(e){
+
+        if (this.currentItem.type == 'room') {
+          return 10
+        }
+        if (this.currentItem.type == 'building') {
+          return 10
+
+        }
+        // if (this.currentItem.type == 'campus') {
+        //   return 1
+
+        // }
+      },
 
       onSubmitCampus: function(e){
         var vm = this;
@@ -453,7 +497,6 @@
           }
         })
         .catch(vm.handleError);
-
       },
 
       onSubmitBuilding: function(e){
@@ -548,7 +591,6 @@
           name:'',
           campus_code:''
         }
-
       },
 
       onUpdateBuilding: function(e){
@@ -904,7 +946,6 @@
       },
 
       onAddSoftware: function(e){
-        console.log("onAddSoftware")
         var vm = this;
 
         this.newSoftware.room_id = this.currentItem.id
@@ -1075,6 +1116,8 @@
           currentItem.building_id = this.selectedBuilding.id
           //currentItem room id is currentItem.id
 
+          currentItem.zoom = 20
+
           //--Position of item in room--//
           var i,j,k
 
@@ -1093,7 +1136,7 @@
           currentItem.campus_id = this.selectedCampus.id
 
           currentItem.type = 'building'
-
+          currentItem.zoom = 18
           //--Position of item in building--//
           var i,j,k
 
@@ -1109,6 +1152,7 @@
           var currentItem = this.selectedCampus
           currentItem.campus_id = this.selectedCampus.id
           currentItem.type = 'campus'
+          currentItem.zoom = 16
 
           //--Position of item in campus--//
           var i

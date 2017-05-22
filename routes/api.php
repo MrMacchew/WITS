@@ -25,6 +25,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
     // Route::get('users/{id?}',  'ApiController@users');
     Route::resource('users', 'UserController');
+    Route::resource('departments', 'DepartmentController');
+    // Route::resource('hierarchy', 'HierarchyController');
     Route::resource('roles', 'RoleController');
     Route::resource('asset', 'AssetController');
     Route::resource('campus', 'CampusController');

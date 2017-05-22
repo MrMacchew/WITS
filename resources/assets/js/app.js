@@ -11,10 +11,11 @@ $.ajaxSetup({
 
 
 
-Vue.component('example', require('./components/Example.vue'));
+// Vue.component('example', require('./components/Example.vue'));
 
 Vue.component('user-table', require('./components/wits/UserTable.vue'));
 Vue.component('locations', require('./components/wits/Locations.vue'));
+Vue.component('departments', require('./components/wits/Departments.vue'));
 
 Vue.component('passport-clients', require('./components/passport/Clients.vue') );
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue') );

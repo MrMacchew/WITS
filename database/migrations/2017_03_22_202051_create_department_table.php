@@ -13,13 +13,13 @@ class CreateDepartmentTable extends Migration
      */
     public function up()
     {
-        Schema::create('department', function (Blueprint $table) {
+        Schema::create('division_department_teams', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('primary_orgcode_id')->unsigned()->nullable();
             $table->string('name');
-            $table->string('phone');
-            $table->string('email');
-            $table->string('primary_contact');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('primary_contact')->nullable();
             // $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateDepartmentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('department');
+        Schema::dropIfExists('division_department_teams');
     }
 }
