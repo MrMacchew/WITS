@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class Hierarchy extends Model
 {
     use \Venturecraft\Revisionable\RevisionableTrait;
@@ -18,4 +18,25 @@ class Hierarchy extends Model
     public $timestamps = false;
 
     protected $table = "hierarchy";
+
+
+    public function divisions()
+    {
+    	$this->hasMany('App\Department', 'id');
+        return $this->hasMany('App\Department', 'id')
+        ->where('id', $this->division_id);
+    }
+
+    public function departments()
+    {
+    	// return $this->hasMany('App\Department', 'id');
+        return $this->hasMany('App\Department', 'id')
+        ->where('id', $this->department_id);
+    }
+    public function teams()
+    {
+    	// return $this->hasMany('App\Department', 'id')->teams
+        return $this->hasMany('App\Department', 'id')
+        ->where('id', $this->team_id);
+    }
 }

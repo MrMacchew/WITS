@@ -29,9 +29,29 @@ class Department extends Model
         return $this->belongsToMany('App\Building', 'building_department', 'department_id', 'building_id');
     }
 
-    public function hierarchy()
+    // public function hierarchy()
+    // {
+    //     return $this->hasMany('App\Hierarchy', 'division_id')
+    //     // ->where('id', $this->department_id)
+    //     ;
+    // }
+
+    public function divisions()
     {
-        return $this->hasMany('App\Hierarchy');
+        return $this->hasMany('App\Hierarchy', 'division_id')
+        ;
+    }
+
+    public function departments()
+    {
+        return $this->hasMany('App\Hierarchy', 'department_id')
+        ;
+    }
+
+    public function teams()
+    {
+        return $this->hasMany('App\Hierarchy', 'team_id')
+        ;
     }
 
 }
