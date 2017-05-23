@@ -6,6 +6,9 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
+            <span class="pull-right">
+              <i class="fa fa-check-square-o"></i>
+            </span>
             <h3 class="panel-title">Divisions</h3>
           </div>
           <select v-model="selectedDivision" class="form-control" :size="setSelectSizeDivision()" ref="selectItem">
@@ -14,25 +17,7 @@
           </select>
         </div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Departments</h3>
-          </div>
-          <select v-model="selectedDepartment" class="form-control" :size="setSelectSizeDepartment()" ref="selectItem">
-            <option value="" style="color:#c3c3c3">Select/Add a departments</option>
-            <option v-for="department in departments" :value="department">{{department.name}}</option>
-          </select>
-        </div>
-
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Teams</h3>
-          </div>
-          <select v-model="selectedTeam" class="form-control" :size="setSelectSizeTeam()" ref="selectItem">
-            <option value="" style="color:#c3c3c3">Select/Add a teams</option>
-            <option v-for="team in teams" :value="team">{{team.name}}</option>
-          </select>
-        </div>
+        
 
       </div>
     </aside>

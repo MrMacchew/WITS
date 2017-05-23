@@ -45,19 +45,7 @@ class DepartmentController extends ApiController
         $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
         $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
 
-        $hierarchy = Department::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
-        $hierarchy->groupBy('name');
-
-
-        $hierarchy = collect((Object) [
-            "divisions" => $hierarchy,
-            "departments" => $hierarchy,
-            "teams" => $hierarchy,
-            ]);
-
-
-        return $hierarchy;
-
+        return Department::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 
     /**

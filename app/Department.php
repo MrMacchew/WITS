@@ -17,7 +17,7 @@ class Department extends Model
     protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
     public $timestamps = false;
 
-    protected $table = "division_department_teams";
+    protected $table = "departments";
 
     public function org()
     {

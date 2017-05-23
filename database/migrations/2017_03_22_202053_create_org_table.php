@@ -16,7 +16,7 @@ class CreateOrgTable extends Migration
         Schema::create('org', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('department_id')->unsigned();
-            $table->foreign('department_id')->references('id')->on('division_department_teams');
+            $table->foreign('department_id')->references('id')->on('departments');
             $table->string('name');
             $table->string('code');
             // $table->timestamps();
