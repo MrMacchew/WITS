@@ -39,6 +39,7 @@ class Department extends Model
     public function divisions()
     {
         return $this->hasMany('App\Hierarchy', 'division_id')
+        // ->where(['id','=', $this->division_id])
         ;
     }
 

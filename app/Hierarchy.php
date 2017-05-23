@@ -22,16 +22,19 @@ class Hierarchy extends Model
 
     public function divisions()
     {
-    	$this->hasMany('App\Department', 'id');
         return $this->hasMany('App\Department', 'id')
-        ->where('id', $this->division_id);
+        // ->groupBy('departments')
+        ;
+        // ->where('id', $this->division_id);
     }
 
     public function departments()
     {
     	// return $this->hasMany('App\Department', 'id');
         return $this->hasMany('App\Department', 'id')
-        ->where('id', $this->department_id);
+        // ->groupBy('departments.name')
+        // ->where('id', $this->department_id);
+        ;
     }
     public function teams()
     {

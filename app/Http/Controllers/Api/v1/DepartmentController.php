@@ -45,7 +45,19 @@ class DepartmentController extends ApiController
         $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
         $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
 
-        return Department::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
+        $hierarchy = Department::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
+        $hierarchy->groupBy('name');
+
+
+        $hierarchy = collect((Object) [
+            "divisions" => $hierarchy,
+            "departments" => $hierarchy,
+            "teams" => $hierarchy,
+            ]);
+
+
+        return $hierarchy;
+
     }
 
     /**
@@ -137,6 +149,7 @@ class DepartmentController extends ApiController
             {
                 $room->delete();
             }
+
             $building->delete();
         }
 
@@ -150,5 +163,10 @@ class DepartmentController extends ApiController
     protected function formatValidationErrors(Validator $validator)
     {
         return $validator->errors()->all();
+    }
+
+    public function hierarchy($item = 'test')
+    {
+        return "testing the link " . $item;
     }
 }

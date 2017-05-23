@@ -106,6 +106,8 @@
         selectedTeam: "",
 
         divisions:[],
+        departments:[],
+        teams:[],
 
 
         results:[],
@@ -146,11 +148,11 @@
 
         }
       },
-    }, 
+    },
     mounted: function(){
       var vm = this
 
-      axios.get('/api/v1/departments?with=org,hierarchy')
+      axios.get('/api/v1/departments?with=org,divisions,departments,teams')
       .then(function (response) {
         vm.divisions = response.data;
         toastr["success"]("Loaded Divisions")
