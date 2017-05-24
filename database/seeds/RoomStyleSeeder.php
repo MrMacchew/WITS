@@ -12,7 +12,9 @@ class RoomStyleSeeder extends Seeder
     public function run()
     {
         DB::table('room_style')->insert(['name' => "classroom", ]);
+        DB::table('room_style')->insert(['name' => "conference", ]);
         DB::table('room_style')->insert(['name' => "office", ]);
         DB::table('room_style')->insert(['name' => "hallway", ]);
+        DB::table('room_style')->insert(['name' => "closet", ]);
     }
 }

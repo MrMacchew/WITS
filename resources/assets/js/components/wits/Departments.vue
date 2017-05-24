@@ -27,7 +27,64 @@
             </div>
         </aside>
         <div class="col-xs-12 col-md-9">
-             <!-- <span class="editable" data-url="/update_title.php">Hello world</span> -->
+
+            <div id="addDepartment">
+
+            <form class="form-horizontal">
+
+                <div class="panel-group">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse1">Add Department</a>
+                      </h4>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                      <div class="panel-body">
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">Department Name</label>
+                          <div class="col-sm-9">
+                            <input type="email" class="form-control" placeholder="Name">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">Primary Contact</label>
+                          <div class="col-sm-9">
+                            <input type="email" class="form-control" placeholder="Primary Contact">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">Email</label>
+                          <div class="col-sm-9">
+                            <input type="email" class="form-control" placeholder="Email">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">parent department </label>
+                          <div class="col-sm-9">
+                            <select name="" id="">
+                              <option value=""></option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Add</button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
 
             <table class="table table-striped" style="border-collapse:collapse;">
                 <thead>
@@ -107,8 +164,6 @@
 
                 departments: [],
 
-
-                fields: ['name', 'email', '__slot:actions'],
                 search: '',
                 fuse: null,
                 results: [],
