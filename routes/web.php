@@ -32,8 +32,8 @@ Route::get('dashboard', 'DashboardController@index');
 
 
 Route::group(
-	[]
-	// ['middleware' => 'auth']
+	// []
+	['middleware' => 'auth']
 	, function () {
 	Route::get('inventory', 'PagesController@inventory');
 	Route::get('departments', 'PagesController@departments');

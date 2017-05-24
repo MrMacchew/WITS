@@ -20,7 +20,7 @@ class DepartmentSeeder extends Seeder
             ]);
 
         DB::table('departments')->insert([
-            'name' => "Another Division",
+            'name' => "_Division",
             'primary_orgcode_id' => null,
             'phone' => "555-2345",
             'email' => "someone@weber.edu",

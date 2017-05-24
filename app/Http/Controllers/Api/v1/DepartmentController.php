@@ -141,8 +141,6 @@ class DepartmentController extends ApiController
             $building->delete();
         }
 
-
-
         $department->delete();
         return $department;
 
@@ -151,10 +149,5 @@ class DepartmentController extends ApiController
     protected function formatValidationErrors(Validator $validator)
     {
         return $validator->errors()->all();
-    }
-
-    public function hierarchy($item = 'test')
-    {
-        return "testing the link " . $item;
     }
 }

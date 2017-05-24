@@ -11,7 +11,6 @@ class DepartmentOrgSeeder extends Seeder
      */
     public function run()
     {
-        // DB::table('department')->delete();
         // factory(App\Department::class, 10)->create();
 
         factory(App\Department::class, 10)->create();
@@ -22,6 +21,15 @@ class DepartmentOrgSeeder extends Seeder
         $department->org()->save(factory(App\Org::class)->make());
 
         $department = App\Department::find(2);
+        $department->org()->save(factory(App\Org::class)->make());
+
+        $department = App\Department::find(3);
+        $department->org()->save(factory(App\Org::class)->make());
+        $department->org()->save(factory(App\Org::class)->make());
+
+
+        $department = App\Department::find(4);
+        $department->org()->save(factory(App\Org::class)->make());
         $department->org()->save(factory(App\Org::class)->make());
         $department->org()->save(factory(App\Org::class)->make());
 

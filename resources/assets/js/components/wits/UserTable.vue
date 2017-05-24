@@ -22,7 +22,7 @@
       </thead>
       <tbody>
 
-        <template v-for="(user, userKey) in result">
+        <template v-for="(user, userKey) in results">
           <tr>
             <td data-toggle="collapse" :data-target="'#row'+userKey" class="accordion-toggle" aria-expanded="false">
               <i class="fa fa-chevron-right fa-fw"></i>
@@ -98,13 +98,13 @@
 
 
   export default {
-    data: function(){
+    data() {
       return {
         users:[],
         roles:[],
         search: '',
         fuse: null,
-        result: []
+        results: []
 
       }
     },
@@ -114,13 +114,14 @@
     watch: {
       search: function() {
         if (this.search.trim() === ''){
-          this.result = this.users
+          this.results = this.users
         }
         else{
-          this.result = this.fuse.search(this.search.trim())
+          this.results = this.fuse.search(this.search.trim())
         }
       }
     },
+
     mounted() {
       var vm = this;
       console.log('Component mounted.')
@@ -151,7 +152,7 @@
         vm.users = response.data;
 
         vm.fuse = new Fuse(response.data, options);
-        vm.result = vm.users
+        vm.results = vm.users
       })
       .catch(function (error) {
         console.log(error);
