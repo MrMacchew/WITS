@@ -19,6 +19,10 @@ class Department extends Model
 
     protected $table = "departments";
 
+    protected $fillable = [
+        'name', 'campus_code', 'latlong'
+    ];
+
     public function org()
     {
     	return $this->hasMany('App\Org');

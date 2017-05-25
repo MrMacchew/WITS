@@ -66,12 +66,13 @@ class DepartmentController extends ApiController
      */
     public function store(Request $request)
     {
-       $this->validate($request, [
-        'name' => 'required|unique:campus',
-        'campus_code' => 'required|unique:campus',
-        ]);
+       // $this->validate($request, [
+       //  'name' => 'required|unique:campus',
+       //  'campus_code' => 'required|unique:campus',
+       //  ]);
+
         $department = Department::create($request->all());
-        return Department::with('buildings', 'buildings.rooms')->find($department->id);
+        return $department;
     }
 
     /**

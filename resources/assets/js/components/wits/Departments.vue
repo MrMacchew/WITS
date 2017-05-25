@@ -3,74 +3,82 @@
     <aside class="col-md-3 col-xs-12">
       <ui-collapsible title="Add Department" @close="resetNewDepartment()" open>
 
-        <div class="form-group">
-          <div class="col-sm-12">
+
+          <form @submit.prevent="onSubmitDepartment">
+
+            <!-- <input  name="_method" type="hidden" value="POST"> -->
 
             <ui-textbox
             floating-label
             error="This field is required"
             label="Department Name"
             placeholder="Department Name"
-            v-model="department_name"
+            v-model="newDepartment.name"
             required
-            :invalid="department_name_touched && department_name.length === 0"
-            @touch="department_name_touched = true"
+            :invalid="newDepartment.name_touched && newDepartment.name.length === 0"
+            @touch="newDepartment.name_touched = true"
             />
 
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="col-sm-12">
+
+
             <ui-textbox
             floating-label
             error="This field is required"
             label="Primary Contact Name"
             placeholder="Primary Contact"
-            v-model="primary_contact_name"
+            v-model="newDepartment.primary_contact_name"
             required
-            :invalid="primary_contact_name_touched && primary_contact_name.length === 0"
-            @touch="primary_contact_name_touched = true"
+            :invalid="newDepartment.primary_contact_name_touched && newDepartment.primary_contact_name.length === 0"
+            @touch="newDepartment.primary_contact_name_touched = true"
             />
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="col-sm-12">
+
+            <ui-textbox
+            floating-label
+            error="This field is required"
+            label="Phone"
+            placeholder="Primary Contact"
+            v-model="newDepartment.phone"
+            required
+            :invalid="newDepartment.phone_touched && newDepartment.phone.length === 0"
+            @touch="newDepartment.phone_touched = true"
+            />
+
+
+
             <ui-textbox
             type="email"
             floating-label
             error="This field is required"
             label="Primary Contact Email"
             placeholder="email"
-            v-model="primary_contact_email"
+            v-model="newDepartment.primary_contact_email"
             required
-            :invalid="primary_contact_email_touched && primary_contact_email.length === 0"
-            @touch="primary_contact_email_touched = true"
+            :invalid="newDepartment.primary_contact_email_touched && newDepartment.primary_contact_email.length === 0"
+            @touch="newDepartment.primary_contact_email_touched = true"
             />
-          </div>
-        </div>
 
 
-        <div class="form-group">
-          <div class="col-sm-12">
+
+
             <ui-select
             has-search
             floating-label
             label="Parent Department"
-            placeholder="if this has a parent department or division"
+            placeholder="if this has a parent department"
             :options="optionsParentDepartment"
-            v-model="parentDepartment"
+            v-model="newDepartment.parentDepartment"
             ></ui-select>
-          </div>
-        </div>
+
+            <ui-button buttonType="submit" type="primary" color="primary" size="small">Add Department</ui-button>
+
+            </form>
 
 
-        <div class="form-group">
-          <div class="col-sm-12">
-            <button type="submit" class="btn btn-default">Add</button>
-          </div>
-        </div>
+
+
+
       </ui-collapsible>
     </aside>
 
@@ -168,6 +176,20 @@
   import _ from 'lodash';
   import toastr from 'toastr';
 
+
+class Errors {
+  constructor(){
+    this.errors = {};
+
+    get = function(field) {
+      if (this.errors[field]) {
+        this.errors[field][0]
+      }
+    }
+  }
+}
+
+
   export default
   {
    data: function() {
@@ -179,16 +201,21 @@
 
       departments: [],
 
-      
+      newDepartment:{
+
+        name:"",
+        name_touched: false,
+        primary_contact_name:"",
+        primary_contact_name_touched:false,
+        phone:"",
+        phone_touched:false,
+        primary_contact_email:"",
+        primary_contact_email_touched:false,
+        parentDepartment: "",
+      },
 
       //Add Department
-      department_name:"",
-      department_name_touched: false,
-      primary_contact_name:"",
-      primary_contact_name_touched:false,
-      primary_contact_email:"",
-      primary_contact_email_touched:false,
-      parentDepartment: "",
+
 
       search: '',
       fuse: null,
@@ -198,46 +225,23 @@
     }
   },
   methods: {
-    setSelectSizedepartment: function (e) {
-      if (this.currentItem.type == 'department') {
-        return 1
-      }
-      if (this.currentItem.type == 'department') {
-        return 1
-      }
-      if (this.currentItem.type == null) {
-        return 3
-      }
-    },
-    setSelectSizeDepartment: function (e) {
-      if (this.currentItem.type == 'team') {
-        return 1
-      }
-      if (this.currentItem.type == 'department') {
-        return 1
-
-      }
-      if (this.currentItem.type == 'department') {
-        return 10
-
-      }
-    },
-    setSelectSizeTeam: function (e) {
-      if (this.currentItem.type == 'team') {
-        return 10
-      }
-      if (this.currentItem.type == 'department') {
-        return 10
-      }
+    onSubmitDepartment: function () {
+       axios.post('/api/v1/departments', this.newDepartment)
+       .then(response => response.data)
+       .catch(error => this.errors = error.response.data)
     },
     resetNewDepartment: function(){
-      this.department_name = ""
-      this.department_name_touched =  false
-      this.primary_contact_name = ""
-      this.primary_contact_name_touched = false
-      this.primary_contact_email = ""
-      this.primary_contact_email_touched = false
-      this.parentDepartment =  ""
+
+      this.newDepartment = {
+        name:"",
+        name_touched: false,
+        primary_contact_name:"",
+        primary_contact_name_touched:false,
+        primary_contact_email:"",
+        primary_contact_email_touched:false,
+        parentDepartment: "",
+      }
+
     }
   },
   watch: {

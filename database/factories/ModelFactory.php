@@ -111,8 +111,9 @@ $factory->define(App\Department::class, function (Faker\Generator $faker) {
         'name' => $faker->unique()->colorName(),
         'phone' => $faker->unique()->phoneNumber(),
         'primary_orgcode_id' => $faker->randomDigit(),
+        'parent_department_id' => $faker->randomDigit(),
         'email' => $faker->unique()->safeEmail,
-        'primary_contact' => $faker->unique()->name(),
+        'primary_contact_name' => $faker->unique()->name(),
     ];
     // dd($data);
     return $data;

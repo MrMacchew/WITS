@@ -15,11 +15,12 @@ class CreateDepartmentTable extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('primary_orgcode_id')->unsigned()->nullable();
             $table->string('name');
+            $table->integer('primary_orgcode_id')->unsigned()->nullable();
+            $table->integer('parent_department_id')->unsigned()->nullable();
+            $table->string('primary_contact_name')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-            $table->string('primary_contact')->nullable();
             // $table->timestamps();
         });
     }
