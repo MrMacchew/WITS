@@ -20,7 +20,12 @@ class Department extends Model
     protected $table = "departments";
 
     protected $fillable = [
-        'name', 'campus_code', 'latlong'
+        'name',
+        'primary_orgcode_id',
+        'parent_department_id',
+        'primary_contact_name',
+        'phone',
+        'email'
     ];
 
     public function org()

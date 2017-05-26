@@ -19,4 +19,14 @@ class Org extends Model
     protected $table = 'org';
     public $timestamps  = false;
 
+    protected $fillable = [
+        'name',
+        'department_id',
+        'code',
+    ];
+
+    public function departments(){
+    	return  $this->belongsTo('App\Department', 'department_id');
+    }
+
 }

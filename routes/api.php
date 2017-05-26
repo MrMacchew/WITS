@@ -26,6 +26,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
     // Route::get('users/{id?}',  'ApiController@users');
 
     Route::resource('departments', 'DepartmentController');
+    Route::resource('org', 'OrgController');
     Route::resource('users', 'UserController');
     Route::resource('hierarchy', 'HierarchyController');
     Route::resource('roles', 'RoleController');

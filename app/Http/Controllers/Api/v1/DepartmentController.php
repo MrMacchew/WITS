@@ -70,7 +70,7 @@ class DepartmentController extends ApiController
        //  'name' => 'required|unique:campus',
        //  'campus_code' => 'required|unique:campus',
        //  ]);
-
+        // return $request->all();
         $department = Department::create($request->all());
         return $department;
     }
