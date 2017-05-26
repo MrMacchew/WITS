@@ -91,6 +91,7 @@
               <th>Primary Contact</th>
               <th>Phone</th>
               <th>Email</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -105,6 +106,7 @@
                 <td><span class="editable">{{department.primary_contact_name}}</span></td>
                 <td><span class="editable">{{department.phone}}</span></td>
                 <td><span class="editable">{{department.email}}</span></td>
+                <td> <i class="fa fa-trash" @click="onDeleteDepartment(department)"></i> </span></td>
               </tr>
 
               <tr>
@@ -165,12 +167,12 @@
                             <td>{{org.name}}</td>
                             <td>{{org.code}}</td>
                             <td>
-                              <input type="radio" 
-                              :name="'primary_orgcode_id'+department.id" 
-                              :value="org.id" 
-                              @change="onPrimaryOrgChange(department,org)" 
+                              <input type="radio"
+                              :name="'primary_orgcode_id'+department.id"
+                              :value="org.id"
+                              @change="onPrimaryOrgChange(department,org)"
                               :checked="org.id == department.primary_orgcode_id">
-                              
+
                               </td>
                             <td><i class="fa fa-trash" @click="onDeleteOrg(org)"></i></td>
                           </tr>
@@ -204,14 +206,42 @@
   class Errors {
     constructor(){
       this.errors = {};
+    }
 
-      get = function(field) {
-        if (this.errors[field]) {
-          this.errors[field][0]
-        }
+    get(field) {
+      if (this.errors[field]) {
+        this.errors[field][0];
+      }
+    }
+
+    has(field) {
+      return this.errors.hasOwnProperty(field);
+    }
+
+    any() {
+      return Object.key(this.errors).length > 0;
+    }
+
+    record(errors) {
+      this.errors = errors;
+    }
+
+    clear(field) {
+      delete this.errors[field];
+    }
+
+  }
+
+  class Form{
+    constructor(data){
+      this.data = data
+
+      for(let field in data){
+        this[field] = data[field];
       }
     }
   }
+
 
 
   export default
@@ -224,6 +254,20 @@
       toggleCheckboxes: false,
 
       departments: [],
+
+      formDepartment: new Form({
+        name:"",
+        primary_contact_name:"",
+        phone:"",
+        email:"",
+        parent_department_id: "",
+      }),
+
+      formOrg: new Form({
+        name:"",
+        department_id:"",
+        code:"",
+      }),
 
       newDepartment:{
 
@@ -337,6 +381,46 @@
         }
       });
     },
+
+    onDeleteDepartment: function (department) {
+      var vm = this
+
+      department._method = "DELETE"
+
+
+      $.confirm({
+        title: 'Delete: ' + department.name,
+        content: 'Ok... if your absolutely positive',
+        icon: 'fa fa-warning',
+        animation: 'zoom',
+        closeAnimation: 'zoom',
+        buttons: {
+          confirm: {
+            text: 'DELETE!',
+            btnClass: 'btn-red',
+            action: function () {
+
+              axios.post('/api/v1/departments/'+department.id, department)
+              .then(function(response){
+
+                var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.data.department_id; });
+                vm.departments.splice(department_index,1)
+
+                toastr["success"]("Deleted Org code")
+
+              })
+              .catch(error => this.errors = error.response.data)
+
+            }
+          },
+          close:{
+            text: "Close"
+          }
+        }
+      });
+    },
+
+
     onPrimaryOrgChange: function (department,org,e) {
       console.log(e,department,org);
 

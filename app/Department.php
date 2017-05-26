@@ -33,7 +33,7 @@ class Department extends Model
     	return $this->hasMany('App\Org');
     }
 
-    public function building()
+    public function buildings()
     {
         return $this->belongsToMany('App\Building', 'building_department', 'department_id', 'building_id');
     }

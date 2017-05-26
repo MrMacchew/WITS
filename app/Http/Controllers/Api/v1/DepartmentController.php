@@ -129,8 +129,7 @@ class DepartmentController extends ApiController
      */
     public function destroy(Department $department)
     {
-        $department = Department::with(['buildings', 'buildings.rooms'])->find($department->id);
-
+        $department = Department::with(['buildings', 'buildings.rooms', 'org'])->find($department->id);
         // return $department;
         foreach($department->buildings as $building)
         {
@@ -140,6 +139,11 @@ class DepartmentController extends ApiController
             }
 
             $building->delete();
+        }
+
+        foreach($department->org as $org)
+        {
+            $org->delete();
         }
 
         $department->delete();
