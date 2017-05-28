@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Laravel\Passport\HasApiTokens;
 
-
 class DepartmentController extends ApiController
 {
 
@@ -45,6 +44,7 @@ class DepartmentController extends ApiController
         $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
         $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
 
+
         return Department::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 
@@ -66,12 +66,18 @@ class DepartmentController extends ApiController
      */
     public function store(Request $request)
     {
-       // $this->validate($request, [
-       //  'name' => 'required|unique:campus',
-       //  'campus_code' => 'required|unique:campus',
-       //  ]);
+       $validate = $this->validate($request, [
+        'name' => 'required',
+        'primary_contact_name' => 'required',
+        'phone' => 'nullable|size:10',
+        'email' => 'nullable|email',
+        'parent_department_id' => 'nullable|numeric',
+        ]);
+
         // return $request->all();
         $department = Department::create($request->all());
+        $department->org = [];
+        $department->parent = [];
         return $department;
     }
 
@@ -151,8 +157,4 @@ class DepartmentController extends ApiController
 
     }
 
-    protected function formatValidationErrors(Validator $validator)
-    {
-        return $validator->errors()->all();
-    }
 }

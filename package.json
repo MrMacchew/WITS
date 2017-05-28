@@ -22,6 +22,6 @@
     "vue": "^2.1.10",
     "vue2-google-maps": "^0.7.5",
     "vuejs-autocomplete": "^0.1.1",
-    "vuetiful": "^0.2.13"
+    "vuetiful": "git+ssh://git@github.com/andrewcourtice/vuetiful.git"
   }
 }

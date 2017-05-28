@@ -241,9 +241,11 @@
                   <input type="number" v-model="currentItem.capacity">
                 </div>
               </div>
+
               <div class="form-group">
                 <button type="submit" class="btn btn-default">Update Room</button>
               </div>
+              
             </form>
           </div>
 

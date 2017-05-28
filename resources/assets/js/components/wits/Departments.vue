@@ -1,66 +1,64 @@
 <template>
   <div id="department-vue" class="container-fluid">
     <aside class="col-md-3 col-xs-12">
-      <ui-collapsible title="Add Department" @close="resetNewDepartment()" open>
+      <ui-collapsible title="Add Department" open>
 
 
         <form @submit.prevent="onSubmitDepartment">
 
-          <!-- <input  name="_method" type="hidden" value="POST"> -->
-
           <ui-textbox
           floating-label
-          error="This field is required"
           label="Department Name"
-          placeholder="Department Name"
-          v-model="newDepartment.name"
-          required
-          :invalid="newDepartment.name_touched && newDepartment.name.length === 0"
-          @touch="newDepartment.name_touched = true"
+          v-model="formDepartment.name"
+          :error="formDepartment.errors.get('name')"
+          :invalid="!!formDepartment.errors.get('name')"
+          @keydown="formDepartment.errors.clear('name')"
+
           />
 
           <ui-textbox
           floating-label
-          error="This field is required"
           label="Primary Contact Name"
-          placeholder="Primary Contact"
-          v-model="newDepartment.primary_contact_name"
-          required
-          :invalid="newDepartment.primary_contact_name_touched && newDepartment.primary_contact_name.length === 0"
-          @touch="newDepartment.primary_contact_name_touched = true"
+          v-model="formDepartment.primary_contact_name"
+          :error="formDepartment.errors.get('primary_contact_name')"
+          :invalid="!!formDepartment.errors.get('primary_contact_name')"
+          @keydown="formDepartment.errors.clear('primary_contact_name')"
           />
 
           <ui-textbox
+          type="number"
           floating-label
-          error="This field is required"
           label="Phone"
-          placeholder="Primary Contact"
-          v-model="newDepartment.phone"
-          required
-          :invalid="newDepartment.phone_touched && newDepartment.phone.length === 0"
-          @touch="newDepartment.phone_touched = true"
+          v-model="formDepartment.phone"
+          :help="phoneHelp"
+          :error="formDepartment.errors.get('phone')"
+          :invalid="!!formDepartment.errors.get('phone')"
+          @keydown="formDepartment.errors.clear('phone')"
           />
 
           <ui-textbox
-          type="email"
+          type="text"
           floating-label
-          error="This field is required"
           label="Primary Contact Email"
-          placeholder="email"
-          v-model="newDepartment.email"
-          required
-          :invalid="newDepartment.email_touched && newDepartment.email.length === 0"
-          @touch="newDepartment.email_touched = true"
+          v-model="formDepartment.email"
+          :error="formDepartment.errors.get('email')"
+          :invalid="!!formDepartment.errors.get('email')"
+          @keydown="formDepartment.errors.clear('email')"
+
           />
 
           <ui-select
           has-search
           floating-label
           label="Parent Department"
-          placeholder="if this has a parent department"
           :options="optionsParentDepartment"
-          v-model="newDepartment.parent_department_id"
+          v-model="formDepartment.parent_department_id"
+          :error="formDepartment.errors.get('parent_department_id')"
+          :invalid="!!formDepartment.errors.get('parent_department_id')"
+          @keydown="formDepartment.errors.clear('parent_department_id')"
+
           ></ui-select>
+
 
           <ui-button buttonType="submit" type="primary" color="primary" size="small">Add Department</ui-button>
 
@@ -91,6 +89,7 @@
               <th>Primary Contact</th>
               <th>Phone</th>
               <th>Email</th>
+              <th>Parent Department</th>
               <th></th>
             </tr>
           </thead>
@@ -106,16 +105,17 @@
                 <td><span class="editable">{{department.primary_contact_name}}</span></td>
                 <td><span class="editable">{{department.phone}}</span></td>
                 <td><span class="editable">{{department.email}}</span></td>
+                <td><span class="editable" v-if="department.parent" >{{department.parent.name}}</span> </td>
                 <td> <i class="fa fa-trash" @click="onDeleteDepartment(department)"></i> </span></td>
               </tr>
 
               <tr>
-                <td colspan="6" style="padding: 0">
+                <td colspan="7" style="padding: 0">
                   <div class="container-fluid">
 
                     <div class="accordian-body collapse" :id="'row'+departmentKey" style="margin:20px 60px 50px">
 
-                      <ui-collapsible title="Add Org Code" @close="resetNewDepartment()">
+                      <ui-collapsible title="Add Org Code">
 
                         <form @submit.prevent="onSubmitOrgcode">
 
@@ -124,25 +124,21 @@
 
                           <ui-textbox
                           floating-label
-                          error="This field is required"
                           label="Name"
-                          placeholder="name"
-                          v-model="newOrgcode.name"
-                          required
-                          :invalid="newOrgcode.name_touched && newOrgcode.name.length === 0"
-                          @touch="newOrgcode.name_touched = true"
+                          v-model="formOrg.name"
+                          :error="formOrg.errors.get('name')"
+                          :invalid="!!formOrg.errors.get('name')"
+                          @keydown="formOrg.errors.get('name')"
                           />
 
                           <ui-textbox
                           type="number"
                           floating-label
-                          error="This field is required"
                           label="Code"
-                          placeholder="Code"
-                          v-model="newOrgcode.code"
-                          required
-                          :invalid="newOrgcode.code_touched && newOrgcode.code.length === 0"
-                          @touch="newOrgcode.code_touched = true"
+                          v-model="formOrg.code"
+                          :error="formOrg.errors.get('code')"
+                          :invalid="!!formOrg.errors.get('code')"
+                          @keydown="formOrg.errors.get('code')"
                           />
 
                           <ui-button buttonType="submit" type="primary" color="primary" size="small">Add Org Code</ui-button>
@@ -173,7 +169,7 @@
                               @change="onPrimaryOrgChange(department,org)"
                               :checked="org.id == department.primary_orgcode_id">
 
-                              </td>
+                            </td>
                             <td><i class="fa fa-trash" @click="onDeleteOrg(org)"></i></td>
                           </tr>
 
@@ -200,47 +196,7 @@
   import _ from 'lodash';
   import toastr from 'toastr';
   import confirm from 'jquery-confirm';
-
-
-
-  class Errors {
-    constructor(){
-      this.errors = {};
-    }
-
-    get(field) {
-      if (this.errors[field]) {
-        this.errors[field][0];
-      }
-    }
-
-    has(field) {
-      return this.errors.hasOwnProperty(field);
-    }
-
-    any() {
-      return Object.key(this.errors).length > 0;
-    }
-
-    record(errors) {
-      this.errors = errors;
-    }
-
-    clear(field) {
-      delete this.errors[field];
-    }
-
-  }
-
-  class Form{
-    constructor(data){
-      this.data = data
-
-      for(let field in data){
-        this[field] = data[field];
-      }
-    }
-  }
+  import Form from '../../utils/Form';
 
 
 
@@ -248,10 +204,6 @@
   {
    data: function() {
     return {
-
-      currentItem: {},
-
-      toggleCheckboxes: false,
 
       departments: [],
 
@@ -269,84 +221,60 @@
         code:"",
       }),
 
-      newDepartment:{
-
-        name:"",
-        primary_contact_name:"",
-        phone:"",
-        email:"",
-        parent_department_id: "",
-
-        name_touched: false,
-        primary_contact_name_touched:false,
-        phone_touched:false,
-        email_touched:false,
-      },
-
-      newOrgcode:{
-
-        name:"",
-        department_id:"",
-        code:"",
-
-        name_touched: false,
-        department_id_touched:false,
-        code_touched:false
-      },
-
-      //Add Department
-
-
       search: '',
       fuse: null,
       results: [],
 
-
     }
   },
   methods: {
+    // parentDepartmentLabel:function(parent_department_id){
+    //   if (this.optionsParentDepartment) {
 
+    //     _.each(optionsParentDepartment, function(option){
+    //       if (option.value == parent_department_id) {
+    //         return option.label
+    //       }
+    //     })
 
-    onSubmitDepartment: function () {
+    //   }
+    // },
+    onSubmitDepartment: function (e) {
       var vm = this
-      // var oldPDId = this.newDepartment.parent_department_id
+      this.formDepartment.beforeSubmit(function(form){
 
-      this.newDepartment.parent_department_id = this.newDepartment.parent_department_id.value
+        if (form.get('parent_department_id')) {
+          form.set('parent_department_id', form.get('parent_department_id').value)
+        }
 
-      console.log(this.newDepartment);
-      axios.post('/api/v1/departments', this.newDepartment)
+      })
+      .post('/api/v1/departments')
       .then(function(response){
-        vm.resetNewDepartment();
+        vm.departments.push(response)
         toastr["success"]("Saved Department")
-
-        vm.departments.push(response.data)
-
       })
-      .catch(error => this.errors = error.response.data)
+      .catch(errors => console.log(this.formDepartment.errors.errors))
     },
-    onSubmitOrgcode: function (e) {
+
+    onSubmitOrgcode: function(e){
       var vm = this
-
-      this.newOrgcode.department_id = $(e.currentTarget).find("[name=department_id]").val()
-      console.log(e, this.newOrgcode);
-
-      axios.post('/api/v1/org', this.newOrgcode)
+      this.formOrg
+      .beforeSubmit(form =>{form.set('department_id', $(e.currentTarget).find("[name=department_id]").val())})
+      .post('/api/v1/org')
       .then(function(response){
-        vm.resetNewDepartment();
+        var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.department_id; });
+        vm.departments[department_index].org.push(response)
         toastr["success"]("Saved Org code")
-        console.log(response.data, vm.departments)
-        var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.data.department_id; });
-        vm.departments[department_index].org.push(response.data)
-
-
       })
-      .catch(error => this.errors = error.response.data)
+      .catch(errors => console.log(this.formOrg.errors.errors))
     },
+
+    onSuccessDepartment: function(){},
+
     onDeleteOrg: function (org) {
       var vm = this
-
-      org._method = "DELETE"
-
+      this.form
+      // org._method = "DELETE"
 
       $.confirm({
         title: 'Delete: ' + org.name,
@@ -360,18 +288,16 @@
             btnClass: 'btn-red',
             action: function () {
 
-              axios.post('/api/v1/org/'+org.id, org)
-              .then(function(response){
-
-
-                var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.data.department_id; });
-                var org_index = _.findIndex(vm.departments[department_index].org, function(org) { return org.id == response.data.id; });
-                vm.departments[department_index].org.splice(org_index, 1)
-
-                toastr["success"]("Deleted Org code")
-                vm.resetNewOrg()
+              vm.formOrg.beforeSubmit(form => {
+                form._method = "DELETE"
               })
-              .catch(error => this.errors = error.response.data)
+              .delete('/api/v1/org/'+org.id)
+              .then(response => {
+                var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.department_id; });
+                var org_index = _.findIndex(vm.departments[department_index].org, function(org) { return org.id == response.id; });
+                vm.departments[department_index].org.splice(org_index, 1)
+              })
+              .catch(error => console.log(vm.formOrg.errors.errors))
 
             }
           },
@@ -385,9 +311,6 @@
     onDeleteDepartment: function (department) {
       var vm = this
 
-      department._method = "DELETE"
-
-
       $.confirm({
         title: 'Delete: ' + department.name,
         content: 'Ok... if your absolutely positive',
@@ -400,17 +323,19 @@
             btnClass: 'btn-red',
             action: function () {
 
-              axios.post('/api/v1/departments/'+department.id, department)
-              .then(function(response){
 
-                var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.data.department_id; });
+              vm.formDepartment.beforeSubmit(form => {
+                form._method = "DELETE"
+                form.id = department.id
+              })
+              .delete('/api/v1/departments/'+vm.formDepartment.id)
+              .then(response => {
+                var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.id; })
                 vm.departments.splice(department_index,1)
 
-                toastr["success"]("Deleted Org code")
-
+                toastr["success"]("Deleted Department")
               })
-              .catch(error => this.errors = error.response.data)
-
+              .catch(error => console.log(vm.formOrg.errors.errors))
             }
           },
           close:{
@@ -420,55 +345,18 @@
       });
     },
 
-
     onPrimaryOrgChange: function (department,org,e) {
-      console.log(e,department,org);
+      console.log(e,department,org, e);
 
       axios.post('/api/v1/departments/'+department.id, {"_method":"PATCH",primary_orgcode_id: org.id})
       .then(function(response){
-
-
-        // var department_index = _.findIndex(vm.departments, function(department) { return department.id == response.data.department_id; });
-        // var org_index = _.findIndex(vm.departments[department_index].org, function(org) { return org.id == response.data.id; });
-        // vm.departments[department_index].org.splice(org_index, 1)
-
         toastr["success"]("Updated Primary Org code")
-        // vm.resetNewOrg()
       })
       .catch(error => this.errors = error.response.data)
-
-
     },
-    resetNewDepartment: function(){
-
-      this.newDepartment = {
-        name:"",
-        primary_orgcode_id:"",
-        primary_contact_name:"",
-        phone:"",
-        email:"",
-        parent_department_id: "",
-
-        name_touched: false,
-        primary_contact_name_touched:false,
-        phone_touched:false,
-        email_touched:false,
-      }
-
-    },
-    resetNewOrg: function(){
-
-      this.newOrgcode ={
-        name:"",
-        department_id:"",
-        code:"",
-        name_touched: false,
-        department_id_touched:false,
-        code_touched:false
-      }
-    }
 
   },
+
   watch: {
     search: function () {
       if (this.search.trim() === '') {
@@ -478,8 +366,8 @@
         this.results = this.fuse.search(this.search.trim())
       }
     }
-
   },
+
   computed:{
     optionsParentDepartment: function(){
       var options = _.map(this.departments,
@@ -488,16 +376,23 @@
         }
       })
       options.unshift({
-        'value': null, 'label':'No Parent'
+        'value': "", 'label':'No Parent'
       });
       return options;
+    },
+    phoneHelp: function(){
+      if ((10 - this.formDepartment.phone.length) !== 0) {
+        return '10 digit phone number: ' + (10 - this.formDepartment.phone.length) + ' left'
+      }
+      return '10 digit phone number'
     }
+
   },
-  mounted()
-  {
+
+  mounted(){
     var vm = this
 
-    axios.get('/api/v1/departments?with=org')
+    axios.get('/api/v1/departments?with=org,parent')
     .then(function (response) {
       vm.departments = response.data;
       toastr["success"]("Loaded departments")
@@ -541,16 +436,11 @@
       "showMethod": "fadeIn",
       "hideMethod": "fadeOut"
     }
+  }
+}
 
-            // $('body').on('click', '.editable', function(){
-            //     $('.editable').jinplace();
-            // });
+</script>
 
-          }
-        }
+<style>
 
-      </script>
-
-      <style>
-
-      </style>
+</style>

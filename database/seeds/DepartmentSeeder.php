@@ -17,7 +17,7 @@ class DepartmentSeeder extends Seeder
             'phone' => "555-1234",
             'email' => "bret-assistante@weber.edu",
             'primary_contact_name' => "Bret Assistante",
-            'parent_department_id' => 1,
+            'parent_department_id' => null,
             ]);
 
         DB::table('departments')->insert([
@@ -26,7 +26,7 @@ class DepartmentSeeder extends Seeder
             'phone' => "555-2345",
             'email' => "someone@weber.edu",
             'primary_contact_name' => "someone",
-            'parent_department_id' => 2,
+            'parent_department_id' => null,
             ]);
 
         DB::table('departments')->insert([
@@ -35,7 +35,7 @@ class DepartmentSeeder extends Seeder
             'phone' => "555-1235",
             'email' => "shelly@weber.edu",
             'primary_contact_name' => "Shelly",
-            'parent_department_id' => 3,
+            'parent_department_id' => 1,
             ]);
 
         DB::table('departments')->insert([
@@ -44,7 +44,7 @@ class DepartmentSeeder extends Seeder
             'phone' => "555-1236",
             'email' => "allan@weber.edu",
             'primary_contact_name' => "Allan",
-            'parent_department_id' => 4,
+            'parent_department_id' => 3,
             ]);
 
     }

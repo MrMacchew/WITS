@@ -16,6 +16,13 @@ import UiButton from 'keen-ui/src/UiButton.vue';
 
 Vue.use(KeenUI);
 
+// import Vuetiful from 'node_modules/vuetiful/dist/components/components.bundle.js'
+// Vue.use(Vuetiful);
+
+
+
+
+
 // Vue.component('example', require('./components/Example.vue'));
 
 Vue.component('user-table', require('./components/wits/UserTable.vue'));

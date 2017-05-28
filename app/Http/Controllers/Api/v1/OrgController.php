@@ -40,6 +40,12 @@ class OrgController extends ApiController
      */
     public function store(Request $request)
     {
+        $validate = $this->validate($request, [
+        'name' => 'required',
+        'department_id' => 'required',
+        'code' => 'numeric',
+        ]);
+
         $org = Org::create($request->all());
         return $org;
     }
