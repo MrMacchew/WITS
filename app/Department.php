@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use \Venturecraft\Revisionable\RevisionableTrait;
-    
+
     public static function boot(){
         parent::boot();
     }
@@ -40,6 +40,11 @@ class Department extends Model
 
     public function parent(){
         return $this->hasOne('App\Department', 'id', 'parent_department_id');
+    }
+
+    public function buildDepartRoom()
+    {
+        return $this->hasMany('App\BuildDepartRoom');
     }
 
 

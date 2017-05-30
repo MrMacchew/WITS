@@ -257,7 +257,7 @@
             <div class="collapse" id="addSoftware">
               <div class="well">
                 <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
-                  <h4>Add Software <span>to {{currentItem.name || currentItem.number}}</span></h4>
+                  <h4>Add Software to <span>{{currentItem.name || currentItem.number}}</span></h4>
 
                   <div class="form-group">
                     <label class="col-sm-1 control-label text-capitalize">Title</label>
@@ -331,7 +331,7 @@
           <div role="tabpanel" class="tab-pane" id="department">
 
             <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
-              <h4>Add Software <span>to {{currentItem.name || currentItem.number}}</span></h4>
+              <h4>Add Department to <span>{{currentItem.name || currentItem.number}}</span></h4>
 
               <ui-select
             has-search
@@ -339,7 +339,7 @@
             :options="departments"
             v-model="selectedDepartment"
             :keys="{label: 'name', value:'id'}"
-            :change="onSelectDepartment"
+            @change="onSelectDepartment"
             />
 
 
@@ -347,10 +347,10 @@
 
 
             </form>
-          
-            
 
-            
+
+
+
 
 
           </div>
@@ -1017,40 +1017,27 @@
         })
         .catch(vm.handleError);
       },
-      
+
       onSelectDepartment: function(e){
+
+        console.log(e);
         var vm = this;
-
-        this.newDepartment.department_id = this.currentItem.department
-
-        if (this.newDepartment.title == "") {
-          toastr["warning"]("Need Title of software")
-          return
-        }
-
-         
-
-        // this.newSoftware
 
         axios.post('/api/v1/departments', this.newSoftware)
         .then(function (response) {
           console.log(response);
 
-          vm.campuses[vm.currentItem.index.campus]
-              .buildings[vm.currentItem.index.building]
-              .rooms[vm.currentItem.index.room]
-              .software.push(response.data)
+          // vm.campuses[vm.currentItem.index.campus]
+          //     .buildings[vm.currentItem.index.building]
+          //     .rooms[vm.currentItem.index.room]
+          //     .software.push(response.data)
 
 
 
-          toastr["success"]("Added Software: " + response.data.title)
+          toastr["success"]("Room : " + response.data.title)
 
-          vm.newSoftware = {
-            title: '',
-            filename: '',
-            url: '',
-          }
-          $('#software-btn').trigger('click')
+
+
         })
         .catch(vm.handleError);
       },
@@ -1189,7 +1176,7 @@
           i = _.findIndex(this.campuses, function(campus) { return campus.id == vm.selectedCampus.id; });
           j = _.findIndex(this.campuses[i].buildings, function(building) { return building.id == vm.selectedBuilding.id; });
           k = _.findIndex(this.campuses[i].buildings[j].rooms, function(room) { return room.id == vm.selectedRoom.id; });
-          console.log(i,j,k)
+          // console.log(i,j,k)
           currentItem.index = {campus: i, building: j, room: k} //this.campuses[i].buildings[j].rooms[k]
           //----//
 
@@ -1207,7 +1194,7 @@
 
           i = _.findIndex(this.campuses, function(campus) { return campus.id == vm.selectedCampus.id; });
           j = _.findIndex(this.campuses[i].buildings, function(building) { return building.id == vm.selectedBuilding.id; });
-          console.log(i,j)
+          // console.log(i,j)
           currentItem.index = {campus: i, building: j, room: null}
           //----//
           return currentItem;
@@ -1224,7 +1211,7 @@
 
           i = _.findIndex(this.campuses, function(campus) { return campus.id == vm.selectedCampus.id; });
 
-          console.log(i)
+          // console.log(i)
           currentItem.index = {campus: i, building: null, room: null}
           //----//
 

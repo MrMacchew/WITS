@@ -42,4 +42,10 @@ class Room extends Model
         return $this->belongsTo('App\Building');
     }
 
+    public function buildDepartRoom()
+    {
+        return $this->hasMany('App\BuildDepartRoom');
+    }
+
+
 }

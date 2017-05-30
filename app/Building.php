@@ -44,4 +44,9 @@ class Building extends Model
         return $this->hasMany('App\Room', 'building_id', 'id');
     }
 
+    public function buildDepartRoom()
+    {
+        return $this->hasMany('App\BuildDepartRoom');
+    }
+
 }

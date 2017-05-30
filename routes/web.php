@@ -22,9 +22,30 @@ Route::get('/logout', [ 'as' => 'logout', 'uses' => 'Auth\LoginController@logout
 Route::post('/saml-response', 'Auth\LoginController@saml');
 
 Route::get('/browserSync/login/{user}', function($user){
-	$user = \App\User::where('username',$user) -> first();
-	Auth::login($user, true);
-	return redirect('/dashboard');
+    $user = \App\User::where('username',$user) -> first();
+    Auth::login($user, true);
+    return redirect('/dashboard');
+});
+
+
+
+Route::get('/test', function(){
+     $buildings = \App\Building::with('BuildDepartRoom.room', 'BuildDepartRoom.department', 'BuildDepartRoom.department.org')->get();
+     $rooms = \App\Room::with('BuildDepartRoom.building', 'BuildDepartRoom.department')->first();
+     $departments = \App\Department::with('BuildDepartRoom.building', 'BuildDepartRoom.room')->first();
+
+
+
+// $user->teamsRolesUsers->first()->team;
+// $user->teamsRolesUsers->first()->role;
+
+     // dump($buildings->toArray());
+     // dump($buildings->first()->buildDepartRoom->first()->department->get()->first()->org->first()->code);
+     // dump($rooms->toArray());
+     // dump($departments->toArray());
+
+     return $buildings;
+
 });
 
 

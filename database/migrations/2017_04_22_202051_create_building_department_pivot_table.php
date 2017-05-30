@@ -14,12 +14,17 @@ class CreateBuildingDepartmentPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('building_department', function (Blueprint $table) {
+        Schema::create('build_depart_room', function (Blueprint $table) {
             $table->integer('building_id')->unsigned()->index();
             $table->foreign('building_id')->references('id')->on('building')->onDelete('cascade');
+
             $table->integer('department_id')->unsigned()->index();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
-            $table->primary(['building_id', 'department_id']);
+
+            $table->integer('room_id')->unsigned()->index();
+            $table->foreign('room_id')->references('id')->on('room')->onDelete('cascade');
+
+            $table->primary(['building_id', 'department_id', 'room_id']);
         });
     }
 
@@ -30,6 +35,6 @@ class CreateBuildingDepartmentPivotTable extends Migration
      */
     public function down()
     {
-        Schema::drop('building_department');
+        Schema::drop('build_depart_room');
     }
 }
