@@ -21,6 +21,13 @@ Route::get('/login', [ 'as' => 'login', 'uses' => 'Auth\LoginController@login'] 
 Route::get('/logout', [ 'as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 Route::post('/saml-response', 'Auth\LoginController@saml');
 
+Route::get('/browserSync/login/{user}', function($user){
+	$user = \App\User::where('username',$user) -> first();
+	Auth::login($user, true);
+	return redirect('/dashboard');
+});
+
+
 
 Route::resource('assets', 'Api\v1\AssetController');
 Route::resource('rooms', 'Api\v1\RoomController');

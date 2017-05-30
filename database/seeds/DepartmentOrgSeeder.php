@@ -13,7 +13,7 @@ class DepartmentOrgSeeder extends Seeder
     {
         // factory(App\Department::class, 10)->create();
 
-        factory(App\Department::class, 10)->create();
+        factory(App\Department::class, 50)->create();
 
         $department = App\Department::find(1);
         $department->org()->save(factory(App\Org::class)->make());

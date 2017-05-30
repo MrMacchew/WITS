@@ -34,7 +34,4 @@ class Campus extends Model
         return $this->hasMany('App\Building', 'campus_id', 'id');;
     }
 
-    public function allBuildingsRooms() {
-        return $this->userRelations->merge($this->relatedUserRelations);
-    }
 }

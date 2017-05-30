@@ -56,10 +56,10 @@ class SoftwareController extends ApiController
     public function show(Request $request, Software $software)
     {
         $software = Software::find($software->id);
-       $software->fill($request->all());
+        $software->fill($request->all());
 
-       $software->save();
-       return $software;
+        $software->save();
+        return $software;
     }
 
     /**

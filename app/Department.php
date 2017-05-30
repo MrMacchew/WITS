@@ -42,4 +42,5 @@ class Department extends Model
         return $this->hasOne('App\Department', 'id', 'parent_department_id');
     }
 
+
 }

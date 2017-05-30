@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
             // $this->call(BuildingDepartmentSeeder::class);
             $this->call(UsersSeeder::class);
-            // $this->call(DepartmentOrgSeeder::class);
+            $this->call(DepartmentOrgSeeder::class);
             // $this->call(RoomStyleSeeder::class);
             // $this->call(SupportSeeder::class);
             $this->call(RoomSoftwareSeeder::class);

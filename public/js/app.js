@@ -43607,6 +43607,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
 
 
 
@@ -43789,17 +43790,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   },
 
   computed: {
-    optionsParentDepartment: function optionsParentDepartment() {
-      var options = __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.map(this.departments, function (obj) {
-        return {
-          'value': obj.id, 'label': obj.name
-        };
-      });
-      options.unshift({
-        'value': "", 'label': 'No Parent'
-      });
-      return options;
-    },
     phoneHelp: function phoneHelp() {
       if (10 - this.formDepartment.phone.length !== 0) {
         return '10 digit phone number: ' + (10 - this.formDepartment.phone.length) + ' left';
@@ -43817,14 +43807,27 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       __WEBPACK_IMPORTED_MODULE_2_toastr___default.a["success"]("Loaded departments");
 
       vm.fuse = new __WEBPACK_IMPORTED_MODULE_0_fuse_js___default.a(response.data, {
-        caseSensitive: false,
+        caseSensitive: true,
         tokenize: true,
         threshold: 0.6,
         location: 0,
         distance: 900,
         maxPatternLength: 32,
         minMatchCharLength: 1,
-        keys: ["name", "email", "org.code"]
+        keys: [{
+          name: 'name',
+          weight: .7
+        }, {
+          name: 'email',
+          weight: 0.1
+        }, {
+          name: 'org.code',
+          weight: 0.1
+        }, {
+          name: 'parent.name',
+          weight: 0.1
+        }]
+
       });
 
       vm.results = vm.departments;
@@ -44225,6 +44228,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -44258,6 +44284,9 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
       currentCampus: {},
       currentBuilding: {},
       currentRoom: {},
+
+      departments: [],
+      selectedDepartment: {},
 
       roomStyles: [],
       roomStyle: '',
@@ -44784,6 +44813,34 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
       }).catch(vm.handleError);
     },
 
+    onSelectDepartment: function onSelectDepartment(e) {
+      var vm = this;
+
+      this.newDepartment.department_id = this.currentItem.department;
+
+      if (this.newDepartment.title == "") {
+        __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["warning"]("Need Title of software");
+        return;
+      }
+
+      // this.newSoftware
+
+      axios.post('/api/v1/departments', this.newSoftware).then(function (response) {
+        console.log(response);
+
+        vm.campuses[vm.currentItem.index.campus].buildings[vm.currentItem.index.building].rooms[vm.currentItem.index.room].software.push(response.data);
+
+        __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["success"]("Added Software: " + response.data.title);
+
+        vm.newSoftware = {
+          title: '',
+          filename: '',
+          url: ''
+        };
+        $('#software-btn').trigger('click');
+      }).catch(vm.handleError);
+    },
+
     onDeleteSoftware: function onDeleteSoftware(software) {
       var vm = this;
       var data = software;
@@ -44980,6 +45037,10 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
 
     axios.get('/api/v1/roomstyle').then(function (response) {
       vm.roomStyles = response.data;
+    }).catch(vm.handleError);
+
+    axios.get('/api/v1/departments').then(function (response) {
+      vm.departments = response.data;
     }).catch(vm.handleError);
 
     __WEBPACK_IMPORTED_MODULE_3_toastr___default.a.options = {
@@ -48613,7 +48674,7 @@ exports.push([module.i, "\n.action-link[data-v-32017756] {\n    cursor: pointer;
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(5)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 /* 104 */
@@ -70163,7 +70224,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "has-search": "",
       "floating-label": "",
       "label": "Parent Department",
-      "options": _vm.optionsParentDepartment,
+      "options": _vm.departments,
+      "keys": {
+        label: 'name',
+        value: 'id'
+      },
       "error": _vm.formDepartment.errors.get('parent_department_id'),
       "invalid": !!_vm.formDepartment.errors.get('parent_department_id')
     },
@@ -72041,7 +72106,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "role": "tabpanel",
       "id": "department"
     }
-  }, [_vm._v("\n            department\n          ")]), _vm._v(" "), _c('div', {
+  }, [_c('form', {
+    staticClass: "form-horizontal",
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        _vm.onAddSoftware($event)
+      }
+    }
+  }, [_c('h4', [_vm._v("Add Software "), _c('span', [_vm._v("to " + _vm._s(_vm.currentItem.name || _vm.currentItem.number))])]), _vm._v(" "), _c('ui-select', {
+    attrs: {
+      "has-search": "",
+      "label": "Room's Department ",
+      "options": _vm.departments,
+      "keys": {
+        label: 'name',
+        value: 'id'
+      },
+      "change": _vm.onSelectDepartment
+    },
+    model: {
+      value: (_vm.selectedDepartment),
+      callback: function($$v) {
+        _vm.selectedDepartment = $$v
+      }
+    }
+  })], 1)]), _vm._v(" "), _c('div', {
     staticClass: "tab-pane",
     attrs: {
       "role": "tabpanel",

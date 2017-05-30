@@ -44,7 +44,6 @@ class DepartmentController extends ApiController
         $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
         $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
 
-
         return Department::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 

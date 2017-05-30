@@ -34,7 +34,7 @@ class Building extends Model
         return $this->belongsTo('App\Campus');
     }
 
-    public function department()
+    public function departments()
     {
         return $this->belongsToMany('App\Department', 'building_department', 'building_id', 'department_id');
     }

@@ -51,7 +51,8 @@
           has-search
           floating-label
           label="Parent Department"
-          :options="optionsParentDepartment"
+          :options="departments"
+          :keys="{label: 'name', value:'id'}"
           v-model="formDepartment.parent_department_id"
           :error="formDepartment.errors.get('parent_department_id')"
           :invalid="!!formDepartment.errors.get('parent_department_id')"
@@ -369,17 +370,6 @@
   },
 
   computed:{
-    optionsParentDepartment: function(){
-      var options = _.map(this.departments,
-        function(obj){return {
-          'value': obj.id, 'label':obj.name
-        }
-      })
-      options.unshift({
-        'value': "", 'label':'No Parent'
-      });
-      return options;
-    },
     phoneHelp: function(){
       if ((10 - this.formDepartment.phone.length) !== 0) {
         return '10 digit phone number: ' + (10 - this.formDepartment.phone.length) + ' left'
@@ -397,20 +387,35 @@
       vm.departments = response.data;
       toastr["success"]("Loaded departments")
 
-
       vm.fuse = new Fuse(response.data, {
-        caseSensitive: false,
+        caseSensitive: true,
         tokenize: true,
         threshold: 0.6,
         location: 0,
         distance: 900,
         maxPatternLength: 32,
         minMatchCharLength: 1,
-        keys: [
-        "name",
-        "email",
-        "org.code"
-        ]
+        keys: [{
+          name: 'name',
+          weight: .7
+        },
+        {
+          name: 'email',
+          weight: 0.1
+        }, 
+        {
+          name: 'org.code',
+          weight: 0.1
+        }, 
+        {
+          name: 'parent.name',
+          weight: 0.1
+        }]
+
+        
+
+
+
       });
 
       vm.results = vm.departments

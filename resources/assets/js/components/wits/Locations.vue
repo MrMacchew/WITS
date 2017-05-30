@@ -245,7 +245,7 @@
               <div class="form-group">
                 <button type="submit" class="btn btn-default">Update Room</button>
               </div>
-              
+
             </form>
           </div>
 
@@ -329,7 +329,30 @@
           </div>
 
           <div role="tabpanel" class="tab-pane" id="department">
-            department
+
+            <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
+              <h4>Add Software <span>to {{currentItem.name || currentItem.number}}</span></h4>
+
+              <ui-select
+            has-search
+            label="Room's Department "
+            :options="departments"
+            v-model="selectedDepartment"
+            :keys="{label: 'name', value:'id'}"
+            :change="onSelectDepartment"
+            />
+
+
+
+
+
+            </form>
+          
+            
+
+            
+
+
           </div>
 
           <div role="tabpanel" class="tab-pane" id="media">
@@ -393,10 +416,13 @@
         currentBuilding: {},
         currentRoom: {},
 
+        departments:[],
+        selectedDepartment: {},
+
         roomStyles: [],
         roomStyle: '',
 
-        
+
         newCampus: {
           name:'',
           campus_code:'',
@@ -416,11 +442,11 @@
         center: {lat: 41.192638470302114, lng: -111.9427574918045}, //{lat: 41.192638470302114, lng: -111.9427574918045}
 
         markers: [], //[{position: JSON.parse(currentItem.latlong)}],
-        
+
         infoContent: '',
-        
+
         toggleAddSoftware: false,
-        
+
         newSoftware: {
           title: '',
           filename: '',
@@ -991,6 +1017,43 @@
         })
         .catch(vm.handleError);
       },
+      
+      onSelectDepartment: function(e){
+        var vm = this;
+
+        this.newDepartment.department_id = this.currentItem.department
+
+        if (this.newDepartment.title == "") {
+          toastr["warning"]("Need Title of software")
+          return
+        }
+
+         
+
+        // this.newSoftware
+
+        axios.post('/api/v1/departments', this.newSoftware)
+        .then(function (response) {
+          console.log(response);
+
+          vm.campuses[vm.currentItem.index.campus]
+              .buildings[vm.currentItem.index.building]
+              .rooms[vm.currentItem.index.room]
+              .software.push(response.data)
+
+
+
+          toastr["success"]("Added Software: " + response.data.title)
+
+          vm.newSoftware = {
+            title: '',
+            filename: '',
+            url: '',
+          }
+          $('#software-btn').trigger('click')
+        })
+        .catch(vm.handleError);
+      },
 
       onDeleteSoftware: function (software) {
         var vm = this
@@ -1181,6 +1244,8 @@
     mounted() {
       var vm = this;
 
+
+
       axios.get('/api/v1/campus?with=buildings,buildings.rooms,buildings.rooms.software')
       .then(function (response) {
         vm.campuses = response.data;
@@ -1194,6 +1259,12 @@
       })
       .catch(vm.handleError);
 
+
+      axios.get('/api/v1/departments')
+      .then(function(response){
+        vm.departments = response.data
+      })
+      .catch(vm.handleError);
 
       toastr.options = {
         "closeButton": true,
