@@ -34,5 +34,29 @@ class DepartmentOrgSeeder extends Seeder
         $department->org()->save(factory(App\Org::class)->make());
 
 
+        DB::table('org')->insert([
+            'name' => "Admin",
+            'department_id' => 5,
+            'code' => 25000
+            ]);
+
+        DB::table('org')->insert([
+            'name' => "Botany",
+            'department_id' => 5,
+            'code' => 25100
+            ]);
+
+        DB::table('org')->insert([
+            'name' => "Zoology",
+            'department_id' => 5,
+            'code' => 25700
+            ]);
+
+        DB::table('org')->insert([
+            'name' => "Spares",
+            'department_id' => 5,
+            'code' => 25001
+            ]);
+
     }
 }

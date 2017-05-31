@@ -39,7 +39,7 @@ class Department extends Model
     // }
 
     public function rooms(){
-        return $this->hasMany('App\Room', 'id', 'room_id');
+        return $this->belongsToMany('App\Room');
     }
 
 

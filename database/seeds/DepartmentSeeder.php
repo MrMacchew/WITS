@@ -46,6 +46,14 @@ class DepartmentSeeder extends Seeder
             'primary_contact_name' => "Allan",
             'parent_department_id' => 3,
             ]);
+        DB::table('departments')->insert([
+            'name' => "College of Science",
+            // 'primary_orgcode_id' => 1,
+            'phone' => "8016267061",
+            'email' => "tylerhardy@weber.edu",
+            'primary_contact_name' => "Tyler Hardy",
+            'parent_department_id' => 3,
+            ]);
 
     }
 }

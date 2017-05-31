@@ -114,4 +114,11 @@ class RoomController extends ApiController
         $room->delete();
         return $room;
     }
+
+
+    public function syncDepartments(Request $request, Room $room)
+    {
+        // return $request->all();
+        return $room->departments()->sync($request->all());
+    }
 }

@@ -33,9 +33,9 @@ class Room extends Model
         return $this->morphMany('App\Media', 'mediable');
     }
 
-    public function department()
+    public function departments()
     {
-    	return $this->hasOne('App\Department');
+    	return $this->belongsToMany('App\Department');
     }
 
     public function software()

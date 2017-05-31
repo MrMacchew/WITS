@@ -331,19 +331,21 @@
           <div role="tabpanel" class="tab-pane" id="department">
 
             <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
-              <h4>Add Department to <span>{{currentItem.name || currentItem.number}}</span></h4>
-              
+              <h4>Add Departments to <span>{{currentItem.name || currentItem.number}}</span></h4>
+
 <!-- v-model="selectedDepartment" -->
-              <ui-select
+
+
+            <ui-select v-if="currentItem.departments"
+            floating-label
             has-search
+            multiple
             label="Room's Department "
             :options="departments"
-            v-model="selectedDepartment"
+            v-model="currentItem.departments"
             :keys="{label: 'name', value:'id'}"
             @change="onSelectDepartment"
             />
-
-
 
 
 
@@ -1021,16 +1023,13 @@
 
       onSelectDepartment: function(e){
 
-        console.log('onSelectDepartment', e, this.selectedDepartment);
+        console.log('onSelectDepartment', e, this.currentItem.departments);
         var vm = this;
+        var data = _.map(this.currentItem.departments, function (i) {return i.id})
 
-        axios.post('/api/v1/departments/BuildDepartRoom', {
-          building_id: vm.selectedBuilding.id,
-          department_id: vm.selectedDepartment.id,
-          room_id: vm.selectedRoom.id
-        })
+        axios.post('/api/v1/rooms/'+ this.currentItem.id +'/sync/departments', data)
         .then(function (response) {
-          console.log(response);
+          console.log(response, response.config.data);
 
           // vm.campuses[vm.currentItem.index.campus]
           //     .buildings[vm.currentItem.index.building]
@@ -1232,8 +1231,11 @@
       var vm = this;
 
 
-
-      axios.get('api/v1/campus?with=buildings,buildings.rooms,buildings.rooms.software,buildings.buildDepartRoom.department')
+      var $with = [
+      'buildings.rooms.software',
+      'buildings.rooms.departments',
+      ]
+      axios.get('api/v1/campus?with='+ $with.join())
       .then(function (response) {
         vm.campuses = response.data;
         toastr["success"]("Loaded Locations")
@@ -1247,7 +1249,7 @@
       .catch(vm.handleError);
 
 
-      axios.get('/api/v1/departments')
+      axios.get('/api/v1/departments?fields=id,name')
       .then(function(response){
         vm.departments = response.data
       })
