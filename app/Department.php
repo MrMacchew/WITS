@@ -28,24 +28,29 @@ class Department extends Model
         'email'
     ];
 
-    public function org()
-    {
-    	return $this->hasMany('App\Org');
+
+    public function org(){
+    	return $this->hasMany('App\Org', 'department_id', 'id');
     }
 
-    public function buildings()
-    {
-        return $this->belongsToMany('App\Building', 'building_department', 'department_id', 'building_id');
+    // public function buildings()
+    // {
+    //     return $this->belongsToMany('App\Building', 'building_department', 'department_id', 'building_id');
+    // }
+
+    public function rooms(){
+        return $this->hasMany('App\Room', 'id', 'room_id');
+    }
+
+
+    public function users(){
+        return $this->hasMany('App\User', 'user_id', 'id');
     }
 
     public function parent(){
         return $this->hasOne('App\Department', 'id', 'parent_department_id');
     }
 
-    public function buildDepartRoom()
-    {
-        return $this->hasMany('App\BuildDepartRoom');
-    }
 
 
 }

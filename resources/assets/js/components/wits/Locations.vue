@@ -332,7 +332,8 @@
 
             <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
               <h4>Add Department to <span>{{currentItem.name || currentItem.number}}</span></h4>
-
+              
+<!-- v-model="selectedDepartment" -->
               <ui-select
             has-search
             label="Room's Department "
@@ -1020,10 +1021,14 @@
 
       onSelectDepartment: function(e){
 
-        console.log(e);
+        console.log('onSelectDepartment', e, this.selectedDepartment);
         var vm = this;
 
-        axios.post('/api/v1/departments', this.newSoftware)
+        axios.post('/api/v1/departments/BuildDepartRoom', {
+          building_id: vm.selectedBuilding.id,
+          department_id: vm.selectedDepartment.id,
+          room_id: vm.selectedRoom.id
+        })
         .then(function (response) {
           console.log(response);
 
@@ -1032,12 +1037,7 @@
           //     .rooms[vm.currentItem.index.room]
           //     .software.push(response.data)
 
-
-
           toastr["success"]("Room : " + response.data.title)
-
-
-
         })
         .catch(vm.handleError);
       },
@@ -1233,7 +1233,7 @@
 
 
 
-      axios.get('/api/v1/campus?with=buildings,buildings.rooms,buildings.rooms.software')
+      axios.get('api/v1/campus?with=buildings,buildings.rooms,buildings.rooms.software,buildings.buildDepartRoom.department')
       .then(function (response) {
         vm.campuses = response.data;
         toastr["success"]("Loaded Locations")

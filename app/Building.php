@@ -34,19 +34,9 @@ class Building extends Model
         return $this->belongsTo('App\Campus');
     }
 
-    public function departments()
-    {
-        return $this->belongsToMany('App\Department', 'building_department', 'building_id', 'department_id');
-    }
-
     public function rooms()
     {
         return $this->hasMany('App\Room', 'building_id', 'id');
-    }
-
-    public function buildDepartRoom()
-    {
-        return $this->hasMany('App\BuildDepartRoom');
     }
 
 }

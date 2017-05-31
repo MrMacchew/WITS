@@ -30,7 +30,12 @@ class Room extends Model
     protected $table = "room";
     public function media()
     {
-    	return $this->morphMany('App\Media', 'mediable');
+        return $this->morphMany('App\Media', 'mediable');
+    }
+
+    public function department()
+    {
+    	return $this->hasOne('App\Department');
     }
 
     public function software()
@@ -40,11 +45,6 @@ class Room extends Model
 
     public function building(){
         return $this->belongsTo('App\Building');
-    }
-
-    public function buildDepartRoom()
-    {
-        return $this->hasMany('App\BuildDepartRoom');
     }
 
 

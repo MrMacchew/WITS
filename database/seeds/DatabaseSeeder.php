@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         Eloquent::unguard();
 
         //PRODUCTION SEEDS
+        
         //roles & properties
         $this->call(PermissionSeeder::class);
         $this->call(CampusSeeder::class);

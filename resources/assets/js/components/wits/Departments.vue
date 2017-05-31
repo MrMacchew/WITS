@@ -388,7 +388,7 @@
       toastr["success"]("Loaded departments")
 
       vm.fuse = new Fuse(response.data, {
-        caseSensitive: true,
+        caseSensitive: false,
         tokenize: true,
         threshold: 0.6,
         location: 0,

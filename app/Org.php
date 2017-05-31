@@ -26,6 +26,7 @@ class Org extends Model
         'code',
     ];
 
+
     public function departments(){
     	return  $this->belongsTo('App\Department', 'department_id');
     }

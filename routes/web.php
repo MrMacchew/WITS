@@ -31,6 +31,7 @@ Route::get('/browserSync/login/{user}', function($user){
 
 Route::get('/test', function(){
      $buildings = \App\Building::with('BuildDepartRoom.room', 'BuildDepartRoom.department', 'BuildDepartRoom.department.org')->get();
+     // $buildings = \App\Building::with('BuildDepartRoom.room', 'BuildDepartRoom.department', 'BuildDepartRoom.department.org');
      $rooms = \App\Room::with('BuildDepartRoom.building', 'BuildDepartRoom.department')->first();
      $departments = \App\Department::with('BuildDepartRoom.building', 'BuildDepartRoom.room')->first();
 
