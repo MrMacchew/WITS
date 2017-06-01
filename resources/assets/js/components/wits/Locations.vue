@@ -331,21 +331,13 @@
           <div role="tabpanel" class="tab-pane" id="department">
 
             <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
-              <h4>Add Departments to <span>{{currentItem.name || currentItem.number}}</span></h4>
+              <!-- <h4>Add Departments to <span>{{currentItem.name || currentItem.number}}</span></h4> -->
 
-<!-- v-model="selectedDepartment" -->
+        <!-- <multiselect v-model="currentItem.departments" :options="departments"/> -->
+
+        <span>Hey</span>
 
 
-            <ui-select v-if="currentItem.departments"
-            floating-label
-            has-search
-            multiple
-            label="Room's Department "
-            :options="departments"
-            v-model="currentItem.departments"
-            :keys="{label: 'name', value:'id'}"
-            @change="onSelectDepartment"
-            />
 
 
 
@@ -389,6 +381,7 @@
   import Vue from 'vue';
   import toastr from 'toastr';
   import confirm from 'jquery-confirm';
+  import _ from 'lodash';
 
 
   Vue.use(VueGoogleMaps, {
@@ -399,6 +392,8 @@
   });
 
   export default{
+
+    components: { Multiselect },
     data: function(){
       return {
         search: '',

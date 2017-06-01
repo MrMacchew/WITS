@@ -22,7 +22,6 @@ class RoomController extends ApiController
         $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
 
 
-
         return Room::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
     }
 
@@ -119,6 +118,7 @@ class RoomController extends ApiController
     public function syncDepartments(Request $request, Room $room)
     {
         // return $request->all();
+        $room->departments()->detach();
         return $room->departments()->sync($request->all());
     }
 }

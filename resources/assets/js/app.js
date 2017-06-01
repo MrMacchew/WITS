@@ -19,6 +19,8 @@ Vue.use(KeenUI);
 // import Vuetiful from 'node_modules/vuetiful/dist/components/components.bundle.js'
 // Vue.use(Vuetiful);
 
+import Multiselect from 'vue-multiselect'
+Vue.component('multiselect', Multiselect)
 
 
 
