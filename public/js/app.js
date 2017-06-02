@@ -44262,9 +44262,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
-//
-//
-//
 
 
 
@@ -44398,7 +44395,7 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
 
       axios.post('/api/v1/campus', this.newCampus).then(function (response) {
         console.log(response);
-        vm.campuses.push(response.data);
+        vm.campuses.unshift(response.data);
 
         __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["success"]("Added Campus: " + response.data.name);
         __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["info"]("Place a marker for " + response.data.name);
@@ -44421,7 +44418,7 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
       }
 
       axios.post('/api/v1/buildings', this.newBuilding).then(function (response) {
-        vm.campuses[vm.currentItem.index.campus].buildings.push(response.data);
+        vm.campuses[vm.currentItem.index.campus].buildings.unshift(response.data);
 
         __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["success"]("Added building: " + response.data.name);
         __WEBPACK_IMPORTED_MODULE_3_toastr___default.a["info"]("Place a marker for " + response.data.name);
@@ -44451,7 +44448,7 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
 
       axios.post('/api/v1/rooms', this.newRoom).then(function (response) {
         try {
-          vm.campuses[vm.currentItem.index.campus].buildings[vm.currentItem.index.building].rooms.push(response.data);
+          vm.campuses[vm.currentItem.index.campus].buildings[vm.currentItem.index.building].rooms.unshift(response.data);
         } catch (e) {
           // statements to handle any exceptions
           console.log(e); // pass exception object to error handler
@@ -45033,6 +45030,7 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
 
       return { type: null, index: { campus: null, building: null, room: null } };
     }
+
   },
 
   filters: {
@@ -72972,25 +72970,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "role": "tab",
       "data-toggle": "tab"
     }
-  }, [_vm._v("media")])]), _vm._v(" "), _c('li', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.currentItem.type == 'room'),
-      expression: "currentItem.type == 'room'"
-    }],
-    attrs: {
-      "role": "presentation"
-    }
-  }, [_c('a', {
-    attrs: {
-      "href": "#something",
-      "aria-controls": "something",
-      "role": "tab",
-      "data-toggle": "tab",
-      "cl": "text-transform: capitalize"
-    }
-  }, [_vm._v("Something")])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("media")])])]), _vm._v(" "), _c('div', {
     staticClass: "tab-content"
   }, [_c('div', {
     staticClass: "tab-pane active",
@@ -73336,7 +73316,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "role": "tabpanel",
       "id": "inventory"
     }
-  }, [_vm._v("\n            inventory\n          ")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n       inventory\n      ")]), _vm._v(" "), _c('div', {
     staticClass: "tab-pane",
     attrs: {
       "role": "tabpanel",
@@ -73352,7 +73332,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', [_c('label', {
     staticClass: "typo__label"
-  }, [_vm._v("Single select / dropdown")]), _vm._v(" "), _c('multiselect', {
+  }, [_vm._v("Select Departments")]), _vm._v(" "), _c('multiselect', {
     attrs: {
       "options": _vm.departments,
       "multiple": true,
@@ -73385,13 +73365,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "role": "tabpanel",
       "id": "media"
     }
-  }, [_vm._v("\n            media\n          ")]), _vm._v(" "), _c('div', {
-    staticClass: "tab-pane",
-    attrs: {
-      "role": "tabpanel",
-      "id": "something"
-    }
-  }, [_vm._v("\n            something\n          ")])])])], 2)])])
+  }, [_vm._v("\n      media\n     ")])])])], 2)])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "panel-heading"
