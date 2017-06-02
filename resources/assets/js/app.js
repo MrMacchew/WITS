@@ -16,11 +16,8 @@ import UiButton from 'keen-ui/src/UiButton.vue';
 
 Vue.use(KeenUI);
 
-// import Vuetiful from 'node_modules/vuetiful/dist/components/components.bundle.js'
-// Vue.use(Vuetiful);
-
-import Multiselect from 'vue-multiselect'
-Vue.component('multiselect', Multiselect)
+import Multiselect from 'vue-multiselect/dist/vue-multiselect.min.js'
+Vue.component('multiselect',Multiselect)
 
 
 

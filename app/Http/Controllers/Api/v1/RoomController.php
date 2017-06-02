@@ -117,8 +117,12 @@ class RoomController extends ApiController
 
     public function syncDepartments(Request $request, Room $room)
     {
-        // return $request->all();
-        $room->departments()->detach();
-        return $room->departments()->sync($request->all());
+        $data = collect($request->all());
+        // return $data->pluck('id');
+        $ids = $room->departments()->sync($data->pluck('id'));
+        $departments['attached'] = \App\Department::find($ids["attached"]);
+        $departments['detached'] = \App\Department::find($ids["detached"]);
+        $departments['updated'] = \App\Department::find($ids["updated"]);
+        return $departments;
     }
 }

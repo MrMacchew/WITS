@@ -20,7 +20,7 @@
     "metismenu": "^2.7.0",
     "toastr": "^2.1.2",
     "vue": "^2.1.10",
-    "vue-multiselect": "^1.1.4",
+    "vue-multiselect": "^2.0.0-beta.15",
     "vue2-google-maps": "^0.7.5",
     "vuejs-autocomplete": "^0.1.1",
     "vuetiful": "git+ssh://git@github.com/andrewcourtice/vuetiful.git"

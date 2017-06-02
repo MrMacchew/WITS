@@ -332,10 +332,28 @@
 
             <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
               <!-- <h4>Add Departments to <span>{{currentItem.name || currentItem.number}}</span></h4> -->
+          <div>
+              <label class="typo__label">Single select / dropdown</label>
 
-        <!-- <multiselect v-model="currentItem.departments" :options="departments"/> -->
+              <multiselect
+              v-model="currentItem.departments"
+              :options="departments"
+              :multiple="true"
+              track-by="name"
+              label="name"
+              :hideSelected="true"
+              :close-on-select="false"
+              @input="onSelectDepartment"
+              >
+              <template slot="option" scope="props">
+                <div class="option__desc">
+                    <span class="option__title">{{ props.option.name }}</span>
+                </div>
+            </template>
+        </multiselect>
 
-        <span>Hey</span>
+
+          </div>
 
 
 
@@ -392,8 +410,6 @@
   });
 
   export default{
-
-    components: { Multiselect },
     data: function(){
       return {
         search: '',
@@ -454,6 +470,11 @@
     },
 
     methods:{
+
+      departmentLabel:function(item){
+        return `${item.name} – ${item.id}`
+      },
+
       setSelectSizeCampus: function(e){
         if (this.currentItem.type == 'building') {
           return 1
@@ -1020,18 +1041,23 @@
 
         console.log('onSelectDepartment', e, this.currentItem.departments);
         var vm = this;
-        var data = _.map(this.currentItem.departments, function (i) {return i.id})
+        var data = this.currentItem.departments
+
+        console.log(data)
 
         axios.post('/api/v1/rooms/'+ this.currentItem.id +'/sync/departments', data)
         .then(function (response) {
-          console.log(response, response.config.data);
+            console.clear();
+            var items = response.data
+            console.log(items);
 
-          // vm.campuses[vm.currentItem.index.campus]
-          //     .buildings[vm.currentItem.index.building]
-          //     .rooms[vm.currentItem.index.room]
-          //     .software.push(response.data)
+          _.each(items['attached'], function(item){
+            toastr["success"]("Added department: " + item.name)
+          })
 
-          toastr["success"]("Room : " + response.data.title)
+          _.each(items['detached'], function(item){
+            toastr["warning"]("Removed department: " + item.name)
+          })
         })
         .catch(vm.handleError);
       },
