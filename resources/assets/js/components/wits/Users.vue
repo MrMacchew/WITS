@@ -23,7 +23,7 @@
       <tbody>
 
         <template v-for="(user, userKey) in results">
-          <tr>
+          <tr @click="select(user)" >
             <td data-toggle="collapse" :data-target="'#row'+userKey" class="accordion-toggle" aria-expanded="false">
               <i class="fa fa-chevron-right fa-fw"></i>
               <i class="fa fa-chevron-down fa-fw"></i>
@@ -33,13 +33,45 @@
             <td>{{user.last_name}}</td>
             <td>{{user.email}}</td>
             <td>
-              <select name="" class='form-control '>
-                <option v-for="role in roles"
-                :value="role.name"
-                :selected="role.name == user.roles[0].name"> {{role.name}} </option>
-              </select>
+              <multiselect
+                v-model="user.roles"
+                :options="roles"
+                :multiple="true"
+                track-by="name"
+                label="name"
+                :hideSelected="true"
+                :close-on-select="false"
+                @input="onSelectRoles"
+                >
+                <template slot="option" scope="props">
+                  <div class="option__desc">
+                     <span class="option__title">{{ props.option.name }}</span>
+                 </div>
+             </template>
+         </multiselect>
+
+
+
+
             </td>
-            <td>{{user.department}}</td>
+            <td>
+             <multiselect
+             v-model="user.departments"
+             :options="departments"
+             :multiple="true"
+             track-by="name"
+             label="name"
+             :hideSelected="true"
+             :close-on-select="false"
+             @input="onSelectDepartment"
+             >
+             <template slot="option" scope="props">
+              <div class="option__desc">
+               <span class="option__title">{{ props.option.name }}</span>
+              </div>
+             </template>
+            </multiselect>
+            </td>
           </tr>
 
           <tr>
@@ -93,8 +125,9 @@
 </template>
 
 <script>
-  import Fuse from 'fuse.js';
-  import _ from 'lodash';
+ import Fuse from 'fuse.js';
+ import _ from 'lodash';
+ import toastr from 'toastr';
 
 
   export default {
@@ -102,6 +135,8 @@
       return {
         users:[],
         roles:[],
+        departments: [],
+        currentUser:{},
         search: '',
         fuse: null,
         results: []
@@ -109,6 +144,60 @@
       }
     },
     methods: {
+
+     select: function (currentUser) {
+      this.currentUser = currentUser
+     },
+      onSelectDepartment: function(e){
+        var vm = this;
+
+
+
+        console.log('onSelectDepartment',this.users[this.currentUser.id]);
+
+        axios.post('/api/v1/users/'+ this.currentUser.id +'/sync/departments',
+         this.users[this.currentUser.id].departments)
+        .then(function (response) {
+         // console.clear();
+         var items = response.data
+         console.log(items);
+
+         _.each(items['attached'], function(item){
+          toastr["success"]("Added department: " + item.name)
+         })
+
+         _.each(items['detached'], function(item){
+          toastr["warning"]("Removed department: " + item.name)
+         })
+        })
+        .catch(vm.handleError);
+       },
+
+        onSelectRoles: function(e){
+
+        console.log('onSelectRoles', e);
+        var vm = this;
+
+        // console.log(data)
+
+        // axios.post('/api/v1/users/'+ this.currentItem.id +'/sync/departments', data)
+        // .then(function (response) {
+        //  console.clear();
+        //  var items = response.data
+        //  console.log(items);
+
+        //  _.each(items['attached'], function(item){
+        //   toastr["success"]("Added department: " + item.name)
+        //  })
+
+        //  _.each(items['detached'], function(item){
+        //   toastr["warning"]("Removed department: " + item.name)
+        //  })
+        // })
+        // .catch(vm.handleError);
+       },
+
+
 
     },
     watch: {
@@ -175,6 +264,13 @@
       .catch(function (error) {
         console.log(error);
       });
+
+      axios.get('/api/v1/departments?fields=id,name')
+      .then(function(response){
+       vm.departments = response.data
+      })
+      .catch(vm.handleError);
+
 
 
 

@@ -229,23 +229,14 @@
     }
   },
   methods: {
-    // parentDepartmentLabel:function(parent_department_id){
-    //   if (this.optionsParentDepartment) {
-
-    //     _.each(optionsParentDepartment, function(option){
-    //       if (option.value == parent_department_id) {
-    //         return option.label
-    //       }
-    //     })
-
-    //   }
-    // },
     onSubmitDepartment: function (e) {
       var vm = this
-      this.formDepartment.beforeSubmit(function(form){
+        console.log('onSubmitDepartment', this, e)
 
+      this.formDepartment.beforeSubmit(function(form){
+        console.log(form)
         if (form.get('parent_department_id')) {
-          form.set('parent_department_id', form.get('parent_department_id').value)
+          form.set('parent_department_id', form.get('parent_department_id').id)
         }
 
       })
@@ -299,7 +290,6 @@
                 vm.departments[department_index].org.splice(org_index, 1)
               })
               .catch(error => console.log(vm.formOrg.errors.errors))
-
             }
           },
           close:{
@@ -402,17 +392,17 @@
         {
           name: 'email',
           weight: 0.1
-        }, 
+        },
         {
           name: 'org.code',
           weight: 0.1
-        }, 
+        },
         {
           name: 'parent.name',
           weight: 0.1
         }]
 
-        
+
 
 
 

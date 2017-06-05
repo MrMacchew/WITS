@@ -42,6 +42,10 @@ class Department extends Model
         return $this->belongsToMany('App\Room');
     }
 
+    // public function buildings(){
+    //     return $this->belongsToMany('App\Building');
+    // }
+
 
     public function users(){
         return $this->hasMany('App\User', 'user_id', 'id');

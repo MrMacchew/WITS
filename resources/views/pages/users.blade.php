@@ -7,7 +7,7 @@
 
 <div class="container-fluid">
 
-    <user-table></user-table>
+    <users></users>
 
 </div>
 @stop

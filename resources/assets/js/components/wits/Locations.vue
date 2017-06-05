@@ -275,7 +275,7 @@
           <div class="form-group">
            <label class="col-sm-1 control-label text-capitalize">url</label>
            <div class="col-sm-11">
-            <input type="text" v-model="newSoftware.url">
+            <input type="url" v-model="newSoftware.url">
            </div>
           </div>
 
@@ -330,7 +330,7 @@
       <div role="tabpanel" class="tab-pane" id="department">
 
        <form class="form-horizontal" v-on:submit.prevent="onAddSoftware">
-        <!-- <h4>Add Departments to <span>{{currentItem.name || currentItem.number}}</span></h4> -->
+
         <div>
          <label class="typo__label">Select Departments</label>
 

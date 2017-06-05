@@ -76,7 +76,10 @@ class DepartmentController extends ApiController
         // return $request->all();
         $department = Department::create($request->all());
         $department->org = [];
-        $department->parent = [];
+
+        $parent = Department::find($request->get('parent_department_id'));
+
+        $department->parent = $parent;
         return $department;
     }
 
@@ -134,16 +137,11 @@ class DepartmentController extends ApiController
      */
     public function destroy(Department $department)
     {
-        $department = Department::with(['buildings', 'buildings.rooms', 'org'])->find($department->id);
+        $department = Department::with(['rooms', 'org'])->find($department->id);
         // return $department;
-        foreach($department->buildings as $building)
+        foreach($department->rooms as $room)
         {
-            foreach($building->rooms as $room)
-            {
-                $room->delete();
-            }
-
-            $building->delete();
+            $room->delete();
         }
 
         foreach($department->org as $org)

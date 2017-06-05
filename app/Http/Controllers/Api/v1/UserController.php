@@ -110,4 +110,16 @@ class UserController extends ApiController
     {
         //
     }
+
+
+    public function syncDepartments(Request $request, User $user)
+    {
+        $data = collect($request->all());
+        return $request->all();
+        $ids = $user->departments()->sync($data->pluck('id'));
+        $departments['attached'] = \App\Department::find($ids["attached"]);
+        $departments['detached'] = \App\Department::find($ids["detached"]);
+        $departments['updated'] = \App\Department::find($ids["updated"]);
+        return $departments;
+    }
 }

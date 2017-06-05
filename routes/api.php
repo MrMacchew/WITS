@@ -28,6 +28,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
     Route::resource('departments', 'DepartmentController');
     Route::resource('org', 'OrgController');
     Route::resource('users', 'UserController');
+    Route::post('users/{user}/sync/departments', 'UserController@syncDepartments');
+
     Route::resource('roles', 'RoleController');
     Route::resource('asset', 'AssetController');
     Route::resource('campus', 'CampusController');
