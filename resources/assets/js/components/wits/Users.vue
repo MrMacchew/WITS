@@ -74,7 +74,7 @@
             </td>
           </tr>
 
-          <tr>
+          <tr @click="select(user)">
             <td colspan="6" style="padding: 0">
               <div class="container-fluid">
 
@@ -147,16 +147,18 @@
 
      select: function (currentUser) {
       this.currentUser = currentUser
+
+      console.log(this.currentUser)
      },
       onSelectDepartment: function(e){
-        var vm = this;
+        var vm = this
+        var i = this.currentUser.id
 
-
-
-        console.log('onSelectDepartment',this.users[this.currentUser.id]);
+        console.log('onSelectDepartment',this.currentUser);
+        console.log('onSelectDepartment',this.currentUser.departments);
 
         axios.post('/api/v1/users/'+ this.currentUser.id +'/sync/departments',
-         this.users[this.currentUser.id].departments)
+         this.currentUser.departments)
         .then(function (response) {
          // console.clear();
          var items = response.data
@@ -180,21 +182,22 @@
 
         // console.log(data)
 
-        // axios.post('/api/v1/users/'+ this.currentItem.id +'/sync/departments', data)
-        // .then(function (response) {
-        //  console.clear();
-        //  var items = response.data
-        //  console.log(items);
+           axios.post('/api/v1/users/'+ this.currentUser.id +'/sync/roles',
+         this.currentUser.roles)
+        .then(function (response) {
+         // console.clear();
+         var items = response.data
+         console.log(items);
 
-        //  _.each(items['attached'], function(item){
-        //   toastr["success"]("Added department: " + item.name)
-        //  })
+         _.each(items['attached'], function(item){
+          toastr["success"]("Added department: " + item.name)
+         })
 
-        //  _.each(items['detached'], function(item){
-        //   toastr["warning"]("Removed department: " + item.name)
-        //  })
-        // })
-        // .catch(vm.handleError);
+         _.each(items['detached'], function(item){
+          toastr["warning"]("Removed department: " + item.name)
+         })
+        })
+        .catch(vm.handleError);
        },
 
 
@@ -232,6 +235,24 @@
         "roles.name"
         ]
       };
+
+      toastr.options = {
+         "closeButton": true,
+         "debug": false,
+         "newestOnTop": true,
+         "progressBar": true,
+         "positionClass": "toast-bottom-right",
+         "preventDuplicates": false,
+         "onclick": null,
+         "showDuration": "300",
+         "hideDuration": "2000",
+         "timeOut": "5000",
+         "extendedTimeOut": "10000",
+         "showEasing": "swing",
+         "hideEasing": "linear",
+         "showMethod": "fadeIn",
+         "hideMethod": "fadeOut"
+        }
 
 
 

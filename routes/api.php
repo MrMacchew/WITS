@@ -25,10 +25,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
     // Route::get('users/{id?}',  'ApiController@users');
 
-    Route::resource('departments', 'DepartmentController');
-    Route::resource('org', 'OrgController');
     Route::resource('users', 'UserController');
     Route::post('users/{user}/sync/departments', 'UserController@syncDepartments');
+    Route::post('users/{user}/sync/roles', 'UserController@syncRoles');
+
+    Route::resource('departments', 'DepartmentController');
+    Route::resource('org', 'OrgController');
 
     Route::resource('roles', 'RoleController');
     Route::resource('asset', 'AssetController');

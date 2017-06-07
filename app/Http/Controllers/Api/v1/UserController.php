@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends ApiController
 {
@@ -115,11 +116,20 @@ class UserController extends ApiController
     public function syncDepartments(Request $request, User $user)
     {
         $data = collect($request->all());
-        return $request->all();
+        // return $request->all();
         $ids = $user->departments()->sync($data->pluck('id'));
         $departments['attached'] = \App\Department::find($ids["attached"]);
         $departments['detached'] = \App\Department::find($ids["detached"]);
         $departments['updated'] = \App\Department::find($ids["updated"]);
         return $departments;
+    }
+
+    public function syncRoles(Request $request, User $user)
+    {
+        $data = collect($request->all());
+        // return $data->pluck('name');
+        $ids = $user->syncRoles($data->pluck('name'));
+
+        return $user->roles()->pluck('name');
     }
 }
