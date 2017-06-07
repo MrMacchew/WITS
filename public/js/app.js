@@ -45207,6 +45207,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -71751,7 +71766,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "fa fa-chevron-right fa-fw"
     }), _vm._v(" "), _c('i', {
       staticClass: "fa fa-chevron-down fa-fw"
-    })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.first_name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.last_name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.email))]), _vm._v(" "), _c('td', [_c('multiselect', {
+    })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.first_name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.last_name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.email))]), _vm._v(" "), _c('td', [_c('div', [(user !== _vm.currentUser) ? _c('ul', {
+      staticClass: "list-inline"
+    }, _vm._l((user.roles), function(role) {
+      return _c('li', [_vm._v(_vm._s(role.name))])
+    })) : _vm._e(), _vm._v(" "), (user == _vm.currentUser) ? _c('multiselect', {
       attrs: {
         "options": _vm.roles,
         "multiple": true,
@@ -71778,7 +71797,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           user.roles = $$v
         }
       }
-    })], 1), _vm._v(" "), _c('td', [_c('multiselect', {
+    }) : _vm._e()], 1)]), _vm._v(" "), _c('td', [(user !== _vm.currentUser) ? _c('ul', {
+      staticClass: "list-inline"
+    }, _vm._l((user.departments), function(department) {
+      return _c('li', [_vm._v(_vm._s(department.name))])
+    })) : _vm._e(), _vm._v(" "), (user == _vm.currentUser) ? _c('multiselect', {
       attrs: {
         "options": _vm.departments,
         "multiple": true,
@@ -71805,7 +71828,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           user.departments = $$v
         }
       }
-    })], 1)]), _vm._v(" "), _c('tr', {
+    }) : _vm._e()], 1)]), _vm._v(" "), _c('tr', {
       on: {
         "click": function($event) {
           _vm.select(user)
@@ -71816,7 +71839,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "padding": "0"
       },
       attrs: {
-        "colspan": "6"
+        "colspan": "7"
       }
     }, [_c('div', {
       staticClass: "container-fluid"

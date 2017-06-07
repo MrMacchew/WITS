@@ -33,29 +33,44 @@
             <td>{{user.last_name}}</td>
             <td>{{user.email}}</td>
             <td>
-              <multiselect
-                v-model="user.roles"
-                :options="roles"
-                :multiple="true"
-                track-by="name"
-                label="name"
-                :hideSelected="true"
-                :close-on-select="false"
-                @input="onSelectRoles"
-                >
-                <template slot="option" scope="props">
-                  <div class="option__desc">
-                     <span class="option__title">{{ props.option.name }}</span>
-                 </div>
-             </template>
-         </multiselect>
+             <div>
+
+
+              <ul v-if="user !== currentUser" class="list-inline">
+               <li v-for="role in user.roles">{{role.name}}</li>
+              </ul>
+
+              <multiselect v-if="user == currentUser"
+              v-model="user.roles"
+              :options="roles"
+              :multiple="true"
+              track-by="name"
+              label="name"
+              :hideSelected="true"
+              :close-on-select="false"
+              @input="onSelectRoles"
+              >
+              <template slot="option" scope="props">
+               <div class="option__desc">
+                <span class="option__title">{{ props.option.name }}</span>
+               </div>
+              </template>
+             </multiselect>
+
+            </div>
 
 
 
 
             </td>
             <td>
-             <multiselect
+
+             <ul v-if="user !== currentUser" class="list-inline">
+              <li v-for="department in user.departments">{{department.name}}</li>
+             </ul>
+
+
+             <multiselect v-if="user == currentUser"
              v-model="user.departments"
              :options="departments"
              :multiple="true"
@@ -75,7 +90,7 @@
           </tr>
 
           <tr @click="select(user)">
-            <td colspan="6" style="padding: 0">
+            <td colspan="7" style="padding: 0">
               <div class="container-fluid">
 
 
