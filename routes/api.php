@@ -38,6 +38,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
     Route::resource('buildings', 'BuildingController');
     Route::resource('rooms', 'RoomController');
     Route::post('rooms/{room}/sync/departments', 'RoomController@syncDepartments');
+    Route::post('rooms/{room}/sync/supports', 'RoomController@syncSupports');
     Route::resource('roomstyle', 'RoomStyleController');
     Route::resource('software', 'SoftwareController');
     Route::resource('support', 'SupportController');

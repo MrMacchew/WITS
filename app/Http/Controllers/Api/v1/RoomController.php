@@ -125,4 +125,15 @@ class RoomController extends ApiController
         $departments['updated'] = \App\Department::find($ids["updated"]);
         return $departments;
     }
+
+    public function syncSupports(Request $request, Room $room)
+    {
+        $data = collect($request->all());
+        // return $data->pluck('id');
+        $ids = $room->supports()->sync($data->pluck('id'));
+        $supports['attached'] = \App\User::find($ids["attached"]);
+        $supports['detached'] = \App\User::find($ids["detached"]);
+        $supports['updated'] = \App\User::find($ids["updated"]);
+        return $supports;
+    }
 }

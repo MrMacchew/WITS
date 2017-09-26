@@ -137,12 +137,13 @@ class DepartmentController extends ApiController
      */
     public function destroy(Department $department)
     {
-        $department = Department::with(['rooms', 'org'])->find($department->id);
-        // return $department;
-        foreach($department->rooms as $room)
-        {
-            $room->delete();
-        }
+        $department = Department::with(['org'])->find($department->id);
+
+        // I commented this out because it shouldn't delete rooms if department is removed
+        // foreach($department->rooms as $room)
+        // {
+        //     $room->delete();
+        // }
 
         foreach($department->org as $org)
         {

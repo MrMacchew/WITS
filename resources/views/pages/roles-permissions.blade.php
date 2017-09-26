@@ -2,9 +2,13 @@
 @section ('page_heading','Roles / Permissions')
 @section('content')
 
-
-
 <div class="container-fluid">
+
+    <roles-permissions name="test"> </roles-permissions>
+
+</div>
+
+<!-- <div class="container-fluid">
 	<div class="panel panel-default">
 
 		<div class="col-lg-4 col-md-4 col-sm-4 nopadding" >
@@ -29,7 +33,7 @@
 		</div>
 
 	</div>
-</div>
+</div> -->
 
 
 

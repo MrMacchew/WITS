@@ -18,6 +18,7 @@ class PermissionSeeder extends Seeder
         $departmentAdmin = Role::create(['name' => 'department_admin']);
         $departmentUser = Role::create(['name' => 'department_user']);
         $auditor = Role::create(['name' => 'auditor']);
+        $support = Role::create(['name' => 'support']);
         $user = Role::create(['name' => 'user']);
     }
 }

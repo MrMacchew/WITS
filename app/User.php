@@ -60,4 +60,9 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Department');
 
     }
+    public function supports()
+    {
+        return $this->belongsToMany('App\User');
+
+    }
 }

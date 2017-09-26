@@ -28,6 +28,7 @@ class Room extends Model
     ];
 
     protected $table = "room";
+
     public function media()
     {
         return $this->morphMany('App\Media', 'mediable');
@@ -35,7 +36,12 @@ class Room extends Model
 
     public function departments()
     {
-    	return $this->belongsToMany('App\Department');
+        return $this->belongsToMany('App\Department');
+    }
+
+    public function supports()
+    {
+    	return $this->belongsToMany('App\User');
     }
 
     public function software()

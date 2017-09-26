@@ -16,7 +16,11 @@ _____________________
 | **Linux** |     [Docs](https://goo.gl/n0rXRg)    | [LAMP Docs](http://howtoubuntu.org/how-to-install-lamp-on-ubuntu) |      Use [Docs](https://getcomposer.org/download/)      | [Installer (64)](https://nodejs.org/dist/v7.7.2/node-v7.7.2-linux-x64.tar.xz) |
 
 
+## Database Schema
 
+````
+https://www.lucidchart.com/documents/edit/6fe7035c-4ede-416a-844d-46168be1a34b
+````
 
 ## Got everything? Let's do a quick check.
 
