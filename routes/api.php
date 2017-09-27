@@ -29,22 +29,34 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
     Route::post('users/{user}/sync/departments', 'UserController@syncDepartments');
     Route::post('users/{user}/sync/roles', 'UserController@syncRoles');
 
+    Route::resource('asset', 'AssetController');
+
     Route::resource('departments', 'DepartmentController');
+
     Route::resource('org', 'OrgController');
 
     Route::resource('roles', 'RoleController');
-    Route::resource('asset', 'AssetController');
+
     Route::resource('campus', 'CampusController');
+
     Route::resource('buildings', 'BuildingController');
+
     Route::resource('rooms', 'RoomController');
     Route::post('rooms/{room}/sync/departments', 'RoomController@syncDepartments');
     Route::post('rooms/{room}/sync/supports', 'RoomController@syncSupports');
+
     Route::resource('roomstyle', 'RoomStyleController');
+
     Route::resource('software', 'SoftwareController');
+
     Route::resource('support', 'SupportController');
+
     Route::resource('category', 'CategoryController');
+
     Route::resource('properties', 'PropertiesController');
+
     Route::resource('asset-property-name', 'AssetPropertyNameController');
+
     Route::resource('media', 'MediaController');
 });
 

@@ -46394,7 +46394,7 @@ __WEBPACK_IMPORTED_MODULE_2_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue2
             vm.departments = response.data;
         }).catch(vm.handleError);
 
-        axios.get('/api/v1/roles?with=users&search=support').then(function (response) {
+        axios.get('/api/v1/roles?with=users&search=support&searchColumns=name').then(function (response) {
             vm.supports = response.data[0].users;
         }).catch(vm.handleError);
 

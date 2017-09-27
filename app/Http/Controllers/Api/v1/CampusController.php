@@ -38,14 +38,9 @@ class CampusController extends ApiController
      *     deprecated=false
      * )
      */
-    public function index(Request $request)
+    public function index()
     {
-        $search = !empty($request->query('search')) ? explode(',', $request->query('search')) : null;
-        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
-        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
-        $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
-
-        return Campus::where('name', 'LIKE', "%$search[0]%")->with($with)->orderBy('name', 'asc')->get($fields);
+        return \App\Helper\RestSearch::get(Campus::class);
     }
 
     /**

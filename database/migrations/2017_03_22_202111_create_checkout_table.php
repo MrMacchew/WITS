@@ -19,6 +19,7 @@ class CreateCheckoutTable extends Migration
             $table->string('user_id');
             $table->integer('cost_code')->nullable();
             $table->date('checkout_date');
+            $table->date('due_date')->nullable();
             $table->date('checkin_date')->nullable();
             // $table->timestamps();
 

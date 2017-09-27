@@ -1337,7 +1337,7 @@ export default {
             })
             .catch(vm.handleError);
 
-        axios.get('/api/v1/roles?with=users&search=support')
+        axios.get('/api/v1/roles?with=users&search=support&searchColumns=name')
             .then(function(response) {
                 vm.supports = response.data[0].users
             })

@@ -14,16 +14,9 @@ class RoomStyleController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $search = !empty($request->query('search')) ? explode(',', $request->query('search')) : null;
-        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
-        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
-        $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
-
-
-
-        return RoomStyle::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
+        return \App\Helper\RestSearch::get(RoomStyle::class);
     }
 
     /**

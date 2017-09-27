@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Laravel\Passport\HasApiTokens;
+use \App\Helper\RestSearch;
 
 class DepartmentController extends ApiController
 {
@@ -37,14 +38,9 @@ class DepartmentController extends ApiController
      *     deprecated=false
      * )
      */
-    public function index(Request $request)
+    public function index()
     {
-        $search = !empty($request->query('search')) ? explode(',', $request->query('search')) : null;
-        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
-        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
-        $limit = $request->query('limit') ? (int) $request->query('limit') : 100;
-
-        return Department::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
+         return \App\Helper\RestSearch::get(Department::class);
     }
 
     /**

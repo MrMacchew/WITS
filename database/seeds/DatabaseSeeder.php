@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             // $this->call(AssetPropertyNameSeeder::class);
             // $this->call(PropertiesSeeder::class);
             // $this->call(CategorySeeder::class);
-            // $this->call(AssetSeeder::class);
+            $this->call(AssetSeeder::class);
             // $this->call(CheckoutSeeder::class);
             // $this->call(AssetPropertySeeder::class);
             // $this->call(MediaSeeder::class);

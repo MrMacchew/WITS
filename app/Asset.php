@@ -45,6 +45,11 @@ class Asset extends Model
         return $this->morphMany('App\Media', 'mediable');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
+
     public function property()
     {
         return $this->belongsToMany('App\Properties', 'asset_property', 'asset_id', 'property_id');

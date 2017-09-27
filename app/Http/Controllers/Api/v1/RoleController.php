@@ -13,14 +13,9 @@ class RoleController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $search = !empty($request->query('search')) ? explode(',', $request->query('search')) : null;
-        $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
-        $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
-
-        return Role::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
-        // return Role::all();
+        return \App\Helper\RestSearch::get(Role::class);
     }
 
     /**
