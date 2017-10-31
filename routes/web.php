@@ -31,12 +31,13 @@ Route::get('/browserSync/login/{user}', function($user){
 
 Route::get('/test', function(){
 
-    $with = "rooms";
+    $with = "assets.properties.name";
 
     $department = \App\Department::with($with)->get();
     return $department;
 
 });
+
 
 
 

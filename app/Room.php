@@ -52,6 +52,12 @@ class Room extends Model
     public function building(){
         return $this->belongsTo('App\Building');
     }
+    public function roomstyle(){
+        return $this->belongsTo('App\RoomStyle', 'style_id');
+    }
+    public function assets(){
+        return $this->hasMany('App\Asset', 'room_id');
+    }
 
 
 }

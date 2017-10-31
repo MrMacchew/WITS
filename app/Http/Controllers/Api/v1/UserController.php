@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\User;
+use Auth;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class UserController extends ApiController
      */
     public function index()
     {
-        return \App\Helper\RestSearch::get(User::class);
+        return \App\Helper\RestSearch::all(User::class);
     }
 
     /**
@@ -49,7 +50,6 @@ class UserController extends ApiController
      */
     public function show($id, Request $request)
     {
-
         $with = !empty($request->query('with')) ? explode(',', $request->query('with')) : [];
         $fields = !empty($request->query('fields')) ? explode(',',$request->query('fields')) : null;
 
@@ -109,5 +109,24 @@ class UserController extends ApiController
         $ids = $user->syncRoles($data->pluck('name'));
 
         return $user->roles()->pluck('name');
+    }
+
+    public function currentUser(Request $request)
+    {
+        try {
+            $id =  auth()->guard('api')->user()->id;
+        } catch (Exception $e) {
+             abort(422, $e->getMessage());
+        }
+
+        $currentusers = collect(\App\Helper\RestSearch::all(\App\User::class));
+
+        $currentuser = $currentusers->filter(
+            function($user) use ($id){return $user->id == $id;}
+        )->first();
+
+        return collect([
+            "currentuser" => $currentuser
+        ]);
     }
 }

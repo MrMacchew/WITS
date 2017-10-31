@@ -18,9 +18,6 @@
 // toastr
 @import "node_modules/toastr/toastr";
 
-// vuetiful
-// @import "node_modules/vuetiful/dist/components/app.style";
-
 // jquery-confirm
 @import "node_modules/jquery-confirm/css/jquery-confirm";
 
@@ -31,4 +28,11 @@
 @import "helpers";
 @import "bs-tinynavbar";
 @import "/wits/menus.scss";
+
+
+//Pages
+@import "/wits/pages/inventory.scss";
+
+
+
 

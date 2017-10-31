@@ -15,7 +15,7 @@ class RoleController extends ApiController
      */
     public function index()
     {
-        return \App\Helper\RestSearch::get(Role::class);
+        return \App\Helper\RestSearch::all(Role::class);
     }
 
     /**

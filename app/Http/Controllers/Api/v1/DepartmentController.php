@@ -8,7 +8,6 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Laravel\Passport\HasApiTokens;
-use \App\Helper\RestSearch;
 
 class DepartmentController extends ApiController
 {
@@ -40,7 +39,7 @@ class DepartmentController extends ApiController
      */
     public function index()
     {
-         return \App\Helper\RestSearch::get(Department::class);
+         return \App\Helper\RestSearch::all(Department::class);
     }
 
     /**

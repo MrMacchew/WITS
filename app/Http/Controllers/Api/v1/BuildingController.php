@@ -14,7 +14,7 @@ class BuildingController extends ApiController
      */
     public function index()
     {
-        return \App\Helper\RestSearch::get(Building::class);
+        return \App\Helper\RestSearch::all(Building::class);
     }
 
     /**

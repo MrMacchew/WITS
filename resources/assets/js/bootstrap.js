@@ -1,4 +1,8 @@
 
+/**
+ * Lodash
+ */
+
 window._ = require('lodash');
 
 /**
@@ -33,6 +37,28 @@ window.axios.defaults.headers.common = {
     'X-CSRF-TOKEN': window.Laravel.csrfToken,
     'X-Requested-With': 'XMLHttpRequest'
 };
+
+/**
+ * toastr
+ */
+window.toastr = require('toastr')
+toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "1000",
+    "extendedTimeOut": "4000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

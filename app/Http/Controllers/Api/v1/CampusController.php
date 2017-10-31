@@ -40,7 +40,7 @@ class CampusController extends ApiController
      */
     public function index()
     {
-        return \App\Helper\RestSearch::get(Campus::class);
+        return \App\Helper\RestSearch::all(Campus::class);
     }
 
     /**

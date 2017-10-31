@@ -50,9 +50,19 @@ class Asset extends Model
         return $this->belongsToMany('App\User');
     }
 
-    public function property()
+    public function properties()
     {
-        return $this->belongsToMany('App\Properties', 'asset_property', 'asset_id', 'property_id');
+        return $this->hasMany('App\Properties', $this->id);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo('App\Room', 'id');
+    }
+
+    public function checkout()
+    {
+        return $this->belongsTo('App\Checkout', 'asset_id');
     }
 
 }

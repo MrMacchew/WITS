@@ -48,13 +48,25 @@ class Department extends Model
 
 
     public function users(){
-        return $this->hasMany('App\User', 'user_id', 'id');
+        return $this->hasMany('App\User', 'id');
     }
 
     public function parent(){
         return $this->hasOne('App\Department', 'id', 'parent_department_id');
     }
 
+    public function children(){
+        return $this->hasMany('App\Department', 'parent_department_id', $this->id);
+    }
+
+    public function assets()
+    {
+        return $this->hasMany('App\Asset');
+    }
+    public function room()
+    {
+        return $this->hasOne('App\Room');
+    }
 
 
 }

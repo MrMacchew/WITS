@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,23 +14,20 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::group(['middleware' => 'auth:api', 'prefix' => 'v1', 'namespace' => 'Api\v1'], function () {
 
-// Route::middleware('auth:api')->get('/users', function (Request $request) {
-//     return App\User::all();
-// });
-
-// Route::group(['middleware' => 'auth:api', 'prefix' => 'v1','namespace' => 'Api\v1'], function () {
-Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
-    // Route::get('users/{id?}',  'ApiController@users');
+// Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
 
     Route::resource('users', 'UserController');
     Route::post('users/{user}/sync/departments', 'UserController@syncDepartments');
     Route::post('users/{user}/sync/roles', 'UserController@syncRoles');
+    Route::get('currentuser', 'UserController@currentUser');
+
+    // Route::get('inventory', 'UserController@currentUser');
+
 
     Route::resource('asset', 'AssetController');
+    Route::get('inventory', 'AssetController@index');
 
     Route::resource('departments', 'DepartmentController');
 
@@ -55,7 +53,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1'], function () {
 
     Route::resource('properties', 'PropertiesController');
 
-    Route::resource('asset-property-name', 'AssetPropertyNameController');
+    Route::resource('property-name', 'PropertyNameController');
 
     Route::resource('media', 'MediaController');
 });

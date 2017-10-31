@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\AssetPropertyName;
+use App\PropertyName;
 use Illuminate\Http\Request;
 
-class AssetPropertyNameController extends ApiController
+class PropertyNameController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class AssetPropertyNameController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  \App\AssetPropertyName  $assetPropertyName
+     * @param  \App\PropertyName  $PropertyName
      * @return \Illuminate\Http\Response
      */
-    public function show(AssetPropertyName $assetPropertyName)
+    public function show(PropertyName $PropertyName)
     {
         //
     }
@@ -52,10 +52,10 @@ class AssetPropertyNameController extends ApiController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AssetPropertyName  $assetPropertyName
+     * @param  \App\PropertyName  $PropertyName
      * @return \Illuminate\Http\Response
      */
-    public function edit(AssetPropertyName $assetPropertyName)
+    public function edit(PropertyName $PropertyName)
     {
         //
     }
@@ -64,10 +64,10 @@ class AssetPropertyNameController extends ApiController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\AssetPropertyName  $assetPropertyName
+     * @param  \App\PropertyName  $PropertyName
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AssetPropertyName $assetPropertyName)
+    public function update(Request $request, PropertyName $PropertyName)
     {
         //
     }
@@ -75,10 +75,10 @@ class AssetPropertyNameController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\AssetPropertyName  $assetPropertyName
+     * @param  \App\PropertyName  $PropertyName
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AssetPropertyName $assetPropertyName)
+    public function destroy(PropertyName $PropertyName)
     {
         //
     }

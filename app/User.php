@@ -60,8 +60,13 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Department');
 
     }
-    public function supports()
+    public function assets()
     {
-        return $this->belongsToMany('App\User');
+        return $this->hasMany('App\Asset')->withPivot('user_id', 'asset_id');
+
     }
+    // public function supports()
+    // {
+    //     return $this->belongsToMany('App\User');
+    // }
 }

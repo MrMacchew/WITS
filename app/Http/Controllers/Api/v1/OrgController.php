@@ -21,7 +21,7 @@ class OrgController extends ApiController
 
         // return Org::where('name', 'LIKE', "%$search[0]%")->with($with)->get($fields);
 
-        return \App\Helper\RestSearch::get(Org::class);
+        return \App\Helper\RestSearch::all(Org::class);
     }
 
     /**

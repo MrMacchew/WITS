@@ -47,7 +47,7 @@ class UserTest extends TestCase
         $this->createUsersWithRoles();
 
         // //Act
-        $response = $this->get('/api/v1/users?search=demo&with=roles,departments&fields=email,id,username');
+        $response = $this->get('/api/v1/users?search=demo&searchColumns=username&with=roles,departments&fields=email,id,username');
 
         // //Assert
         $this->assertTrue($response->status() == 200);

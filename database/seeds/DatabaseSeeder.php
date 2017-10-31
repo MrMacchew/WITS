@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             // $this->call(RoomStyleSeeder::class);
             // $this->call(SupportSeeder::class);
             $this->call(RoomSoftwareSeeder::class);
-            // $this->call(AssetPropertyNameSeeder::class);
+            $this->call(PropertyNameSeeder::class);
             // $this->call(PropertiesSeeder::class);
             // $this->call(CategorySeeder::class);
             $this->call(AssetSeeder::class);

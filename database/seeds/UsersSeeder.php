@@ -14,6 +14,8 @@ class UsersSeeder extends Seeder
         factory(App\User::class, 10)->create()->each(function ($user) {
 
             $user->assignRole('user');
+            
+            $user->departments()->sync([rand(1, 5)]);
 
             //add department
             // $user->department

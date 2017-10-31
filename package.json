@@ -9,6 +9,9 @@
   },
   "devDependencies": {
     "axios": "^0.15.3",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-2": "^6.24.1",
     "bootstrap-sass": "^3.3.7",
     "font-awesome": "^4.7.0",
     "fuse.js": "^3.0.0",
@@ -20,7 +23,11 @@
     "metismenu": "^2.7.0",
     "toastr": "^2.1.2",
     "vue": "^2.1.10",
+    "vue-good-table": "git+ssh://git@github.com:dwoodard/vue-good-table.git",
     "vue-multiselect": "^2.0.0-beta.15",
+    "vue-router": "^3.0.1",
+    "vue-tables-2": "^0.6.75",
+    "vue-xeditable": "^1.0.1",
     "vue2-google-maps": "^0.7.5",
     "vuejs-autocomplete": "^0.1.1",
     "vuetiful": "git+ssh://git@github.com/andrewcourtice/vuetiful.git"

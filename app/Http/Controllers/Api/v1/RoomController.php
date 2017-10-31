@@ -15,7 +15,7 @@ class RoomController extends ApiController
      */
     public function index()
     {
-        return \App\Helper\RestSearch::get(Room::class);
+        return \App\Helper\RestSearch::all(Room::class);
     }
 
     /**

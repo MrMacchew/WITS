@@ -16,7 +16,7 @@ class RestSearch
         //fields usage - api/v1/users?fields=email,id,username
         //all usages - api/v1/users?search=de&fields=email,id,username&with=model1,model2
 
-        public static function get($model)
+        public static function all($model)
         {
             $search = !empty(request()->query('search')) ? explode(',', request()->query('search')) : null;
             $searchColumns = !empty(request()->query('searchColumns')) ? explode(',', request()->query('searchColumns')) : [];
@@ -40,6 +40,28 @@ class RestSearch
             ->with($with)
             ->get($fields)
             ;
+        }
+
+        public static function find($model)
+        {
+            $id = !empty(request()->query('id')) ? explode(',', request()->query('id')) : null;
+            $search = !empty(request()->query('search')) ? explode(',', request()->query('search')) : null;
+            $searchColumns = !empty(request()->query('searchColumns')) ? explode(',', request()->query('searchColumns')) : [];
+            $with = !empty(request()->query('with')) ? explode(',', request()->query('with')) : [];
+            $fields = !empty(request()->query('fields')) ? explode(',',request()->query('fields')) : null;
+
+            return $model::find($id)->orWhere(function ($query) use ($searchColumns, $search) {
+                // dump($searchColumns, $search);
+                foreach ($searchColumns as $key => $value) {
+                    // dump($key, $value);
+                    $query->orWhere($value, 'LIKE', "%$search[0]%");
+                }
+
+            })
+            ->with($with)
+            ->get($fields);
+
+            return User::with($with)->find($id, $fields);
         }
 
 }

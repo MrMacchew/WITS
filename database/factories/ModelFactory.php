@@ -38,6 +38,7 @@ $factory->define(App\Asset::class, function (Faker\Generator $faker) {
     $data = [
         'id' => null,
         'room_id' => $faker->unique(true)->numberBetween(1,11),
+        'department_id' => $faker->unique(true)->numberBetween(1,5),
         'name' => $faker->unique(true)->word(),
         'manufacturer' => $faker->unique(true)->word(),
         'model' => $faker->unique(true)->randomElement($array = array ('iPad','Computer','Laptop', 'Extron', 'Projector', 'Camera')),
@@ -194,7 +195,7 @@ $factory->define(App\Software::class, function (Faker\Generator $faker) {
     return $data;
 });
 
-$factory->define(App\AssetPropertyName::class, function (Faker\Generator $faker) {
+$factory->define(App\PropertyName::class, function (Faker\Generator $faker) {
     // $faker->seed(1);
     $data = [
         'id' => null,
@@ -219,12 +220,14 @@ $factory->define(App\Category::class, function (Faker\Generator $faker) {
     // $faker->seed(1);
     $data = [
         'id' => null,
-        'name' => $faker->unique()->randomElement($array = array ('Computer','tablet')),
-        'lifecycle' => $faker->numberBetween(2,4),
+        'name' => $faker->randomElement($array = array ('iPad','Computer','Laptop', 'Extron', 'Projector', 'Camera')),
+        'lifecycle' => $faker->numberBetween(0,4),
         ];
     // dd($data);
     return $data;
 });
+
+//
 
 // $factory->define(App\Media::class, function (Faker\Generator $faker) {
 //     // $faker->seed(1);

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAssetPropertyName extends Migration
+class CreatePropertyNameTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAssetPropertyName extends Migration
      */
     public function up()
     {
-         Schema::create('asset_property_name', function (Blueprint $table) {
+         Schema::create('property_name', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
 
@@ -27,6 +27,6 @@ class CreateAssetPropertyName extends Migration
      */
     public function down()
     {
-        Schema::drop('asset_property_name');
+        Schema::drop('property_name');
     }
 }

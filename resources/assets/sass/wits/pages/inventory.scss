@@ -1,0 +1,48 @@
+#inventory-vue{
+
+
+    .ui-collapsible__body-wrapper {
+        height: auto !important;
+    }
+
+    .childrow{
+        background: #ccc;
+        padding:0 14px;
+    }
+
+    .active td{
+        background: #cccccc;
+    }
+    .department .ui-collapsible__header:hover,
+    .department .ui-collapsible__header {
+        /*background: #7AAAFF;*/
+        padding-left: 10px;
+        /*border-left: 15px solid #dedede;*/
+    }
+
+    .childDepartment .ui-collapsible__header:hover,
+    .childDepartment .ui-collapsible__header {
+        /*background: #93B1E8;*/
+        /*padding-left: 20px;*/
+        border-left: 15px solid #f7f7f7;
+    }
+
+    .grandchildDepartment .ui-collapsible__header:hover,
+    .grandchildDepartment .ui-collapsible__header {
+        /*background: #CFE0FF;*/
+        /*padding-left: 40px;*/
+        border-left: 25px solid #f7f7f7;
+    }
+
+    /*Filter input*/
+    .vue-good-table thead tr + tr input {
+        width: calc(100%);
+    }
+
+
+
+}
+
+
+
+

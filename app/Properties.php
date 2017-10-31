@@ -21,11 +21,11 @@ class Properties extends Model
     public $timestamps  = false;
 
     public function name(){
-    	return $this->hasMany('App\AssetPropertyName', 'id');
+    	return $this->hasOne('App\PropertyName','id');
     }
 
     public function asset()
     {
-        return $this->belongsToMany('App\Asset', 'asset_property', 'property_id', 'asset_id');
+        return $this->belongsTo('App\Asset', 'asset_id');
     }
 }

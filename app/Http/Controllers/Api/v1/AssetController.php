@@ -52,7 +52,7 @@ class AssetController extends ApiController
      */
     public function index()
     {
-        return \App\Helper\RestSearch::get(Asset::class);
+        return \App\Helper\RestSearch::all(Asset::class);
     }
 
     /**
